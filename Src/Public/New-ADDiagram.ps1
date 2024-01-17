@@ -129,6 +129,32 @@ function New-ADDiagram {
 
         [Parameter(
             Mandatory = $false,
+            HelpMessage = 'Please provide the path to the custom logo used for Signature'
+        )]
+        [ValidateScript( {
+            if (Test-Path -Path $_) {
+                $true
+            } else {
+                throw "File $_ not found!"
+            }
+        })]
+        [string] $SignatureLogo,
+
+        [Parameter(
+            Mandatory = $false,
+            HelpMessage = 'Please provide the path to the custom logo'
+        )]
+        [ValidateScript( {
+            if (Test-Path -Path $_) {
+                $true
+            } else {
+                throw "File $_ not found!"
+            }
+        })]
+        [string] $Logo,
+
+        [Parameter(
+            Mandatory = $false,
             HelpMessage = 'Specify the Diagram filename'
         )]
         [ValidateNotNullOrEmpty()]
@@ -204,7 +230,25 @@ function New-ADDiagram {
             HelpMessage = 'Controls verbose of Active Directory generated diagram'
         )]
         [ValidateSet(1, 2)]
-        [int] $DiagramVerbosity = 1
+        [int] $DiagramVerbosity = 1,
+
+        [Parameter(
+            Mandatory = $false,
+            HelpMessage = 'Allow to set footer signature Author Name'
+        )]
+        [string] $AuthorName,
+
+        [Parameter(
+            Mandatory = $false,
+            HelpMessage = 'Allow to set footer signature Company Name'
+        )]
+        [string] $CompanyName,
+
+        [Parameter(
+            Mandatory = $false,
+            HelpMessage = 'Allow the creation of footer signature'
+        )]
+        [Switch] $Signature = $false
     )
 
 
@@ -370,6 +414,17 @@ function New-ADDiagram {
                             $ForestInfo
                         } else {Write-Warning "No Forest Infrastructure available to diagram"}
                     }
+                }
+                if ($Signature) {
+                    SubGraph Legend @{Label=" "; style='dashed,rounded'; color=$SubGraphDebug.color; fontsize=1} {
+                        if ($CustomSignatureLogo) {
+                            node LegendTable -Attributes @{Label=(Get-HTMLTable -Rows "Author: $($AuthorName)","Company: $($CompanyName)" -TableBorder 0 -CellBorder 0 -align 'left' -Logo $CustomSignatureLogo); shape='plain'; fillColor='white'}
+                        } else {
+                            node LegendTable -Attributes @{Label=(Get-HTMLTable -Rows "Author: $($AuthorName)","Company: $($CompanyName)" -TableBorder 0 -CellBorder 0 -align 'left' -Logo "AD_LOGO_Footer"); shape='plain'; fillColor='white'}
+                        }
+                    }
+                    inline {rank="sink"; "Legend"; "LegendTable";}
+                    edge -from MainSubGraph:s -to LegendTable @{minlen=5; constrains='false'; style=$EdgeDebug.style; color=$EdgeDebug.color}
                 }
             }
         }

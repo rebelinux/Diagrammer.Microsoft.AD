@@ -24,12 +24,12 @@ function Get-DiagForest {
         try {
             if ($ForestRoot) {
                 $ChildDomains = ($ADSystem.Domains | Where-Object {$_ -ne $ForestRoot })
-                $ChildDomains = @("a.pharmax.local","b.pharmax.local","c.pharmax.local","ad.pharmax.local","e.pharmax.local","f.pharmax.local","g.pharmax.local", "uia.local", "b12.local", "acad.uia.local", "admin.b12.local", "hr.b12.local")
+                # $ChildDomains = @("a.pharmax.local","b.pharmax.local","c.pharmax.local","ad.pharmax.local","e.pharmax.local","f.pharmax.local","g.pharmax.local", "uia.local", "b12.local", "acad.uia.local", "admin.b12.local", "hr.b12.local")
                 if ($ChildDomains) {
                     # Dummy Node used for Main Labeling
                     node CHILDDOMAINSTEXT @{Label='Child Domains'; fontcolor='#71797E'; fontsize=22; shape='plain'; fillColor='transparent'}
                     # node DummyChildDOMAINS @{Label='DummyChildDOMAINS'; fontcolor=$NodeDebug.color; fillColor=$NodeDebug.style; shape='plain'}
-                    SubGraph MainChildDomains -Attributes @{Label=''; penwidth=1.5; labelloc='t'; style="dashed,rounded"; color="gray"} {
+                    SubGraph MainSubGraph -Attributes @{Label=''; penwidth=1.5; labelloc='t'; style="dashed,rounded"; color="gray"} {
                         if ($ChildDomains.ToUpper() -notmatch $ForestRoot) {
                             SubGraph ContiguousChilds -Attributes @{Label='Contiguous'; fontsize=18; penwidth=1.5; labelloc='b'; style="dashed"; color="gray"} {
                                 # Dummy Node used for subgraph centering

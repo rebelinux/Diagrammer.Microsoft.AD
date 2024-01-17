@@ -285,9 +285,9 @@ param(
 PROCESS {
     if ([string]::IsNullOrEmpty($LogoPath)) {
         if ($Signature) {
-            return "VBR_LOGO_Footer"
+            return "AD_LOGO_Footer"
         } else {
-            return "VBR_Logo"
+            return "Microsoft_Logo"
         }
     } else {
         if (Test-Image -Path $LogoPath) {
