@@ -1,6 +1,6 @@
 <p align="center">
     <a href="https://github.com/rebelinux/Diagrammer.Microsoft.AD" alt="Diagrammer.Microsoft.AD"></a>
-            <img src='https://raw.githubusercontent.com/rebelinux/Diagrammer.Microsoft.AD/dev/icons/verified_recoverability.png' width="8%" height="8%" /></a>
+            <img src='https://raw.githubusercontent.com/rebelinux/Diagrammer.Microsoft.AD/dev/icons/DMAD_Logo.png' width="8%" height="8%" /></a>
 </p>
 <p align="center">
     <a href="https://www.powershellgallery.com/packages/Diagrammer.Microsoft.AD/" alt="PowerShell Gallery Version">
