@@ -274,7 +274,7 @@ function New-ADDiagram {
         }
 
         if ($Signature -and (([string]::IsNullOrEmpty($AuthorName)) -or ([string]::IsNullOrEmpty($CompanyName)))) {
-            throw "New-VeeamDiagram : AuthorName and CompanyName must be defined if the Signature option is specified"
+            throw "New-ADDiagram : AuthorName and CompanyName must be defined if the Signature option is specified"
         }
 
 
