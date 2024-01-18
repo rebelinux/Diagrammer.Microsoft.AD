@@ -1,13 +1,8 @@
 # :arrows_clockwise: Microsoft AD As Built Report Changelog
 
-## [0.1.0] - YYYY-MM-DD
+## [0.1.0] - 2024-01-17
 
 ### Added
 
-### Changed
-
-### Fixed
-
-### Removed
-
-
+- Initial release
+  - Forest diagram support
