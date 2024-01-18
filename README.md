@@ -210,12 +210,12 @@ Get-Help New-ADDiagram -Full
 There are a few examples listed below on running the Diagrammer.Microsoft.AD script against a Domain Controller Server. Refer to the `README.md` file in the main Diagrammer.Microsoft.AD project repository for more examples.
 
 ```powershell
-# Generate a Diagrammer.Microsoft.AD diagram for Backup Server 'dc-01.pharmax.local' using specified credentials. Export report to PDF & PNG formats. Use default report style. Save reports to 'C:\Users\Jon\Documents'
-PS C:\> New-ADDiagram -DiagramType Backup-to-SOBR -Target dc-01.pharmax.local -Username 'Domain\ad_admin' -Password 'P@ssw0rd' -Format pdf,png -OutputFolderPath 'C:\Users\Jon\Documents'
+# Generate a Diagrammer.Microsoft.AD diagram for Domain Controller 'dc-01.pharmax.local' using specified credentials. Export report to PDF & PNG formats. Use default report style. Save reports to 'C:\Users\Jon\Documents'
+PS C:\> New-ADDiagram -DiagramType Forest -Target dc-01.pharmax.local -Username 'Domain\ad_admin' -Password 'P@ssw0rd' -Format pdf,png -OutputFolderPath 'C:\Users\Jon\Documents'
 
-# Generate a Diagrammer.Microsoft.AD diagram for Backup Server dc-01.pharmax.local using stored credentials. Export report to DOT & SVG formats. Save reports to 'C:\Users\Jon\Documents'.
+# Generate a Diagrammer.Microsoft.AD diagram for Domain Controller dc-01.pharmax.local using stored credentials. Export report to DOT & SVG formats. Save reports to 'C:\Users\Jon\Documents'.
 PS C:\> $Creds = Get-Credential
-PS C:\> New-ADDiagram -DiagramType Backup-to-SOBR -Target dc-01.pharmax.local -Credential $Creds -Format dot,pdf -OutputFolderPath 'C:\Users\Jon\Documents'
+PS C:\> New-ADDiagram -DiagramType Forest -Target dc-01.pharmax.local -Credential $Creds -Format dot,pdf -OutputFolderPath 'C:\Users\Jon\Documents'
 
 ```
 
