@@ -44,7 +44,7 @@ function New-ADDiagram {
     .PARAMETER EnableErrorDebug
         Control to enable error debugging.
     .NOTES
-        Version:        0.1.0
+        Version:        0.1.1
         Author(s):      Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -395,9 +395,9 @@ function New-ADDiagram {
                             rank $ForestRoot,ForestRootInformation
                         } else {
                             # Dummy Nodes used for subgraph centering
-                            node Left @{Label=' '; fontcolor='gray'; shape='plain'; fillColor='transparent'}
-                            node Leftt @{Label=' '; fontcolor='gray'; shape='plain'; fillColor='transparent'}
-                            node Right @{Label=' '; fontcolor='gray'; shape='plain'; fillColor='transparent'}
+                            node Left @{Label='Left'; fontcolor=$NodeDebug.color; fillColor=$NodeDebug.style; shape='plain'}
+                            node Leftt @{Label='Leftt'; fontcolor=$NodeDebug.color; fillColor=$NodeDebug.style; shape='plain'}
+                            node Right @{Label='Right'; fontcolor=$NodeDebug.color; fillColor=$NodeDebug.style; shape='plain'}
 
                             node $ForestRoot @{Label=Get-NodeIcon -Name $ForestRoot -Type "ForestRoot" -Align "Center"; shape='plain'; fillColor='transparent'; fontsize=14}
 
@@ -429,6 +429,14 @@ function New-ADDiagram {
             }
         }
     } end {
+        # Remove used PSSession
+        Write-Verbose "Clearing PowerShell Session $($TempPssSession.Id)"
+        Remove-PSSession -Session $TempPssSession
+
+        # Remove used CIMSession
+        Write-Verbose "Clearing CIM Session $($TempCIMSession.Id)"
+        Remove-CIMSession -CimSession $TempCIMSession
+
         #Export Diagram
         Out-ADDiagram
     }

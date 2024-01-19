@@ -5,7 +5,7 @@ function Get-DiagForest {
     .DESCRIPTION
         Build a diagram of the configuration of Microsoft Active Directory in PDF/PNG/SVG formats using Psgraph.
     .NOTES
-        Version:        0.1.0
+        Version:        0.1.1
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,78 +23,109 @@ function Get-DiagForest {
         Write-Verbose -Message "Collecting Forest information from $($ForestRoot)."
         try {
             if ($ForestRoot) {
-                $ChildDomains = ($ADSystem.Domains | Where-Object {$_ -ne $ForestRoot })
-                # $ChildDomains = @("a.pharmax.local","b.pharmax.local","c.pharmax.local","ad.pharmax.local","e.pharmax.local","f.pharmax.local","g.pharmax.local", "uia.local", "b12.local", "acad.uia.local", "admin.b12.local", "hr.b12.local")
-                if ($ChildDomains) {
-                    # Dummy Node used for Main Labeling
-                    node CHILDDOMAINSTEXT @{Label='Child Domains'; fontcolor='#71797E'; fontsize=22; shape='plain'; fillColor='transparent'}
-                    # node DummyChildDOMAINS @{Label='DummyChildDOMAINS'; fontcolor=$NodeDebug.color; fillColor=$NodeDebug.style; shape='plain'}
-                    SubGraph MainSubGraph -Attributes @{Label=''; penwidth=1.5; labelloc='t'; style="dashed,rounded"; color="gray"} {
-                        if ($ChildDomains.ToUpper() -notmatch $ForestRoot) {
-                            SubGraph ContiguousChilds -Attributes @{Label='Contiguous'; fontsize=18; penwidth=1.5; labelloc='b'; style="dashed"; color="gray"} {
-                                # Dummy Node used for subgraph centering
-                                node DummyContiguous @{Label='DummyContiguous'; fontcolor=$NodeDebug.color; fillColor=$NodeDebug.style; shape='plain'}
-                                if (($ChildDomains.ToUpper() -match $ForestRoot).Length -ge 1 -and ($ChildDomains.ToUpper() -match $ForestRoot).Length -le 3) {
-                                    node ($ChildDomains.ToUpper() -match $ForestRoot) @{width=5}
-                                    $ChildDomains.ToUpper() -match $ForestRoot | ForEach-Object { edge -from DummyContiguous -to $_ @{minlen=1; style=$EdgeDebug.style; color=$EdgeDebug.color} }
-                                } else {
-                                    $Group = Split-array -inArray ($ChildDomains.ToUpper() -match $ForestRoot | Sort-Object -Property Name) -size 3
-                                    $Number = 0
-                                    while ($Number -ne $Group.Length) {
-                                        SubGraph "Contiguous$($Number)" -Attributes @{Label=' '; style=$SubGraphDebug.style; color=$SubGraphDebug.color; penwidth=1} {
-                                            $Group[$Number] | ForEach-Object {
-                                                node $_ @{Label=$_}
-                                            }
-                                        }
-                                        $Number++
-                                    }
-                                    edge -From DummyContiguous -To $Group[0] @{minlen=1; style=$EdgeDebug.style; color=$EdgeDebug.color}
-                                    $Start = 0
-                                    $LocalRepoNum = 1
-                                    while ($LocalRepoNum -ne $Group.Length) {
-                                        edge -From $Group[$Start] -To $Group[$LocalRepoNum] @{minlen=1; style=$EdgeDebug.style; color=$EdgeDebug.color}
-                                        $Start++
-                                        $LocalRepoNum++
-                                    }
-                                }
-                            }
-                            SubGraph NonContiguousChilds -Attributes @{Label='Non-Contiguous'; fontsize=18; penwidth=1.5; labelloc='b'; style="dashed"; color="gray"} {
-                                # Dummy Node used for subgraph centering
-                                node DummyNonContiguous @{Label='DummyNonContiguous'; fontcolor=$NodeDebug.color; fillColor=$NodeDebug.style; shape='plain'}
-                                if (($ChildDomains.ToUpper() -notmatch $ForestRoot).Length -ge 1 -and ($ChildDomains.ToUpper() -notmatch $ForestRoot).Length -le 3) {
-                                    node ($ChildDomains.ToUpper() -notmatch $ForestRoot) @{width=5}
-                                    $ChildDomains.ToUpper() -notmatch $ForestRoot | ForEach-Object { edge -from DummyNonContiguous -to $_ @{minlen=1; style=$EdgeDebug.style; color=$EdgeDebug.color} }
-                                } else {
-                                    $Group = Split-array -inArray ($ChildDomains.ToUpper() -notmatch $ForestRoot | Sort-Object -Property Name) -size 3
-                                    $Number = 0
-                                    while ($Number -ne $Group.Length) {
-                                        SubGraph "NonContiguous$($Number)" -Attributes @{Label=' '; style=$SubGraphDebug.style; color=$SubGraphDebug.color; penwidth=1} {
-                                            $Group[$Number] | ForEach-Object {
-                                                node $_ @{Label=$_}
-                                            }
-                                        }
-                                        $Number++
-                                    }
-                                    edge -From DummyNonContiguous -To $Group[0] @{minlen=1; style=$EdgeDebug.style; color=$EdgeDebug.color}
-                                    $Start = 0
-                                    $LocalRepoNum = 1
-                                    while ($LocalRepoNum -ne $Group.Length) {
-                                        edge -From $Group[$Start] -To $Group[$LocalRepoNum] @{minlen=1; style=$EdgeDebug.style; color=$EdgeDebug.color}
-                                        $Start++
-                                        $LocalRepoNum++
-                                    }
-                                }
-                            }
-                            edge -from CHILDDOMAINSTEXT:s -to DummyContiguous:n, DummyNonContiguous:n @{minlen=1; style=$EdgeDebug.style; color=$EdgeDebug.color}
-                        } else {
+                if ($Dir -eq 'LR') {
+                    $DiagramLabel = 'Child Domains'
+                    $DiagramDummyLabel = ' '
+                } else {
+                    $DiagramLabel = ' '
+                    $DiagramDummyLabel = 'Child Domains'
+                }
+                $ForestGroups = Get-ADForestInfo
 
-                            node $ChildDomains.ToUpper()
-                            $ChildDomains.ToUpper() | ForEach-Object { edge -from CHILDDOMAINSTEXT -to $_ @{minlen=1; style=$EdgeDebug.style; color=$EdgeDebug.color} }
-
+                if ($ForestGroups) {
+                    SubGraph MainSubGraph -Attributes @{Label=$DiagramLabel ; fontsize=22; penwidth=1.5; labelloc='t'; style='dashed,rounded'; color=$SubGraphDebug.color} {
+                        # Dummy Node used for subgraph centering
+                        node CHILDDOMAINSTEXT @{Label='Child Domains'; fontcolor='#71797E'; fontsize=22; shape='plain'; fillColor='transparent'}
+                        if ($Dir -eq 'TB') {
+                            node CDLeft @{Label='CDLeft'; style=$EdgeDebug.style; color=$EdgeDebug.color; shape='plain'; fillColor='transparent'}
+                            node CDLeftt @{Label='CDLeftt'; style=$EdgeDebug.style; color=$EdgeDebug.color; shape='plain'; fillColor='transparent'}
+                            node CDRight @{Label='CDRight'; style=$EdgeDebug.style; color=$EdgeDebug.color; shape='plain'; fillColor='transparent'}
+                            edge CDLeft,CDLeftt,CHILDDOMAINSTEXT,CDRight @{style=$EdgeDebug.style; color=$EdgeDebug.color}
+                            rank CDLeft,CDLeftt,CHILDDOMAINSTEXT,CDRight
                         }
+
+                        foreach ($ForestGroupOBJ in $ForestGroups) {
+                            if ($ForestGroupOBJ.Name -match $ForestRoot -and $ForestGroupOBJ.Childs.Group) {
+                                SubGraph ContiguousChilds -Attributes @{Label='Contiguous'; fontsize=18; penwidth=1.5; labelloc='b'; style='dashed,rounded'} {
+                                    node DummyContiguousChilds @{Label='DummyContiguousChilds'; fontcolor=$NodeDebug.color; fillColor=$NodeDebug.style; shape='plain'}
+                                    if ($ForestGroupOBJ.Childs.Group.Length -ge 1 -and $ForestGroupOBJ.Childs.Group.Length -le 3) {
+                                        $SubGraphName = Remove-SpecialChar -String $ForestGroupOBJ.Name -SpecialChars '\-. '
+                                        SubGraph $SubGraphName -Attributes @{Label=$ForestGroupOBJ.Name; fontsize=18; penwidth=1.5; labelloc='t'; style='dashed,rounded'} {
+                                            $ForestGroupOBJ.Childs.Group | ForEach-Object {node $_ @{Label=$_; fontname="Segoe Ui"}}
+                                        }
+                                        edge -from DummyContiguousChilds -to $ForestGroupOBJ.Childs.Group @{minlen=1; style=$EdgeDebug.style; color=$EdgeDebug.color}
+                                    } else {
+                                        $SubGraphName = Remove-SpecialChar -String $ForestGroupOBJ.Name -SpecialChars '\-. '
+                                        $Group = Split-array -inArray $ForestGroupOBJ.Childs.Group -size 3
+                                        $Number = 0
+                                        while ($Number -ne $Group.Length) {
+                                            SubGraph $SubGraphName -Attributes @{Label=$ForestGroupOBJ.Name; fontsize=18; penwidth=1.5; labelloc='t'; style='dashed,rounded'} {
+                                                $Group[$Number] | ForEach-Object {
+                                                    node $_ @{Label=$_}
+                                                }
+                                            }
+                                            $Number++
+                                        }
+                                        edge -From DummyContiguousChilds -To $Group[0] @{minlen=1; style=$EdgeDebug.style; color=$EdgeDebug.color}
+                                        $Start = 0
+                                        $LocalRepoNum = 1
+                                        while ($LocalRepoNum -ne $Group.Length) {
+                                            edge -From $Group[$Start] -To $Group[$LocalRepoNum] @{minlen=1; style=$EdgeDebug.style; color=$EdgeDebug.color}
+                                            $Start++
+                                            $LocalRepoNum++
+                                        }
+                                    }
+                                }
+                                edge -from CHILDDOMAINSTEXT -to DummyContiguousChilds @{minlen=1; style=$EdgeDebug.style; color=$EdgeDebug.color}
+                            }
+                            elseif ($ForestGroupOBJ.Name -notmatch $ForestRoot -and $ForestGroupOBJ.Childs) {
+                                SubGraph NonContiguousChilds -Attributes @{Label='NonContiguous'; fontsize=18; penwidth=1.5; labelloc='b'; style='dashed,rounded'} {
+                                    node DummyNonContiguousChilds @{Label='DummyNonContiguousChilds'; fontcolor=$NodeDebug.color; fillColor=$NodeDebug.style; shape='plain'}
+                                    $DomainDummyNode = Remove-SpecialChar -String $ForestGroupOBJ.Name -SpecialChars '\-. '
+                                    if ($ForestGroupOBJ.Childs.Group.Length -ge 1 -and $ForestGroupOBJ.Childs.Group.Length -le 3) {
+                                        $SubGraphName = Remove-SpecialChar -String $ForestGroupOBJ.Name -SpecialChars '\-. '
+                                        SubGraph $SubGraphName -Attributes @{Label=$ForestGroupOBJ.Name; fontsize=18; penwidth=1.5; labelloc='t'; style='dashed,rounded'} {
+                                            node "Dummy$DomainDummyNode" @{Label="Dummy$DomainDummyNode"; fontcolor=$NodeDebug.color; fillColor=$NodeDebug.style; shape='plain'}
+                                            $ForestGroupOBJ.Childs.Group | ForEach-Object {node $_ @{Label=$_; fontname="Segoe Ui"}}
+                                            edge -from "Dummy$DomainDummyNode" -to $ForestGroupOBJ.Childs.Group @{minlen=1; style=$EdgeDebug.style; color=$EdgeDebug.color}
+                                        }
+                                        edge -from DummyNonContiguousChilds -to "Dummy$DomainDummyNode" @{minlen=1; style=$EdgeDebug.style; color=$EdgeDebug.color}
+                                    } elseif ($ForestGroupOBJ.Childs.Group.Length -ge 4) {
+                                        $SubGraphName = Remove-SpecialChar -String $ForestGroupOBJ.Name -SpecialChars '\-. '
+                                        $Group = Split-array -inArray $ForestGroupOBJ.Childs.Group -size 3
+                                        $Number = 0
+                                        while ($Number -ne $Group.Length) {
+                                            SubGraph $SubGraphName -Attributes @{Label=$ForestGroupOBJ.Name; fontsize=18; penwidth=1.5; labelloc='t'; style='dashed,rounded'} {
+                                                node "Dummy$DomainDummyNode" @{Label="Dummy$DomainDummyNode"; fontcolor=$NodeDebug.color; fillColor=$NodeDebug.style; shape='plain'}
+                                                $Group[$Number] | ForEach-Object {
+                                                    node $_ @{Label=$_}
+                                                }
+                                            }
+                                            $Number++
+                                        }
+                                        edge -From "Dummy$DomainDummyNode" -To $Group[0] @{minlen=1; style=$EdgeDebug.style; color=$EdgeDebug.color}
+                                        $Start = 0
+                                        $LocalRepoNum = 1
+                                        while ($LocalRepoNum -ne $Group.Length) {
+                                            edge -From $Group[$Start] -To $Group[$LocalRepoNum] @{minlen=1; style=$EdgeDebug.style; color=$EdgeDebug.color}
+                                            $Start++
+                                            $LocalRepoNum++
+                                        }
+                                        edge -from DummyNonContiguousChilds -to "Dummy$DomainDummyNode" @{minlen=1; style=$EdgeDebug.style; color=$EdgeDebug.color}
+                                    } else {
+                                        $SubGraphName = Remove-SpecialChar -String $ForestGroupOBJ.Name -SpecialChars '\-. '
+                                        SubGraph $SubGraphName -Attributes @{Label=$ForestGroupOBJ.Name; fontsize=18; penwidth=1.5; labelloc='t'; style='dashed,rounded'} {
+                                            node $ForestGroupOBJ.Name
+                                        }
+                                        edge -from DummyNonContiguousChilds -to $ForestGroupOBJ.Name @{minlen=1; style=$EdgeDebug.style; color=$EdgeDebug.color}
+                                    }
+                                }
+                                edge -from CHILDDOMAINSTEXT -to DummyNonContiguousChilds @{minlen=1; style=$EdgeDebug.style; color=$EdgeDebug.color}
+                            }
+                        }
+
                     }
-                    # edge -from CHILDDOMAINSTEXT:s -to CHILDDOMAINSTEXT:n @{minlen=1; style=$EdgeDebug.style; color=$EdgeDebug.color}
-                    edge -from $ForestRoot -to CHILDDOMAINSTEXT @{minlen=2}
+                    edge -from $ForestRoot -to CHILDDOMAINSTEXT @{minlen=3}
                 }
             }
         }
