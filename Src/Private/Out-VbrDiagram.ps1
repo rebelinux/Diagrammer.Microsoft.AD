@@ -5,7 +5,7 @@ function Out-ADDiagram {
     .DESCRIPTION
         Build a diagram of the configuration of Diagrammer.AD in PDF/PNG/SVG formats using Psgraph.
     .NOTES
-        Version:        0.1.0
+        Version:        0.1.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -21,9 +21,7 @@ function Out-ADDiagram {
             Mandatory = $true,
             HelpMessage = 'Please provide the graphviz dot object'
         )]
-        [ValidateNotNullOrEmpty()]
-        [String] $GraphObj
-
+        $GraphObj
     )
     process {
         if ($EnableErrorDebug) {

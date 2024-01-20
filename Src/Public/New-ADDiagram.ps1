@@ -44,7 +44,7 @@ function New-ADDiagram {
     .PARAMETER EnableErrorDebug
         Control to enable error debugging.
     .NOTES
-        Version:        0.1.1
+        Version:        0.1.2
         Author(s):      Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -291,8 +291,11 @@ function New-ADDiagram {
             'Forest' {'Active Directory Forest Architecture'}
         }
 
+        $URLIcon = $false
+
         if ($EnableEdgeDebug) {
             $EdgeDebug = @{style='filled'; color='red'}
+            $URLIcon = $true
         } else {$EdgeDebug = @{style='invis'; color='red'}}
 
         if ($EnableSubGraphDebug) {
@@ -366,7 +369,7 @@ function New-ADDiagram {
                     arrowsize = 1
                 }
 
-                SubGraph MainGraph -Attributes @{Label=(Get-HTMLLabel -Label $MainGraphLabel -Type $CustomLogo ); fontsize=22; penwidth=0} {
+                SubGraph MainGraph -Attributes @{Label=(Get-HTMLLabel -Label $MainGraphLabel -Type $CustomLogo -URLIcon $URLIcon); fontsize=22; penwidth=0} {
                     $script:ForestRoot = $ADSystem.Name.ToString().ToUpper()
                     SubGraph ForestMain -Attributes @{Label=" "; style="invis"; bgcolor="gray"; penwidth=1; color="blue"} {
 

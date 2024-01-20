@@ -2,7 +2,9 @@ Function Get-HTMLLabel {
     param(
         [string]$Label,
         [string]$Type,
-        [Switch]$SubgraphLabel
+        [Switch]$SubgraphLabel,
+        [bool]$URLIcon
+
     )
 
     if ($Type -eq 'NoIcon') {

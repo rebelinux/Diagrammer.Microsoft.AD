@@ -5,7 +5,8 @@ Function Get-HTMLTable {
         [int] $TableBorder= 1,
         [int] $CellBorder= 1,
         [int] $FontSize = 14,
-        [string] $Logo
+        [string] $Logo,
+        [bool]$URLIcon
     )
 
     if ($images[$Logo]) {
