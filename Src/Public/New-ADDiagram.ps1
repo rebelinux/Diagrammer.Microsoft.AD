@@ -197,7 +197,7 @@ function New-ADDiagram {
 
         [Parameter(
             Mandatory = $false,
-            HelpMessage = 'Controls type of Active Directory generated diagram'
+            HelpMessage = 'Allow to rotate the diagram output image. valid rotation degree (90, 180)'
         )]
         [ValidateSet(90, 180)]
         [string] $Rotate,
@@ -441,6 +441,6 @@ function New-ADDiagram {
         Remove-CIMSession -CimSession $TempCIMSession
 
         #Export Diagram
-        Out-ADDiagram -GraphObj $Graph -ErrorDebug $EnableErrorDebug
+        Out-ADDiagram -GraphObj $Graph -ErrorDebug $EnableErrorDebug -Rotate $Rotate
     }
 }

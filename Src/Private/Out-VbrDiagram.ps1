@@ -27,7 +27,13 @@ function Out-ADDiagram {
             Mandatory = $false,
             HelpMessage = 'Allow to enable error debugging'
         )]
-        [Bool]$ErrorDebug
+        [bool]$ErrorDebug,
+        [Parameter(
+            Position = 2,
+            Mandatory = $false,
+            HelpMessage = 'Allow to rotate the diagram output image. valid rotation degree (90, 180)'
+        )]
+        [int]$Rotate
     )
     process {
         if ($ErrorDebug) {
@@ -68,7 +74,7 @@ function Out-ADDiagram {
                                 if ($Rotate) {
                                     Add-Type -AssemblyName System.Windows.Forms
                                     $RotatedIMG = new-object System.Drawing.Bitmap $Document.FullName
-                                    $RotatedIMG.RotateFlip("Rotate90FlipNone")
+                                    $RotatedIMG.RotateFlip("Rotate$($Rotate)FlipNone")
                                     $RotatedIMG.Save($Document.FullName,"png")
                                     if ($RotatedIMG) {
                                         $Base64 = [convert]::ToBase64String((get-content $Document -encoding byte))
@@ -123,11 +129,27 @@ function Out-ADDiagram {
                         } else {
                             $Document = Export-PSGraph -Source $GraphObj -DestinationPath "$($OutputFolderPath)$($File)" -OutputFormat 'png'
                             if ($Document) {
-                                $Base64 = [convert]::ToBase64String((get-content $Document -encoding byte))
-                                if ($Base64) {
-                                    Remove-Item -Path $Document.FullName
-                                    $Base64
-                                } else {Remove-Item -Path $Document.FullName}
+                                # Code used to allow rotating image!
+                                if ($Rotate) {
+                                    Add-Type -AssemblyName System.Windows.Forms
+                                    $RotatedIMG = new-object System.Drawing.Bitmap $Document.FullName
+                                    $RotatedIMG.RotateFlip("Rotate$($Rotate)FlipNone")
+                                    $RotatedIMG.Save($Document.FullName,"png")
+                                    if ($RotatedIMG) {
+                                        $Base64 = [convert]::ToBase64String((get-content $Document -encoding byte))
+                                        if ($Base64) {
+                                            Remove-Item -Path $Document.FullName
+                                            $Base64
+                                        } else {Remove-Item -Path $Document.FullName}
+                                    }
+                                } else {
+                                    # Code used to output image to base64 format
+                                    $Base64 = [convert]::ToBase64String((get-content $Document -encoding byte))
+                                    if ($Base64) {
+                                        Remove-Item -Path $Document.FullName
+                                        $Base64
+                                    } else {Remove-Item -Path $Document.FullName}
+                                }
                             }
                         }
                     } catch {
