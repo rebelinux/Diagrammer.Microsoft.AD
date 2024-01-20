@@ -45,10 +45,10 @@ function Get-ADForestInfo {
             $ForestDomainInfo = @()
             if ($ForestGroups) {
                 foreach ($ForestGroup in $ForestGroups) {
-                    $ForestRootRows = @{
-                        'Placement Policy' = $Sobr.PolicyType
-                        'Encryption Enabled' = ConvertTo-TextYN $Sobr.EncryptionEnabled
-                    }
+                    # $ForestRootRows = @{
+                    #     'Placement Policy' = $Sobr.PolicyType
+                    #     'Encryption Enabled' = ConvertTo-TextYN $Sobr.EncryptionEnabled
+                    # }
 
                     $TempDomainInfo = [PSCustomObject]@{
                         Name = $ForestGroup.Name
