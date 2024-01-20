@@ -16,11 +16,18 @@ function Out-ADDiagram {
     [OutputType([String])]
     Param
     (
+        [Parameter(
+            Position = 0,
+            Mandatory = $true,
+            HelpMessage = 'Please provide the graphviz dot object'
+        )]
+        [ValidateNotNullOrEmpty()]
+        [String] $GraphObj
 
     )
     process {
         if ($EnableErrorDebug) {
-            $Graph
+            $GraphObj
         } else {
             # If Filename parameter is not specified, set filename to the Output.$OutputFormat
             foreach ($OutputFormat in $Format) {
@@ -28,10 +35,10 @@ function Out-ADDiagram {
                     Try {
                         if ($OutputFormat -ne "base64") {
                             if($OutputFormat -ne "svg") {
-                                $Document = Export-PSGraph -Source $Graph -DestinationPath "$($OutputFolderPath)$($FileName)" -OutputFormat $OutputFormat
+                                $Document = Export-PSGraph -Source $GraphObj -DestinationPath "$($OutputFolderPath)$($FileName)" -OutputFormat $OutputFormat
                                 Write-ColorOutput -Color green  "Diagram '$FileName' has been saved to '$OutputFolderPath'."
                             } else {
-                                $Document = Export-PSGraph -Source $Graph -DestinationPath "$($OutputFolderPath)$($FileName)" -OutputFormat $OutputFormat
+                                $Document = Export-PSGraph -Source $GraphObj -DestinationPath "$($OutputFolderPath)$($FileName)" -OutputFormat $OutputFormat
                                 #Fix icon path issue with svg output
                                 $images = Select-String -Path $($Document.fullname) -Pattern '<image xlink:href=".*png".*>' -AllMatches
                                 foreach($match in $images) {
@@ -51,7 +58,7 @@ function Out-ADDiagram {
 
                             }
                         } else {
-                            $Document = Export-PSGraph -Source $Graph -DestinationPath "$($OutputFolderPath)$($FileName)" -OutputFormat 'png'
+                            $Document = Export-PSGraph -Source $GraphObj -DestinationPath "$($OutputFolderPath)$($FileName)" -OutputFormat 'png'
                             if ($Document) {
                                 # Code used to allow rotating image!
                                 if ($Rotate) {
@@ -89,10 +96,10 @@ function Out-ADDiagram {
                     Try {
                         if ($OutputFormat -ne "base64") {
                             if($OutputFormat -ne "svg") {
-                                $Document = Export-PSGraph -Source $Graph -DestinationPath "$($OutputFolderPath)$($File)" -OutputFormat $OutputFormat
+                                $Document = Export-PSGraph -Source $GraphObj -DestinationPath "$($OutputFolderPath)$($File)" -OutputFormat $OutputFormat
                                 Write-ColorOutput -Color green  "Diagram '$File' has been saved to '$OutputFolderPath'."
                             } else {
-                                $Document = Export-PSGraph -Source $Graph -DestinationPath "$($OutputFolderPath)$($File)" -OutputFormat $OutputFormat
+                                $Document = Export-PSGraph -Source $GraphObj -DestinationPath "$($OutputFolderPath)$($File)" -OutputFormat $OutputFormat
                                 $images = Select-String -Path $($Document.fullname) -Pattern '<image xlink:href=".*png".*>' -AllMatches
                                 foreach($match in $images) {
                                     $matchFound = $match -Match '"(.*png)"'
@@ -110,7 +117,7 @@ function Out-ADDiagram {
                                 }
                             }
                         } else {
-                            $Document = Export-PSGraph -Source $Graph -DestinationPath "$($OutputFolderPath)$($File)" -OutputFormat 'png'
+                            $Document = Export-PSGraph -Source $GraphObj -DestinationPath "$($OutputFolderPath)$($File)" -OutputFormat 'png'
                             if ($Document) {
                                 $Base64 = [convert]::ToBase64String((get-content $Document -encoding byte))
                                 if ($Base64) {

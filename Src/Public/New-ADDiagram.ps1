@@ -366,7 +366,7 @@ function New-ADDiagram {
                     arrowsize = 1
                 }
 
-                SubGraph MainGraph -Attributes @{Label=(Get-HTMLLabel -Label $MainGraphLabel -Type "Microsoft_LOGO" ); fontsize=22; penwidth=0} {
+                SubGraph MainGraph -Attributes @{Label=(Get-HTMLLabel -Label $MainGraphLabel -Type $CustomLogo ); fontsize=22; penwidth=0} {
                     $script:ForestRoot = $ADSystem.Name.ToString().ToUpper()
                     SubGraph ForestMain -Attributes @{Label=" "; style="invis"; bgcolor="gray"; penwidth=1; color="blue"} {
 
@@ -438,6 +438,6 @@ function New-ADDiagram {
         Remove-CIMSession -CimSession $TempCIMSession
 
         #Export Diagram
-        Out-ADDiagram
+        Out-ADDiagram -GraphObj $Graph
     }
 }

@@ -263,7 +263,7 @@ PROCESS {
 function Test-Logo {
 <#
 .SYNOPSIS
-    Used by Diagrammer.AD  to validate logo path.
+    Used by Diagrammer.AD to validate logo path.
 .DESCRIPTION
 .NOTES
     Version:        0.1.0
