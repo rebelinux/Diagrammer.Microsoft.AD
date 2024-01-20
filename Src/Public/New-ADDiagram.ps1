@@ -441,6 +441,6 @@ function New-ADDiagram {
         Remove-CIMSession -CimSession $TempCIMSession
 
         #Export Diagram
-        Out-ADDiagram -GraphObj $Graph
+        Out-ADDiagram -GraphObj $Graph -ErrorDebug $EnableErrorDebug
     }
 }

@@ -21,10 +21,16 @@ function Out-ADDiagram {
             Mandatory = $true,
             HelpMessage = 'Please provide the graphviz dot object'
         )]
-        $GraphObj
+        $GraphObj,
+        [Parameter(
+            Position = 1,
+            Mandatory = $false,
+            HelpMessage = 'Allow to enable error debugging'
+        )]
+        [Bool]$ErrorDebug
     )
     process {
-        if ($EnableErrorDebug) {
+        if ($ErrorDebug) {
             $GraphObj
         } else {
             # If Filename parameter is not specified, set filename to the Output.$OutputFormat
