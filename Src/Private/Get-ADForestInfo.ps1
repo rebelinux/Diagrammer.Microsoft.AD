@@ -50,11 +50,6 @@ function Get-ADForestInfo {
                         'Encryption Enabled' = ConvertTo-TextYN $Sobr.EncryptionEnabled
                     }
 
-                    $ForestChildsRows = @{
-                        'Placement Policy' = $Sobr.PolicyType
-                        'Encryption Enabled' = ConvertTo-TextYN $Sobr.EncryptionEnabled
-                    }
-
                     $TempDomainInfo = [PSCustomObject]@{
                         Name = $ForestGroup.Name
                         # Label = Get-NodeIcon -Name "$($Sobr.Name)" -Type "VBR_SOBR" -Align "Center" -Rows $SobrRows
