@@ -35,7 +35,7 @@ function Get-DiagForest {
                 if ($ForestGroups) {
                     SubGraph MainSubGraph -Attributes @{Label=$DiagramLabel ; fontsize=22; penwidth=1.5; labelloc='t'; style='dashed,rounded'; color=$SubGraphDebug.color} {
                         # Dummy Node used for subgraph centering
-                        node CHILDDOMAINSTEXT @{Label='Child Domains'; fontcolor='#71797E'; fontsize=22; shape='plain'; fillColor='transparent'}
+                        node CHILDDOMAINSTEXT @{Label=$DiagramDummyLabel; fontcolor='#71797E'; fontsize=22; shape='plain'; fillColor='transparent'}
                         if ($Dir -eq 'TB') {
                             node CDLeft @{Label='CDLeft'; style=$EdgeDebug.style; color=$EdgeDebug.color; shape='plain'; fillColor='transparent'}
                             node CDLeftt @{Label='CDLeftt'; style=$EdgeDebug.style; color=$EdgeDebug.color; shape='plain'; fillColor='transparent'}
