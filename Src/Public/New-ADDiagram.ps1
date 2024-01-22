@@ -124,8 +124,14 @@ function New-ADDiagram {
             Mandatory = $false,
             HelpMessage = 'Please provide the path to the diagram output file'
         )]
-        [ValidateScript( { Test-Path -Path $_ -IsValid })]
-        [string] $OutputFolderPath = (Join-Path ([System.IO.Path]::GetTempPath()) "$Filename.$Format"),
+        [ValidateScript( {
+            if (Test-Path -Path $_) {
+                $true
+            } else {
+                throw "Path $_ not found!"
+            }
+        })]
+        [string] $OutputFolderPath = [System.IO.Path]::GetTempPath(),
 
         [Parameter(
             Mandatory = $false,
