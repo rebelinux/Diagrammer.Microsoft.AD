@@ -5,7 +5,8 @@ Function Get-HTMLTable {
         [int] $TableBorder= 1,
         [int] $CellBorder= 1,
         [int] $FontSize = 14,
-        [string] $Logo
+        [string] $Logo,
+        [bool]$URLIcon
     )
 
     if ($images[$Logo]) {
@@ -13,7 +14,6 @@ Function Get-HTMLTable {
     } else {$ICON = $false}
 
     $TR = ''
-    $flag = $true
     foreach ($r in $Rows) {
         Write-Verbose "Creating Node: $r"
         $TR += '<TR><TD valign="top" align="{0}" colspan="2"><B><FONT POINT-SIZE="{1}">{2}</FONT></B></TD></TR>' -f $Align, $FontSize, $r

@@ -7,7 +7,8 @@ Function Get-NodeIcon {
         [hashtable[]]$Rows,
         [string]$Type,
         [String]$Name,
-        [String]$Align
+        [String]$Align,
+        [bool]$URLIcon
     )
 
 

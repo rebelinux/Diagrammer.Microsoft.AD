@@ -44,7 +44,7 @@ function New-ADDiagram {
     .PARAMETER EnableErrorDebug
         Control to enable error debugging.
     .NOTES
-        Version:        0.1.1
+        Version:        0.1.2
         Author(s):      Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -124,8 +124,14 @@ function New-ADDiagram {
             Mandatory = $false,
             HelpMessage = 'Please provide the path to the diagram output file'
         )]
-        [ValidateScript( { Test-Path -Path $_ -IsValid })]
-        [string] $OutputFolderPath = (Join-Path ([System.IO.Path]::GetTempPath()) "$Filename.$Format"),
+        [ValidateScript( {
+            if (Test-Path -Path $_) {
+                $true
+            } else {
+                throw "Path $_ not found!"
+            }
+        })]
+        [string] $OutputFolderPath = [System.IO.Path]::GetTempPath(),
 
         [Parameter(
             Mandatory = $false,
@@ -197,7 +203,7 @@ function New-ADDiagram {
 
         [Parameter(
             Mandatory = $false,
-            HelpMessage = 'Controls type of Active Directory generated diagram'
+            HelpMessage = 'Allow to rotate the diagram output image. valid rotation degree (90, 180)'
         )]
         [ValidateSet(90, 180)]
         [string] $Rotate,
@@ -291,8 +297,11 @@ function New-ADDiagram {
             'Forest' {'Active Directory Forest Architecture'}
         }
 
+        $URLIcon = $false
+
         if ($EnableEdgeDebug) {
             $EdgeDebug = @{style='filled'; color='red'}
+            $URLIcon = $true
         } else {$EdgeDebug = @{style='invis'; color='red'}}
 
         if ($EnableSubGraphDebug) {
@@ -366,7 +375,7 @@ function New-ADDiagram {
                     arrowsize = 1
                 }
 
-                SubGraph MainGraph -Attributes @{Label=(Get-HTMLLabel -Label $MainGraphLabel -Type "Microsoft_LOGO" ); fontsize=22; penwidth=0} {
+                SubGraph MainGraph -Attributes @{Label=(Get-HTMLLabel -Label $MainGraphLabel -Type $CustomLogo -URLIcon $URLIcon); fontsize=22; penwidth=0} {
                     $script:ForestRoot = $ADSystem.Name.ToString().ToUpper()
                     SubGraph ForestMain -Attributes @{Label=" "; style="invis"; bgcolor="gray"; penwidth=1; color="blue"} {
 
@@ -438,6 +447,6 @@ function New-ADDiagram {
         Remove-CIMSession -CimSession $TempCIMSession
 
         #Export Diagram
-        Out-ADDiagram
+        Out-ADDiagram -GraphObj $Graph -ErrorDebug $EnableErrorDebug -Rotate $Rotate
     }
 }

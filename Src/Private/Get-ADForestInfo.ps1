@@ -5,7 +5,7 @@ function Get-ADForestInfo {
     .DESCRIPTION
         Build a diagram of the configuration of Microsoft Active Directory in PDF/PNG/SVG formats using Psgraph.
     .NOTES
-        Version:        0.1.1
+        Version:        0.1.2
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -45,15 +45,10 @@ function Get-ADForestInfo {
             $ForestDomainInfo = @()
             if ($ForestGroups) {
                 foreach ($ForestGroup in $ForestGroups) {
-                    $ForestRootRows = @{
-                        'Placement Policy' = $Sobr.PolicyType
-                        'Encryption Enabled' = ConvertTo-TextYN $Sobr.EncryptionEnabled
-                    }
-
-                    $ForestChildsRows = @{
-                        'Placement Policy' = $Sobr.PolicyType
-                        'Encryption Enabled' = ConvertTo-TextYN $Sobr.EncryptionEnabled
-                    }
+                    # $ForestRootRows = @{
+                    #     'Placement Policy' = $Sobr.PolicyType
+                    #     'Encryption Enabled' = ConvertTo-TextYN $Sobr.EncryptionEnabled
+                    # }
 
                     $TempDomainInfo = [PSCustomObject]@{
                         Name = $ForestGroup.Name
