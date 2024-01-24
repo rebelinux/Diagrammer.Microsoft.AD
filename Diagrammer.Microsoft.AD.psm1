@@ -1,4 +1,3 @@
-Set-StrictMode -Version Latest
 # Get public and private function definition files and dot source them
 $Public = @(Get-ChildItem -Path $PSScriptRoot\Src\Public\*.ps1 -ErrorAction SilentlyContinue)
 $Private = @(Get-ChildItem -Path $PSScriptRoot\Src\Private\*.ps1 -ErrorAction SilentlyContinue)
