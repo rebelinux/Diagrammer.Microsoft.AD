@@ -44,7 +44,7 @@ function New-ADDiagram {
     .PARAMETER EnableErrorDebug
         Control to enable error debugging.
     .NOTES
-        Version:        0.1.2
+        Version:        0.1.4
         Author(s):      Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -315,6 +315,7 @@ function New-ADDiagram {
 
         $RootPath = Split-Path (Split-Path $PSScriptRoot -Parent) -Parent
         $IconPath = Join-Path $RootPath 'icons'
+        $script:GraphvizPath = Join-Path $RootPath 'Graphviz\bin\dot.exe'
         $Dir = switch ($Direction) {
             'top-to-bottom' {'TB'}
             'left-to-right' {'LR'}
