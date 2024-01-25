@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Chaged
 
-- Added Graphviz libary to local module path.
+- Added Graphviz libraries to local module folder. (No need to manually install Graphviz)
 
 ## [0.1.3] - 2024-01-24
 
