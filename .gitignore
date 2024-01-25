@@ -7,9 +7,6 @@ debug.log
 # Exclude packaged modules
 *.zip
 
-# Exclude .NET assemblies from source
-*.dll
-
 # End of https://www.toptal.com/developers/gitignore/api/powershell
 
 ### vscode ###
