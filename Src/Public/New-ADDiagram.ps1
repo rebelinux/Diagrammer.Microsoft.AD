@@ -315,7 +315,7 @@ function New-ADDiagram {
 
         $RootPath = Split-Path (Split-Path $PSScriptRoot -Parent) -Parent
         $IconPath = Join-Path $RootPath 'icons'
-        $GraphvizPath = Join-Path $RootPath 'Graphviz\bin\dot.exe'
+        $script:GraphvizPath = Join-Path $RootPath 'Graphviz\bin\dot.exe'
         $Dir = switch ($Direction) {
             'top-to-bottom' {'TB'}
             'left-to-right' {'LR'}
