@@ -23,6 +23,9 @@ function Get-DiagForest {
         Write-Verbose -Message "Collecting Forest information from $($ForestRoot)."
         try {
             if ($ForestRoot) {
+                # Get Forest Root Node Object
+                Get-DiagForestRoot
+
                 if ($Dir -eq 'LR') {
                     $DiagramLabel = 'Child Domains'
                     $DiagramDummyLabel = ' '
@@ -31,6 +34,8 @@ function Get-DiagForest {
                     $DiagramDummyLabel = 'Child Domains'
                 }
                 $ForestGroups = Get-ADForestInfo
+`
+
 
                 if ($ForestGroups) {
                     SubGraph MainSubGraph -Attributes @{Label=$DiagramLabel ; fontsize=22; penwidth=1.5; labelloc='t'; style='dashed,rounded'; color=$SubGraphDebug.color} {
@@ -121,6 +126,9 @@ function Get-DiagForest {
                                     }
                                 }
                                 edge -from CHILDDOMAINSTEXT -to DummyNonContiguousChilds @{minlen=1; style=$EdgeDebug.style; color=$EdgeDebug.color}
+                            } else {
+                                Node -Name NoChildDomain @{LAbel= "No Child Domains"; shape = "rectangle"; labelloc = 'c'; fixedsize = $true; width = "3"; height = "2"; fillColor = 'transparent'; penwidth = 0}
+                                edge -from CHILDDOMAINSTEXT -to NoChildDomain @{minlen=1; style=$EdgeDebug.style; color=$EdgeDebug.color}
                             }
                         }
 

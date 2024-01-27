@@ -198,7 +198,7 @@ function New-ADDiagram {
             Mandatory = $true,
             HelpMessage = 'Controls type of Active Directory generated diagram'
         )]
-        [ValidateSet('Forest')]
+        [ValidateSet('Forest','Domain','Sites','DomainController')]
         [string] $DiagramType,
 
         [Parameter(
@@ -260,6 +260,15 @@ function New-ADDiagram {
 
     begin {
 
+        # Setup all paths required for script to run
+        $RootPath = Split-Path (Split-Path $PSScriptRoot -Parent) -Parent
+
+        # Default language en-US
+        Import-LocalizedData -BaseDirectory ($RootPath + '\Language') -BindingVariable translate -UICulture es-ES -ErrorAction SilentlyContinue
+
+        # Override the default (en-US) if it exists in lang directory
+        # Import-LocalizedData -BaseDirectory ($RootPath + "\Language") -BindingVariable translate -ErrorAction SilentlyContinue
+
         # If Username and Password parameters used, convert specified Password to secure string and store in $Credential
         #@tpcarman
         if (($Username -and $Password)) {
@@ -268,7 +277,7 @@ function New-ADDiagram {
         }
 
         if (($Format -ne "base64") -and  !(Test-Path $OutputFolderPath)) {
-            Write-Error "OutputFolderPath '$OutputFolderPath' is not a valid folder path."
+            Write-Error ($translate.outputfolderpatherror -f $OutputFolderPath)
             break
         }
 
@@ -276,11 +285,11 @@ function New-ADDiagram {
 
         if (-not $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
 
-            throw "The requested operation requires elevation: Run PowerShell console as administrator"
+            throw $translate.runasadmin
         }
 
         if ($Signature -and (([string]::IsNullOrEmpty($AuthorName)) -or ([string]::IsNullOrEmpty($CompanyName)))) {
-            throw "New-ADDiagram : AuthorName and CompanyName must be defined if the Signature option is specified"
+            throw $translate.signaturerequirements
         }
 
 
@@ -294,7 +303,8 @@ function New-ADDiagram {
         }
 
         $MainGraphLabel = Switch ($DiagramType) {
-            'Forest' {'Active Directory Forest Architecture'}
+            'Forest' {$translate.forestgraphlabel}
+            'Domain' {$translate.domaingraphlabel}
         }
 
         $URLIcon = $false
@@ -313,7 +323,6 @@ function New-ADDiagram {
             $NodeDebug = @{color='transparent'; style='transparent'}
         }
 
-        $RootPath = Split-Path (Split-Path $PSScriptRoot -Parent) -Parent
         $IconPath = Join-Path $RootPath 'icons'
         $script:GraphvizPath = Join-Path $RootPath 'Graphviz\bin\dot.exe'
         $Dir = switch ($Direction) {
@@ -378,51 +387,13 @@ function New-ADDiagram {
 
                 SubGraph MainGraph -Attributes @{Label=(Get-HTMLLabel -Label $MainGraphLabel -Type $CustomLogo -URLIcon $URLIcon); fontsize=22; penwidth=0} {
                     $script:ForestRoot = $ADSystem.Name.ToString().ToUpper()
-                    SubGraph ForestMain -Attributes @{Label=" "; style="invis"; bgcolor="gray"; penwidth=1; color="blue"} {
-
-                        if ($DiagramVerbosity -eq 2) {
-                            $ADVersion = Invoke-Command -Session $TempPssSession {Get-ADObject (Get-ADRootDSE).schemaNamingContext -property objectVersion | Select-Object -ExpandProperty objectVersion}
-                            If ($ADVersion -eq '88') {$server = 'Windows Server 2019'}
-                            ElseIf ($ADVersion -eq '87') {$server = 'Windows Server 2016'}
-                            ElseIf ($ADVersion -eq '69') {$server = 'Windows Server 2012 R2'}
-                            ElseIf ($ADVersion -eq '56') {$server = 'Windows Server 2012'}
-                            ElseIf ($ADVersion -eq '47') {$server = 'Windows Server 2008 R2'}
-                            ElseIf ($ADVersion -eq '44') {$server = 'Windows Server 2008'}
-                            ElseIf ($ADVersion -eq '31') {$server = 'Windows Server 2003 R2'}
-                            ElseIf ($ADVersion -eq '30') {$server = 'Windows Server 2003'}
-
-                            # Main Forest Root Node
-                            $Rows = @(
-                                "<B>Func Level</B> : $($ADSystem.ForestMode)"
-                                "<B>Schema Ver</B> : $server"
-                            )
-
-                            Convert-TableToHTML -Label "Forest Root Information" -Name ForestRootInformation -Row $Rows -HeaderColor "#6d8faf" -HeaderFontColor "white" -BorderColor "black" -FontSize 14
-                            node $ForestRoot @{Label=Get-NodeIcon -Name $ForestRoot -Type "ForestRoot" -Align "Center"; shape='plain'; fillColor='transparent'; fontsize=14}
-
-                            # Edges between nodes to ensure that Forest name is in the center of the cluster
-                            edge ForestRootInformation,$ForestRoot @{style=$EdgeDebug.style; color=$EdgeDebug.color}
-                            rank $ForestRoot,ForestRootInformation
-                        } else {
-                            # Dummy Nodes used for subgraph centering
-                            node Left @{Label='Left'; fontcolor=$NodeDebug.color; fillColor=$NodeDebug.style; shape='plain'}
-                            node Leftt @{Label='Leftt'; fontcolor=$NodeDebug.color; fillColor=$NodeDebug.style; shape='plain'}
-                            node Right @{Label='Right'; fontcolor=$NodeDebug.color; fillColor=$NodeDebug.style; shape='plain'}
-
-                            node $ForestRoot @{Label=Get-NodeIcon -Name $ForestRoot -Type "ForestRoot" -Align "Center"; shape='plain'; fillColor='transparent'; fontsize=14}
-
-                            # Edges between nodes to ensure that Forest name is in the center of the cluster
-                            edge Left,Leftt,$ForestRoot,Right @{style=$EdgeDebug.style; color=$EdgeDebug.color}
-                            rank Left,Leftt,$ForestRoot,Right
-                        }
-                    }
 
                     # Call Forest Diagram
                     if ($DiagramType -eq 'Forest') {
                         $ForestInfo = Get-DiagForest
                         if ($ForestInfo) {
                             $ForestInfo
-                        } else {Write-Warning "No Forest Infrastructure available to diagram"}
+                        } else {Write-Warning $translate.emptyForest}
                     }
                 }
                 if ($Signature) {
@@ -440,11 +411,11 @@ function New-ADDiagram {
         }
     } end {
         # Remove used PSSession
-        Write-Verbose "Clearing PowerShell Session $($TempPssSession.Id)"
+        Write-Verbose ($translate.psSession -f $($TempPssSession.Id))
         Remove-PSSession -Session $TempPssSession
 
         # Remove used CIMSession
-        Write-Verbose "Clearing CIM Session $($TempCIMSession.Id)"
+        Write-Verbose ($translate.cimSession -f $($TempCIMSession.Id))
         Remove-CIMSession -CimSession $TempCIMSession
 
         #Export Diagram
