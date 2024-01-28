@@ -267,46 +267,46 @@ PROCESS {
 }
 
 function Test-Logo {
-<#
-.SYNOPSIS
-    Used by Diagrammer.AD to validate logo path.
-.DESCRIPTION
-.NOTES
-    Version:        0.1.0
-    Author:         Joanthan Colon
-.EXAMPLE
-    Test-Image -LogoPath "C:\Users\jocolon\logo.png"
-.LINK
-#>
+    <#
+    .SYNOPSIS
+        Used by Diagrammer.AD to validate logo path.
+    .DESCRIPTION
+    .NOTES
+        Version:        0.1.0
+        Author:         Joanthan Colon
+    .EXAMPLE
+        Test-Image -LogoPath "C:\Users\jocolon\logo.png"
+    .LINK
+    #>
 
-[CmdletBinding()]
-[OutputType([String])]
-param(
+    [CmdletBinding()]
+    [OutputType([String])]
+    param(
 
-    [parameter(Mandatory=$true, Position=0, ValueFromPipeline=$true)]
-    $LogoPath,
-    [Switch] $Signature
-)
+        [parameter(Mandatory=$true, Position=0, ValueFromPipeline=$true)]
+        $LogoPath,
+        [Switch] $Signature
+    )
 
-PROCESS {
-    if ([string]::IsNullOrEmpty($LogoPath)) {
-        if ($Signature) {
-            return "AD_LOGO_Footer"
-        } else {
-            return "Microsoft_Logo"
-        }
-    } else {
-        if (Test-Image -Path $LogoPath) {
-            # Add logo path to the Image variable
-            Copy-Item -Path $LogoPath -Destination $IconPath
-            $outputLogoFile = Split-Path $LogoPath -leaf
-            if ($outputLogoFile) {
-                $Images.Add("Custom", $outputLogoFile)
-                return "Custom"
+    PROCESS {
+        if ([string]::IsNullOrEmpty($LogoPath)) {
+            if ($Signature) {
+                return "AD_LOGO_Footer"
+            } else {
+                return "Microsoft_Logo"
             }
         } else {
-            throw "New-ADDiagram : Logo isn't a supported image file. Please use the following format [.jpeg, .jpg, .png]"
+            if (Test-Image -Path $LogoPath) {
+                # Add logo path to the Image variable
+                Copy-Item -Path $LogoPath -Destination $IconPath
+                $outputLogoFile = Split-Path $LogoPath -leaf
+                if ($outputLogoFile) {
+                    $Images.Add("Custom", $outputLogoFile)
+                    return "Custom"
+                }
+            } else {
+                throw "New-ADDiagram : Logo isn't a supported image file. Please use the following format [.jpeg, .jpg, .png]"
+            }
         }
     }
-}
 }

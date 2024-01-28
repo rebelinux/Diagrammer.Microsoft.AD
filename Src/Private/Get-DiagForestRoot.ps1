@@ -19,8 +19,12 @@ function Get-DiagForestRoot {
     (
 
     )
+
+    begin {
+    }
+
     process {
-        Write-Verbose -Message "Collecting Forest Root information from $($ForestRoot)."
+        Write-Verbose -Message ($translate.connectingForest -f $($ForestRoot))
         try {
             if ($ForestRoot) {
                 SubGraph ForestMain -Attributes @{Label=" "; style="invis"; bgcolor="gray"; penwidth=1; color="blue"} {
@@ -38,24 +42,24 @@ function Get-DiagForestRoot {
 
                         # Main Forest Root Node
                         $Rows = @(
-                            "<B>Func Level</B> : $($ADSystem.ForestMode)"
-                            "<B>Schema Ver</B> : $server"
+                            $($translate.funcLevel -f $ADSystem.ForestMode)
+                            $($translate.schemaVersion -f $server)
                         )
 
-                        Convert-TableToHTML -Label "Forest Root Information" -Name ForestRootInformation -Row $Rows -HeaderColor "#6d8faf" -HeaderFontColor "white" -BorderColor "black" -FontSize 14
+                        Convert-TableToHTML -Label $translate.forestRootInfo -Name ForestRootInformation -Row $Rows -HeaderColor "#6d8faf" -HeaderFontColor "white" -BorderColor "black" -FontSize 14
 
                         $ADForestFSMO = $ADSystem | Select-Object DomainNamingMaster, SchemaMaster
                         $ADDomainFSMO  = Invoke-Command -Session $TempPssSession {Get-ADDomain $using:ForestRoot| Select-Object InfrastructureMaster, RIDMaster, PDCEmulator}
 
                         $FSMOObj = @(
-                            "<B>Infrastructure:</B> $($ADDomainFSMO.InfrastructureMaster)"
-                            "<B>RID:</B> $($ADDomainFSMO.RIDMaster)"
-                            "<B>PDC Emulator:</B> $($ADDomainFSMO.PDCEmulator)"
-                            "<B>Domain Naming:</B> $($ADForestFSMO.DomainNamingMaster)"
-                            "<B>Schema:</B> $($ADForestFSMO.SchemaMaster)"
+                            $translate.infrastructure -f $($ADDomainFSMO.InfrastructureMaster)
+                            $translate.rID -f $($ADDomainFSMO.RIDMaster)
+                            $translate.pdcEmulator -f $($ADDomainFSMO.PDCEmulator)
+                            $translate.domainNaming -f $($ADForestFSMO.DomainNamingMaster)
+                            $translate.schema -f $($ADForestFSMO.SchemaMaster)
                         )
 
-                        Convert-TableToHTML -Label "FSMO Roles" -Name FSMORoles -Row $FSMOObj -HeaderColor "#6d8faf" -HeaderFontColor "white" -BorderColor "black" -FontSize 14
+                        Convert-TableToHTML -Label $translate.fsmoRoles -Name FSMORoles -Row $FSMOObj -HeaderColor "#6d8faf" -HeaderFontColor "white" -BorderColor "black" -FontSize 14
 
                         node $ForestRoot @{Label=Get-NodeIcon -Name $ForestRoot -Type "ForestRoot" -Align "Center"; shape='plain'; fillColor='transparent'; fontsize=14}
 

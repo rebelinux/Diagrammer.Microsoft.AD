@@ -5,7 +5,7 @@ function Get-ADForestInfo {
     .DESCRIPTION
         Build a diagram of the configuration of Microsoft Active Directory in PDF/PNG/SVG formats using Psgraph.
     .NOTES
-        Version:        0.1.2
+        Version:        0.1.6
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -15,12 +15,13 @@ function Get-ADForestInfo {
     [CmdletBinding()]
     [OutputType([System.Object[]])]
 
-    Param
-    (
+    Param()
 
-    )
+    begin {
+    }
+
     process {
-        Write-Verbose -Message "Collecting Microsoft AD Forest information from $($ForestRoot)."
+        Write-Verbose -Message ($translate.connectingForest -f $($ForestRoot))
         try {
             $ChildDomains = $ADSystem.Domains
             # $ChildDomains = @("a.uia.local", "b.uia.local", "c.uia.local", "d.uia.local", "e.uia.local", "f.uia.local", "g.uia.local", "h.uia.local","a.b12.local")

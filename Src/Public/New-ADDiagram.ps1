@@ -44,7 +44,7 @@ function New-ADDiagram {
     .PARAMETER EnableErrorDebug
         Control to enable error debugging.
     .NOTES
-        Version:        0.1.4
+        Version:        0.1.6
         Author(s):      Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -254,20 +254,33 @@ function New-ADDiagram {
             Mandatory = $false,
             HelpMessage = 'Allow the creation of footer signature'
         )]
-        [Switch] $Signature = $false
+        [Switch] $Signature = $false,
+        [Parameter(
+            Mandatory = $false,
+            HelpMessage = 'Allow the creation of footer signature'
+        )]
+        [ValidateSet('en-US', 'es-ES')]
+        [string] $UICulture
     )
 
 
     begin {
 
         # Setup all paths required for script to run
-        $RootPath = Split-Path (Split-Path $PSScriptRoot -Parent) -Parent
+        $script:RootPath = Split-Path (Split-Path $PSScriptRoot -Parent) -Parent
+        $IconPath = Join-Path $RootPath 'icons'
+        $script:GraphvizPath = Join-Path $RootPath 'Graphviz\bin\dot.exe'
 
-        # Default language en-US
-        Import-LocalizedData -BaseDirectory ($RootPath + '\Language') -BindingVariable translate -UICulture es-ES -ErrorAction SilentlyContinue
+        if ($PSBoundParameters.ContainsKey('UICulture')) {
 
-        # Override the default (en-US) if it exists in lang directory
-        # Import-LocalizedData -BaseDirectory ($RootPath + "\Language") -BindingVariable translate -ErrorAction SilentlyContinue
+            # Override the default (en-US) if it exists in lang directory
+            Import-LocalizedData -BaseDirectory ($RootPath + '\Language') -BindingVariable translate -UICulture $UICulture -ErrorAction SilentlyContinue
+
+        } else {
+
+            # Default language en-US
+            Import-LocalizedData -BaseDirectory ($RootPath + "\Language") -BindingVariable translate -ErrorAction SilentlyContinue
+        }
 
         # If Username and Password parameters used, convert specified Password to secure string and store in $Credential
         #@tpcarman
@@ -323,8 +336,6 @@ function New-ADDiagram {
             $NodeDebug = @{color='transparent'; style='transparent'}
         }
 
-        $IconPath = Join-Path $RootPath 'icons'
-        $script:GraphvizPath = Join-Path $RootPath 'Graphviz\bin\dot.exe'
         $Dir = switch ($Direction) {
             'top-to-bottom' {'TB'}
             'left-to-right' {'LR'}
@@ -360,7 +371,7 @@ function New-ADDiagram {
                 $script:TempPssSession = New-PSSession $System -Credential $Credential -Authentication $PSDefaultAuthentication -ErrorAction Stop
                 $script:TempCIMSession = New-CIMSession $System -Credential $Credential -Authentication $PSDefaultAuthentication -ErrorAction Stop
                 $script:ADSystem = Invoke-Command -Session $TempPssSession { Get-ADForest -ErrorAction Stop }
-            } Catch {throw "Unable to get Domain Controller Server"}
+            } Catch {throw ($translate.unableToConnect -f $System)}
 
             $Graph = Graph -Name MicrosoftAD -Attributes $MainGraphAttributes {
                 # Node default theme

@@ -29,7 +29,7 @@ Function Get-HTMLLabel {
         }  else {
             return "<TABLE border='0' cellborder='0' cellspacing='20' cellpadding='10'>
             <TR>
-                <TD bgcolor='#FFCCCC' ALIGN='center' colspan='1'>Veeam Logo</TD>
+                <TD bgcolor='#FFCCCC' ALIGN='center' colspan='1'>$($translate.veeamLogo)</TD>
             </TR>
             <TR>
                 <TD bgcolor='#FFCCCC' ALIGN='center'>$Label</TD></TR><TR><TD ALIGN='center'><font color='red'>Debug ON</font></TD>

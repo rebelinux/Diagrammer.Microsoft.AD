@@ -19,19 +19,23 @@ function Get-DiagForest {
     (
 
     )
+
+    begin {
+    }
+
     process {
-        Write-Verbose -Message "Collecting Forest information from $($ForestRoot)."
+        Write-Verbose -Message ($translate.connectingDomain -f $($ForestRoot))
         try {
             if ($ForestRoot) {
                 # Get Forest Root Node Object
                 Get-DiagForestRoot
 
                 if ($Dir -eq 'LR') {
-                    $DiagramLabel = 'Child Domains'
+                    $DiagramLabel = $translate.DiagramLabel
                     $DiagramDummyLabel = ' '
                 } else {
                     $DiagramLabel = ' '
-                    $DiagramDummyLabel = 'Child Domains'
+                    $DiagramDummyLabel = $translate.DiagramDummyLabel
                 }
                 $ForestGroups = Get-ADForestInfo
 `
@@ -51,7 +55,7 @@ function Get-DiagForest {
 
                         foreach ($ForestGroupOBJ in $ForestGroups) {
                             if ($ForestGroupOBJ.Name -match $ForestRoot -and $ForestGroupOBJ.Childs.Group) {
-                                SubGraph ContiguousChilds -Attributes @{Label='Contiguous'; fontsize=18; penwidth=1.5; labelloc='b'; style='dashed,rounded'} {
+                                SubGraph ContiguousChilds -Attributes @{Label=$translate.contiguous; fontsize=18; penwidth=1.5; labelloc='b'; style='dashed,rounded'} {
                                     node DummyContiguousChilds @{Label='DummyContiguousChilds'; fontcolor=$NodeDebug.color; fillColor=$NodeDebug.style; shape='plain'}
                                     if ($ForestGroupOBJ.Childs.Group.Length -ge 1 -and $ForestGroupOBJ.Childs.Group.Length -le 3) {
                                         $SubGraphName = Remove-SpecialChar -String $ForestGroupOBJ.Name -SpecialChars '\-. '
@@ -84,7 +88,7 @@ function Get-DiagForest {
                                 edge -from CHILDDOMAINSTEXT -to DummyContiguousChilds @{minlen=1; style=$EdgeDebug.style; color=$EdgeDebug.color}
                             }
                             elseif ($ForestGroupOBJ.Name -notmatch $ForestRoot -and $ForestGroupOBJ.Childs) {
-                                SubGraph NonContiguousChilds -Attributes @{Label='NonContiguous'; fontsize=18; penwidth=1.5; labelloc='b'; style='dashed,rounded'} {
+                                SubGraph NonContiguousChilds -Attributes @{Label=$translate.noncontiguous; fontsize=18; penwidth=1.5; labelloc='b'; style='dashed,rounded'} {
                                     node DummyNonContiguousChilds @{Label='DummyNonContiguousChilds'; fontcolor=$NodeDebug.color; fillColor=$NodeDebug.style; shape='plain'}
                                     $DomainDummyNode = Remove-SpecialChar -String $ForestGroupOBJ.Name -SpecialChars '\-. '
                                     if ($ForestGroupOBJ.Childs.Group.Length -ge 1 -and $ForestGroupOBJ.Childs.Group.Length -le 3) {
@@ -127,7 +131,7 @@ function Get-DiagForest {
                                 }
                                 edge -from CHILDDOMAINSTEXT -to DummyNonContiguousChilds @{minlen=1; style=$EdgeDebug.style; color=$EdgeDebug.color}
                             } else {
-                                Node -Name NoChildDomain @{LAbel= "No Child Domains"; shape = "rectangle"; labelloc = 'c'; fixedsize = $true; width = "3"; height = "2"; fillColor = 'transparent'; penwidth = 0}
+                                Node -Name NoChildDomain @{LAbel= $translate.NoChildDomain; shape = "rectangle"; labelloc = 'c'; fixedsize = $true; width = "3"; height = "2"; fillColor = 'transparent'; penwidth = 0}
                                 edge -from CHILDDOMAINSTEXT -to NoChildDomain @{minlen=1; style=$EdgeDebug.style; color=$EdgeDebug.color}
                             }
                         }

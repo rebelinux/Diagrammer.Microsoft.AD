@@ -8,4 +8,24 @@ ConvertFrom-StringData @'
     emptyForest = No Forest Infrastructure available to diagram
     psSession = Clearing PowerShell Session {0}
     cimSession = Clearing CIM Session {0}
+    unableToConnect = Unable to connect to {0} Domain Controller Server.
+    connectingDomain = Collecting Microsoft AD Domain information from {0}.
+    connectingForest = Collecting Microsoft AD Forest information from {0}.
+    DiagramLabel = Child Domains
+    contiguous = Contiguous
+    noncontiguous = NonContiguous
+    osType = {0} is required to run the Diagrammer.Microsoft.AD. Run 'Install-WindowsFeature -Name '{0}'' to install the required modules. https://github.com/rebelinux/Diagrammer.Microsoft.AD
+    osTypelast = Unable to validate if {0} is installed.
+    DiagramDummyLabel = Child Domains
+    NoChildDomain = No Child Domains
+    funcLevel = <B>Func Level</B>: {0}
+    schemaVersion = <B>Schema Ver</B>: {0}
+    infrastructure = <B>Infrastructure:</B> {0}
+    rID = <B>RID:</B> {0}
+    pdcEmulator= <B>PDC Emulator:</B> {0}
+    schema = <B>Schema:</B> {0}
+    domainNaming = <B>Domain Naming:</B> {0}
+    fsmoRoles = FSMO Roles
+    forestRootInfo = Forest Root Information
+    veeamLogo = Veeam Logo
 '@
