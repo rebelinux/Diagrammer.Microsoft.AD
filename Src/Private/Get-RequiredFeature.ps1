@@ -35,18 +35,16 @@ function Get-RequiredFeature {
     process {
         # Check if the required version of Module is installed
         if ($OSType -eq 'WorkStation') {
-            $RequiredFeature = Get-WindowsCapability -online -Name $Name -InformationAction SilentlyContinue
-            if ($RequiredFeature.State -ne 'Installed')  {
+            $RequiredFeature = Get-WindowsCapability -Online -Name $Name -InformationAction SilentlyContinue
+            if ($RequiredFeature.State -ne 'Installed') {
                 throw ($translate.osType -f $($Name))
             }
-        }
-        elseif ($OSType -eq 'Server' -or $OSType -eq 'DomainController') {
+        } elseif ($OSType -eq 'Server' -or $OSType -eq 'DomainController') {
             $RequiredFeature = Get-WindowsFeature -Name $Name
-            if ($RequiredFeature.InstallState -ne 'Installed')  {
+            if ($RequiredFeature.InstallState -ne 'Installed') {
                 throw ($translate.osType -f $($Name))
             }
-        }
-        else {
+        } else {
             throw ($translate.osTypelast -f $($Name))
         }
     }

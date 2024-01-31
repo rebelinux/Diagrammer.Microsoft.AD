@@ -28,4 +28,10 @@ ConvertFrom-StringData @'
     fsmoRoles = FSMO Roles
     forestRootInfo = Forest Root Information
     veeamLogo = Veeam Logo
+    SitesDiagramLabel = Sites
+    SitesDiagramDummyLabel = Sites
+    sitesgraphlabel = Active Directory Site Topology
+    emptySites = No Site topology available to diagram
+    connectingSites = Collecting Microsoft AD Sites information from {0}.
+    NoSites = No Site Topology
 '@

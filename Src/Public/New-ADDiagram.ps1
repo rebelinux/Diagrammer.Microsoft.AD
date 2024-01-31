@@ -1,5 +1,5 @@
 function New-ADDiagram {
-        <#
+    <#
     .SYNOPSIS
         Diagram the configuration of Microsoft AD infrastructure in PDF/SVG/DOT/PNG formats using PSGraph and Graphviz.
     .DESCRIPTION
@@ -125,12 +125,12 @@ function New-ADDiagram {
             HelpMessage = 'Please provide the path to the diagram output file'
         )]
         [ValidateScript( {
-            if (Test-Path -Path $_) {
-                $true
-            } else {
-                throw "Path $_ not found!"
-            }
-        })]
+                if (Test-Path -Path $_) {
+                    $true
+                } else {
+                    throw "Path $_ not found!"
+                }
+            })]
         [string] $OutputFolderPath = [System.IO.Path]::GetTempPath(),
 
         [Parameter(
@@ -138,12 +138,12 @@ function New-ADDiagram {
             HelpMessage = 'Please provide the path to the custom logo used for Signature'
         )]
         [ValidateScript( {
-            if (Test-Path -Path $_) {
-                $true
-            } else {
-                throw "File $_ not found!"
-            }
-        })]
+                if (Test-Path -Path $_) {
+                    $true
+                } else {
+                    throw "File $_ not found!"
+                }
+            })]
         [string] $SignatureLogo,
 
         [Parameter(
@@ -151,12 +151,12 @@ function New-ADDiagram {
             HelpMessage = 'Please provide the path to the custom logo'
         )]
         [ValidateScript( {
-            if (Test-Path -Path $_) {
-                $true
-            } else {
-                throw "File $_ not found!"
-            }
-        })]
+                if (Test-Path -Path $_) {
+                    $true
+                } else {
+                    throw "File $_ not found!"
+                }
+            })]
         [string] $Logo,
 
         [Parameter(
@@ -165,12 +165,12 @@ function New-ADDiagram {
         )]
         [ValidateNotNullOrEmpty()]
         [ValidateScript({
-            if ($Format.count -lt 2) {
-                $true
-            } else {
-                throw "Format value must be unique if Filename is especified."
-            }
-        })]
+                if ($Format.count -lt 2) {
+                    $true
+                } else {
+                    throw "Format value must be unique if Filename is especified."
+                }
+            })]
         [String] $Filename,
 
         [Parameter(
@@ -198,7 +198,7 @@ function New-ADDiagram {
             Mandatory = $true,
             HelpMessage = 'Controls type of Active Directory generated diagram'
         )]
-        [ValidateSet('Forest','Domain','Sites','DomainController')]
+        [ValidateSet('Forest', 'Domain', 'Sites', 'DomainController')]
         [string] $DiagramType,
 
         [Parameter(
@@ -289,7 +289,7 @@ function New-ADDiagram {
             $Credential = New-Object System.Management.Automation.PSCredential ($Username, $SecurePassword)
         }
 
-        if (($Format -ne "base64") -and  !(Test-Path $OutputFolderPath)) {
+        if (($Format -ne "base64") -and !(Test-Path $OutputFolderPath)) {
             Write-Error ($translate.outputfolderpatherror -f $OutputFolderPath)
             break
         }
@@ -316,29 +316,30 @@ function New-ADDiagram {
         }
 
         $MainGraphLabel = Switch ($DiagramType) {
-            'Forest' {$translate.forestgraphlabel}
-            'Domain' {$translate.domaingraphlabel}
+            'Forest' { $translate.forestgraphlabel }
+            'Domain' { $translate.domaingraphlabel }
+            'Sites' { $translate.sitesgraphlabel }
         }
 
         $URLIcon = $false
 
         if ($EnableEdgeDebug) {
-            $EdgeDebug = @{style='filled'; color='red'}
+            $EdgeDebug = @{style = 'filled'; color = 'red' }
             $URLIcon = $true
-        } else {$EdgeDebug = @{style='invis'; color='red'}}
+        } else { $EdgeDebug = @{style = 'invis'; color = 'red' } }
 
         if ($EnableSubGraphDebug) {
-            $SubGraphDebug = @{style='dashed'; color='red'}
-            $NodeDebug = @{color='black'; style='red'}
+            $SubGraphDebug = @{style = 'dashed'; color = 'red' }
+            $NodeDebug = @{color = 'black'; style = 'red' }
             $URLIcon = $true
         } else {
-            $SubGraphDebug = @{style='invis'; color='gray'}
-            $NodeDebug = @{color='transparent'; style='transparent'}
+            $SubGraphDebug = @{style = 'invis'; color = 'gray' }
+            $NodeDebug = @{color = 'transparent'; style = 'transparent' }
         }
 
         $Dir = switch ($Direction) {
-            'top-to-bottom' {'TB'}
-            'left-to-right' {'LR'}
+            'top-to-bottom' { 'TB' }
+            'left-to-right' { 'LR' }
         }
 
         # Validate Custom logo
@@ -348,13 +349,13 @@ function New-ADDiagram {
 
         $MainGraphAttributes = @{
             pad = 1.0
-            rankdir   = $Dir
-            overlap   = 'true'
-            splines   = $EdgeType
-            penwidth  = 1.5
-            fontname  = "Segoe UI"
+            rankdir = $Dir
+            overlap = 'true'
+            splines = $EdgeType
+            penwidth = 1.5
+            fontname = "Segoe UI"
             fontcolor = '#71797E'
-            fontsize  = 32
+            fontsize = 32
             style = "dashed"
             labelloc = 't'
             imagepath = $IconPath
@@ -369,13 +370,13 @@ function New-ADDiagram {
             try {
                 # Connection setup
                 $script:TempPssSession = New-PSSession $System -Credential $Credential -Authentication $PSDefaultAuthentication -ErrorAction Stop
-                $script:TempCIMSession = New-CIMSession $System -Credential $Credential -Authentication $PSDefaultAuthentication -ErrorAction Stop
+                $script:TempCIMSession = New-CimSession $System -Credential $Credential -Authentication $PSDefaultAuthentication -ErrorAction Stop
                 $script:ADSystem = Invoke-Command -Session $TempPssSession { Get-ADForest -ErrorAction Stop }
-            } Catch {throw ($translate.unableToConnect -f $System)}
+            } Catch { throw ($translate.unableToConnect -f $System) }
 
             $Graph = Graph -Name MicrosoftAD -Attributes $MainGraphAttributes {
                 # Node default theme
-                node @{
+                Node @{
                     shape = 'ellipse'
                     labelloc = 't'
                     style = 'filled'
@@ -387,7 +388,7 @@ function New-ADDiagram {
                     fontname = "Segoe UI"
                 }
                 # Edge default theme
-                edge @{
+                Edge @{
                     style = 'dashed'
                     dir = 'both'
                     arrowtail = 'dot'
@@ -396,7 +397,7 @@ function New-ADDiagram {
                     arrowsize = 1
                 }
 
-                SubGraph MainGraph -Attributes @{Label=(Get-HTMLLabel -Label $MainGraphLabel -Type $CustomLogo -URLIcon $URLIcon); fontsize=22; penwidth=0} {
+                SubGraph MainGraph -Attributes @{Label = (Get-HTMLLabel -Label $MainGraphLabel -Type $CustomLogo -URLIcon $URLIcon); fontsize = 22; penwidth = 0 } {
                     $script:ForestRoot = $ADSystem.Name.ToString().ToUpper()
 
                     # Call Forest Diagram
@@ -404,19 +405,24 @@ function New-ADDiagram {
                         $ForestInfo = Get-DiagForest
                         if ($ForestInfo) {
                             $ForestInfo
-                        } else {Write-Warning $translate.emptyForest}
+                        } else { Write-Warning $translate.emptyForest }
+                    } elseif ($DiagramType -eq 'Sites') {
+                        $SitesInfo = Get-DiagSite
+                        if ($SitesInfo) {
+                            $SitesInfo
+                        } else { Write-Warning $translate.emptySites }
                     }
                 }
                 if ($Signature) {
-                    SubGraph Legend @{Label=" "; style='dashed,rounded'; color=$SubGraphDebug.color; fontsize=1} {
+                    SubGraph Legend @{Label = " "; style = 'dashed,rounded'; color = $SubGraphDebug.color; fontsize = 1 } {
                         if ($CustomSignatureLogo) {
-                            node LegendTable -Attributes @{Label=(Get-HTMLTable -Rows "Author: $($AuthorName)","Company: $($CompanyName)" -TableBorder 0 -CellBorder 0 -align 'left' -Logo $CustomSignatureLogo); shape='plain'; fillColor='white'}
+                            Node LegendTable -Attributes @{Label = (Get-HtmlTable -Rows "Author: $($AuthorName)", "Company: $($CompanyName)" -TableBorder 0 -CellBorder 0 -align 'left' -Logo $CustomSignatureLogo); shape = 'plain'; fillColor = 'white' }
                         } else {
-                            node LegendTable -Attributes @{Label=(Get-HTMLTable -Rows "Author: $($AuthorName)","Company: $($CompanyName)" -TableBorder 0 -CellBorder 0 -align 'left' -Logo "AD_LOGO_Footer"); shape='plain'; fillColor='white'}
+                            Node LegendTable -Attributes @{Label = (Get-HtmlTable -Rows "Author: $($AuthorName)", "Company: $($CompanyName)" -TableBorder 0 -CellBorder 0 -align 'left' -Logo "AD_LOGO_Footer"); shape = 'plain'; fillColor = 'white' }
                         }
                     }
-                    inline {rank="sink"; "Legend"; "LegendTable";}
-                    edge -from MainSubGraph:s -to LegendTable @{minlen=5; constrains='false'; style=$EdgeDebug.style; color=$EdgeDebug.color}
+                    Inline { rank="sink"; "Legend"; "LegendTable"; }
+                    Edge -From MainSubGraph:s -To LegendTable @{minlen = 5; constrains = 'false'; style = $EdgeDebug.style; color = $EdgeDebug.color }
                 }
             }
         }
@@ -427,7 +433,7 @@ function New-ADDiagram {
 
         # Remove used CIMSession
         Write-Verbose ($translate.cimSession -f $($TempCIMSession.Id))
-        Remove-CIMSession -CimSession $TempCIMSession
+        Remove-CimSession -CimSession $TempCIMSession
 
         #Export Diagram
         Out-ADDiagram -GraphObj $Graph -ErrorDebug $EnableErrorDebug -Rotate $Rotate

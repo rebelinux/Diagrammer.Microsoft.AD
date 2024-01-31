@@ -2,8 +2,8 @@ Function Get-HTMLTable {
     param(
         [string[]] $Rows,
         [string] $Align = 'center',
-        [int] $TableBorder= 1,
-        [int] $CellBorder= 1,
+        [int] $TableBorder = 1,
+        [int] $CellBorder = 1,
         [int] $FontSize = 14,
         [string] $Logo,
         [bool]$URLIcon
@@ -11,7 +11,7 @@ Function Get-HTMLTable {
 
     if ($images[$Logo]) {
         $ICON = $images[$Logo]
-    } else {$ICON = $false}
+    } else { $ICON = $false }
 
     $TR = ''
     foreach ($r in $Rows) {
