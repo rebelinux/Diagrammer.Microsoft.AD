@@ -198,7 +198,7 @@ function New-ADDiagram {
             Mandatory = $true,
             HelpMessage = 'Controls type of Active Directory generated diagram'
         )]
-        [ValidateSet('Forest', 'Domain', 'Sites', 'DomainController')]
+        [ValidateSet('Forest', 'Domain', 'Sites', 'SiteTopology', 'DomainController')]
         [string] $DiagramType,
 
         [Parameter(
@@ -319,6 +319,7 @@ function New-ADDiagram {
             'Forest' { $translate.forestgraphlabel }
             'Domain' { $translate.domaingraphlabel }
             'Sites' { $translate.sitesgraphlabel }
+            'SitesTopology' { $translate.sitesgraphlabel }
         }
 
         $URLIcon = $false

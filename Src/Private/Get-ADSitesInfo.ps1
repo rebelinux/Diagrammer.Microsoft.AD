@@ -40,7 +40,16 @@ function Get-ADSitesInfo {
                         Name = $Site.Name
                         # Label = Get-NodeIcon -Name "$($Sobr.Name)" -Type "VBR_SOBR" -Align "Center" -Rows $SobrRows
                         Label = $Site.Name
-                        Subnets = $SubnetArray
+                        Subnets = & {
+                            $SubnetArray = @()
+                            $Subnets = $Site.Subnets
+                            foreach ($Object in $Subnets) {
+                                $SubnetName = Invoke-Command -Session $TempPssSession { Get-ADReplicationSubnet $using:Object }
+                                $SubnetArray += $SubnetName.Name
+                            }
+
+                            return $SubnetArray
+                        }
                         DomainControllers = & {
                             $ServerArray = @()
                             $Servers = try { Get-ADObjectSearch -DN "CN=Servers,$($Site.DistinguishedName)" -Filter { objectClass -eq "Server" } -Properties "DNSHostName" -SelectPrty 'DNSHostName', 'Name' -Session $TempPssSession } catch { Out-Null }
@@ -48,9 +57,7 @@ function Get-ADSitesInfo {
                                 $ServerArray += $Object.Name
                             }
 
-                            if ($ServerArray) {
-                                return $ServerArray
-                            } else { 'No DC assigned' }
+                            return $ServerArray
                         }
                         SitesObj = $Site
                     }

@@ -30,8 +30,11 @@ ConvertFrom-StringData @'
     veeamLogo = Veeam Logo
     SitesDiagramLabel = Sites
     SitesDiagramDummyLabel = Sites
-    sitesgraphlabel = Active Directory Site Topology
+    sitesgraphlabel = Active Directory Site Inventory
     emptySites = No Site topology available to diagram
     connectingSites = Collecting Microsoft AD Sites information from {0}.
     NoSites = No Site Topology
+    NoSiteSubnet = No Site Subnets
+    NoSiteDC = No Site Domain Controllers
+
 '@
