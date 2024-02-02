@@ -60,7 +60,7 @@ function Get-DiagForest {
                                     if ($ForestGroupOBJ.Childs.Group.Length -ge 1 -and $ForestGroupOBJ.Childs.Group.Length -le 3) {
                                         $SubGraphName = Remove-SpecialChar -String $ForestGroupOBJ.Name -SpecialChars '\-. '
                                         SubGraph $SubGraphName -Attributes @{Label = $ForestGroupOBJ.Name; fontsize = 18; penwidth = 1.5; labelloc = 't'; style = 'dashed,rounded' } {
-                                            $ForestGroupOBJ.Childs.Group | ForEach-Object { Node $_ @{Label = $_; fontname = "Segoe Ui" } }
+                                            $ForestGroupOBJ.Childs.Group | ForEach-Object { Node $_ @{Label = Get-NodeIcon -Name $_ -Type "Domain" -Align "Center"; shape = 'plain'; fillColor = 'transparent' } }
                                         }
                                         Edge -From DummyContiguousChilds -To $ForestGroupOBJ.Childs.Group @{minlen = 1; style = $EdgeDebug.style; color = $EdgeDebug.color }
                                     } else {
@@ -70,7 +70,7 @@ function Get-DiagForest {
                                         while ($Number -ne $Group.Length) {
                                             SubGraph $SubGraphName -Attributes @{Label = $ForestGroupOBJ.Name; fontsize = 18; penwidth = 1.5; labelloc = 't'; style = 'dashed,rounded' } {
                                                 $Group[$Number] | ForEach-Object {
-                                                    Node $_ @{Label = $_ }
+                                                    Node $_ @{Label = Get-NodeIcon -Name $_ -Type "Domain" -Align "Center"; shape = 'plain'; fillColor = 'transparent' }
                                                 }
                                             }
                                             $Number++
@@ -94,7 +94,7 @@ function Get-DiagForest {
                                         $SubGraphName = Remove-SpecialChar -String $ForestGroupOBJ.Name -SpecialChars '\-. '
                                         SubGraph $SubGraphName -Attributes @{Label = $ForestGroupOBJ.Name; fontsize = 18; penwidth = 1.5; labelloc = 't'; style = 'dashed,rounded' } {
                                             Node "Dummy$DomainDummyNode" @{Label = "Dummy$DomainDummyNode"; fontcolor = $NodeDebug.color; fillColor = $NodeDebug.style; shape = 'plain' }
-                                            $ForestGroupOBJ.Childs.Group | ForEach-Object { Node $_ @{Label = $_; fontname = "Segoe Ui" } }
+                                            $ForestGroupOBJ.Childs.Group | ForEach-Object { Node $_ @{Label = Get-NodeIcon -Name $_ -Type "Domain" -Align "Center"; shape = 'plain'; fillColor = 'transparent' } }
                                             Edge -From "Dummy$DomainDummyNode" -To $ForestGroupOBJ.Childs.Group @{minlen = 1; style = $EdgeDebug.style; color = $EdgeDebug.color }
                                         }
                                         Edge -From DummyNonContiguousChilds -To "Dummy$DomainDummyNode" @{minlen = 1; style = $EdgeDebug.style; color = $EdgeDebug.color }
@@ -106,7 +106,7 @@ function Get-DiagForest {
                                             SubGraph $SubGraphName -Attributes @{Label = $ForestGroupOBJ.Name; fontsize = 18; penwidth = 1.5; labelloc = 't'; style = 'dashed,rounded' } {
                                                 Node "Dummy$DomainDummyNode" @{Label = "Dummy$DomainDummyNode"; fontcolor = $NodeDebug.color; fillColor = $NodeDebug.style; shape = 'plain' }
                                                 $Group[$Number] | ForEach-Object {
-                                                    Node $_ @{Label = $_ }
+                                                    Node $_ @{ Label = Get-NodeIcon -Name $_ -Type "Domain" -Align "Center"; shape = 'plain'; fillColor = 'transparent' }
                                                 }
                                             }
                                             $Number++
@@ -123,7 +123,7 @@ function Get-DiagForest {
                                     } else {
                                         $SubGraphName = Remove-SpecialChar -String $ForestGroupOBJ.Name -SpecialChars '\-. '
                                         SubGraph $SubGraphName -Attributes @{Label = $ForestGroupOBJ.Name; fontsize = 18; penwidth = 1.5; labelloc = 't'; style = 'dashed,rounded' } {
-                                            Node $ForestGroupOBJ.Name
+                                            Node -Name $ForestGroupOBJ.Name @{ Label = Get-NodeIcon -Name $ForestGroupOBJ.Name -Type "Domain" -Align "Center"; shape = 'plain'; fillColor = 'transparent' }
                                         }
                                         Edge -From DummyNonContiguousChilds -To $ForestGroupOBJ.Name @{minlen = 1; style = $EdgeDebug.style; color = $EdgeDebug.color }
                                     }

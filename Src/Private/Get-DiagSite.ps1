@@ -64,7 +64,7 @@ function Get-DiagSite {
                                             $SubGraphNameDC = Remove-SpecialChar -String $SiteGroupOBJ.Name -SpecialChars '\-. '
                                             Node "Dummy$($SubGraphName)DC" @{Label = "Dummy$($SubGraphName)DC"; fontcolor = $NodeDebug.color; fillColor = $NodeDebug.style; shape = 'plain' }
                                             SubGraph "$($SubGraphNameDC)DC" -Attributes @{Label = "Domain Controllers"; fontsize = 18; penwidth = 1.5; labelloc = 't'; style = 'dashed,rounded' } {
-                                                $SiteGroupOBJ.DomainControllers | ForEach-Object { Node $_ @{Label = Get-NodeIcon -Name $_ -Type "DomainController" -Align "Center"; fontname = "Segoe Ui"; shape = 'plain'; fillColor = 'transparent'; } }
+                                                $SiteGroupOBJ.DomainControllers | ForEach-Object { Node $_ @{Label = Get-NodeIcon -Name $_ -Type "DomainController" -Align "Center"; shape = 'plain'; fillColor = 'transparent'; } }
                                                 Edge -From "Dummy$($SubGraphName)DC" -To $SiteGroupOBJ.DomainControllers @{minlen = 1; style = $EdgeDebug.style; color = $EdgeDebug.color }
                                             }
                                             Edge -From "Dummy$($SubGraphName)" -To "Dummy$($SubGraphName)DC" @{minlen = 1; style = $EdgeDebug.style; color = $EdgeDebug.color }
@@ -82,7 +82,7 @@ function Get-DiagSite {
                                             $SubGraphNameSN = Remove-SpecialChar -String $SiteGroupOBJ.Name -SpecialChars '\-. '
                                             Node "Dummy$($SubGraphName)SN" @{Label = "Dummy$($SubGraphName)SN"; fontcolor = $NodeDebug.color; fillColor = $NodeDebug.style; shape = 'plain' }
                                             SubGraph "$($SubGraphNameSN)SN" -Attributes @{Label = "Subnets"; fontsize = 18; penwidth = 1.5; labelloc = 't'; style = 'dashed,rounded' } {
-                                                $SiteGroupOBJ.Subnets | ForEach-Object { Node $_ @{Label = $_; fontname = "Segoe Ui"; shape = "plain"; fillColor = 'transparent' } }
+                                                $SiteGroupOBJ.Subnets | ForEach-Object { Node $_ @{Label = $_; shape = "plain"; fillColor = 'transparent' } }
                                                 Edge -From "Dummy$($SubGraphName)SN" -To $SiteGroupOBJ.Subnets @{minlen = 1; style = $EdgeDebug.style; color = $EdgeDebug.color }
                                             }
 
@@ -96,7 +96,7 @@ function Get-DiagSite {
                                                 SubGraph "$($SubGraphNameSN)SN" -Attributes @{Label = "Subnets"; fontsize = 18; penwidth = 1.5; labelloc = 't'; style = 'dashed,rounded' } {
                                                     Node "Dummy$($SubGraphName)SN" @{Label = "Dummy$($SubGraphName)SN"; fontcolor = $NodeDebug.color; fillColor = $NodeDebug.style; shape = 'plain' }
                                                     $Group[$Number] | ForEach-Object {
-                                                        Node $_ @{Label = $_; fontname = "Segoe Ui"; shape = "plain"; fillColor = 'transparent' }
+                                                        Node $_ @{Label = $_; shape = "plain"; fillColor = 'transparent' }
                                                     }
                                                 }
                                                 $Number++
