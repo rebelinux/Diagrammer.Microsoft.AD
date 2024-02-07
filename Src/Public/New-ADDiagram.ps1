@@ -322,17 +322,17 @@ function New-ADDiagram {
             'SitesTopology' { $translate.sitesgraphlabel }
         }
 
-        $URLIcon = $false
+        $script:URLIcon = $false
 
         if ($EnableEdgeDebug) {
             $EdgeDebug = @{style = 'filled'; color = 'red' }
-            $URLIcon = $true
+            $script:URLIcon = $true
         } else { $EdgeDebug = @{style = 'invis'; color = 'red' } }
 
         if ($EnableSubGraphDebug) {
             $SubGraphDebug = @{style = 'dashed'; color = 'red' }
             $NodeDebug = @{color = 'black'; style = 'red' }
-            $URLIcon = $true
+            $script:URLIcon = $true
         } else {
             $SubGraphDebug = @{style = 'invis'; color = 'gray' }
             $NodeDebug = @{color = 'transparent'; style = 'transparent' }
@@ -398,7 +398,7 @@ function New-ADDiagram {
                     arrowsize = 1
                 }
 
-                SubGraph MainGraph -Attributes @{Label = (Get-HTMLLabel -Label $MainGraphLabel -Type $CustomLogo -URLIcon $URLIcon); fontsize = 22; penwidth = 0 } {
+                SubGraph MainGraph -Attributes @{Label = (Get-HTMLLabel -Label $MainGraphLabel -IconType $CustomLogo -URLIcon $URLIcon); fontsize = 22; penwidth = 0 } {
                     $script:ForestRoot = $ADSystem.Name.ToString().ToUpper()
 
                     # Call Forest Diagram

@@ -27,5 +27,5 @@ ConvertFrom-StringData @'
     osTypelast = No se ha podido validar si {0} está instalado.
     fsmoRoles = Roles FSMO
     forestRootInfo = Informacion de la Raiz del Arbol
-    veeamLogo = Logo de Veeam
+    MicrosoftLogo = Logo de Microsoft
 '@

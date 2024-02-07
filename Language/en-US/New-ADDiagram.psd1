@@ -27,7 +27,7 @@ ConvertFrom-StringData @'
     domainNaming = <B>Domain Naming:</B> {0}
     fsmoRoles = FSMO Roles
     forestRootInfo = Forest Root Information
-    veeamLogo = Veeam Logo
+    MicrosoftLogo = Microsoft Logo
     SitesDiagramLabel = Sites
     SitesDiagramDummyLabel = Sites
     sitesgraphlabel = Active Directory Site Inventory
