@@ -5,7 +5,10 @@ function New-ADDiagram {
     .DESCRIPTION
         Diagram the configuration of Microsoft AD  infrastructure in PDF/SVG/DOT/PNG formats using PSGraph and Graphviz.
     .PARAMETER DiagramType
-        Specifies the type of microsoft ad diagram that will be generated.
+        Specifies the type of active directory diagram that will be generated.
+        The supported output diagrams are:
+                    'Forest'
+                    'Sites'
     .PARAMETER Target
         Specifies the IP/FQDN of the system to connect.
         Multiple targets may be specified, separated by a comma.
@@ -21,6 +24,8 @@ function New-ADDiagram {
         Multiple output formats may be specified, separated by a comma.
     .PARAMETER Direction
         Set the direction in which resource are plotted on the visualization
+        The supported directions are:
+            'top-to-bottom', 'left-to-right'
         By default, direction will be set to top-to-bottom.
     .PARAMETER NodeSeparation
         Controls Node separation ratio in visualization
@@ -30,19 +35,33 @@ function New-ADDiagram {
         By default, NodeSeparation will be set to .75.
     .PARAMETER EdgeType
         Controls how edges lines appear in visualization
+        The supported edge type are:
+            'polyline', 'curved', 'ortho', 'line', 'spline'
         By default, EdgeType will be set to spline.
+        References: https://graphviz.org/docs/attrs/splines/
     .PARAMETER OutputFolderPath
         Specifies the folder path to save the diagram.
     .PARAMETER Filename
         Specifies a filename for the diagram.
-    .PARAMETER Rotate
-    Specifies a int to rotate the output image diagram.
     .PARAMETER EnableEdgeDebug
         Control to enable edge debugging ( Dummy Edge and Node lines ).
     .PARAMETER EnableSubGraphDebug
         Control to enable subgraph debugging ( Subgraph Lines ).
     .PARAMETER EnableErrorDebug
         Control to enable error debugging.
+    .PARAMETER AuthorName
+        Allow to set footer signature Author Name.
+    .PARAMETER CompanyName
+        Allow to set footer signature Company Name.
+    .PARAMETER Logo
+        Allow to change the Microsoft logo to a custom one.
+        Image should be 400px x 100px or less in size.
+    .PARAMETER SignatureLogo
+        Allow to change the Microsoft signature logo to a custom one.
+        Image should be 120px x 130px or less in size.
+    .PARAMETER Signature
+        Allow the creation of footer signature.
+        AuthorName and CompanyName must be set to use this property.
     .NOTES
         Version:        0.1.6
         Author(s):      Jonathan Colon
@@ -53,7 +72,6 @@ function New-ADDiagram {
     .LINK
         https://github.com/rebelinux/Diagrammer.Microsoft.AD
         https://github.com/KevinMarquette/PSGraph
-        https://github.com/PrateekKumarSingh/AzViz
     #>
 
     [Diagnostics.CodeAnalysis.SuppressMessage(
