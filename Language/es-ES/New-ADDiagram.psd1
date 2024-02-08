@@ -1,0 +1,31 @@
+﻿# culture="es-ES"
+ConvertFrom-StringData @'
+    outputfolderpatherror = El directorio OutputFolderPath {0} no es una ruta de carpeta válida.
+    runasadmin = La operación solicitada requiere elevación: Ejecutar la consola de PowerShell como administrador.
+    signaturerequirements = New-ADDiagram : Las opciones de AuthorName y CompanyName deben definirse si se especifica la opción de Signature.
+    forestgraphlabel = Arquitectura de Arbol de Active Directory.
+    domaingraphlabel = Arquitectura de Dominio de Active Directory.
+    emptyForest = No hay infraestructura forestal disponible para diagramar.
+    psSession = Borrado la sesión de PowerShell {0}.
+    cimSession = Borrado la sesión de Cim {0}.
+    unableToConnect = No se puedo conectar con el controllador de dominio {0}.
+    connectingDomain = Recopilando información de los dominios de Microsoft AD desde {0}.
+    connectingForest = Recopilando información del arbol de Microsoft AD desde {0}.
+    contiguous = Contiguo
+    noncontiguous = No Contiguo
+    DiagramLabel = Child Domains
+    DiagramDummyLabel = Child Domains
+    NoChildDomain = No Child Domains
+    funcLevel = <B>Nivel de Funcionamiento</B>: {0}
+    schemaVersion = <B>Version de Esquema</B>: {0}
+    infrastructure = <B>Infraestructura:</B> {0}
+    rID = <B>RID:</B> {0}
+    pdcEmulator= <B>Emulador PDC:</B> {0}
+    schema = <B>Esquema:</B> {0}
+    domainNaming = <B>Nombramiento de dominios:</B> {0}
+    osType = El modulo {0} es necesario para ejecutar Diagrammer.Microsoft.AD. Ejecute 'Install-WindowsFeature -Name '{0}'' para instalar los módulos necesarios. https://github.com/rebelinux/Diagrammer.Microsoft.AD
+    osTypelast = No se ha podido validar si {0} está instalado.
+    fsmoRoles = Roles FSMO
+    forestRootInfo = Informacion de la Raiz del Arbol
+    MicrosoftLogo = Logo de Microsoft
+'@

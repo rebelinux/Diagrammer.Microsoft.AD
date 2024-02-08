@@ -5,7 +5,7 @@ function Get-RequiredFeature {
     .DESCRIPTION
         Function to check if the required version of windows feature is installed
     .NOTES
-        Version:        0.1.0
+        Version:        0.1.6
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -29,22 +29,23 @@ function Get-RequiredFeature {
         $OSType
     )
 
+    begin {
+    }
+
     process {
         # Check if the required version of Module is installed
         if ($OSType -eq 'WorkStation') {
-            $RequiredFeature = Get-WindowsCapability -online -Name $Name
-            if ($RequiredFeature.State -ne 'Installed')  {
-                throw "$Name is required to run the Diagrammer.Microsoft.AD. Run 'Add-WindowsCapability -online -Name '$($Name)'' to install the required modules. https://github.com/rebelinux/Diagrammer.Microsoft.AD"
+            $RequiredFeature = Get-WindowsCapability -Online -Name $Name -InformationAction SilentlyContinue
+            if ($RequiredFeature.State -ne 'Installed') {
+                throw ($translate.osType -f $($Name))
             }
-        }
-        elseif ($OSType -eq 'Server' -or $OSType -eq 'DomainController') {
+        } elseif ($OSType -eq 'Server' -or $OSType -eq 'DomainController') {
             $RequiredFeature = Get-WindowsFeature -Name $Name
-            if ($RequiredFeature.InstallState -ne 'Installed')  {
-                throw "$Name is required to run the Diagrammer.Microsoft.AD. Run 'Install-WindowsFeature -Name '$($Name)'' to install the required modules. https://github.com/rebelinux/Diagrammer.Microsoft.AD"
+            if ($RequiredFeature.InstallState -ne 'Installed') {
+                throw ($translate.osType -f $($Name))
             }
-        }
-        else {
-            throw "Unable to validate if $Name is installed."
+        } else {
+            throw ($translate.osTypelast -f $($Name))
         }
     }
     end {}
