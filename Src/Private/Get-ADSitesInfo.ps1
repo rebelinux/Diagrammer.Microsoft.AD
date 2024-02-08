@@ -69,7 +69,7 @@ function Get-ADSitesInfo {
 
                             $DCsTable += [PSCustomObject]@{
                                 Name = Remove-SpecialChar -String "$($Site.Name)DCs" -SpecialChars '\-. '
-                                Label = (Get-HTMLNodeTable -inputObject $DCsArray -Columnsize 3 -Align 'Center' -IconType "AD_DC")
+                                Label = (Get-HTMLNodeTable -inputObject $DCsArray -Columnsize 3 -Align 'Center')
                                 DCsArray = $DCsArray
                             }
 

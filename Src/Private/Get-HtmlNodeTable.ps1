@@ -109,7 +109,7 @@ Function Get-HTMLNodeTable {
             #     $TRDATA += $r.getEnumerator() | ForEach-Object { "<TR><TD ALIGN='$Align' colspan='1'><FONT POINT-SIZE='$fontSize'>$($_.Key): $($_.Value)</FONT></TD></TR>" }
             # }
 
-            $TD += '<TD PORT="{0}" ALIGN="{1}" colspan="1">{2}</TD>' -f $Port, $Align, $Element
+            $TD += '<TD PORT="{0}" ALIGN="{1}" colspan="1"><FONT POINT-SIZE="{2}">{3}</FONT></TD>' -f $Port, $Align, $FontSize, $Element
         }
 
         $TR += '<TR>{0}</TR>' -f $TD
