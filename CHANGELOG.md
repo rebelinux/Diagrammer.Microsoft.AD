@@ -20,6 +20,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improved diagram layout
 - Improved Get-HTMLTable cmdlet (Now allow MultiColumn table)
 
+### Fixed
+
+- Fixed CodeQL security alerts
 
 ## [0.1.5] - 2024-01-25
 
