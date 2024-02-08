@@ -64,7 +64,6 @@ function Get-DiagForest {
                                 }
                             } elseif ($ForestGroupOBJ.Name -notmatch $ForestRoot -and $ForestGroupOBJ.Childs) {
                                 SubGraph NonContiguousChilds -Attributes @{Label = $translate.noncontiguous; fontsize = 20; penwidth = 1.5; labelloc = 'b'; style = 'dashed,rounded' } {
-                                    $DomainDummyNode = Remove-SpecialChar -String $ForestGroupOBJ.Name -SpecialChars '\-. '
                                     if ($ForestGroupOBJ.Childs.Group.Length -ge 1) {
                                         $SubGraphName = Remove-SpecialChar -String $ForestGroupOBJ.Name -SpecialChars '\-. '
                                         SubGraph $SubGraphName -Attributes @{Label = (Get-HTMLLabel -Label $ForestGroupOBJ.Name -IconType "AD_Domain" -SubgraphLabel); fontsize = 20; penwidth = 1.5; labelloc = 't'; style = 'dashed,rounded' } {

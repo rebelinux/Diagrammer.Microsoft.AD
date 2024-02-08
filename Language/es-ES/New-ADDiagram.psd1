@@ -1,4 +1,4 @@
-# culture="es-ES"
+﻿# culture="es-ES"
 ConvertFrom-StringData @'
     outputfolderpatherror = El directorio OutputFolderPath {0} no es una ruta de carpeta válida.
     runasadmin = La operación solicitada requiere elevación: Ejecutar la consola de PowerShell como administrador.

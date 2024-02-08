@@ -28,10 +28,11 @@ function Get-ADSitesInfo {
             $SitesInfo = @()
             if ($Sites) {
                 foreach ($Site in $Sites) {
-                    $DCRows = @{
-                        Memory = "4GB"
-                        CPU = "2"
-                    }
+                    # For future uses
+                    # $DCRows = @{
+                    #     Memory = "4GB"
+                    #     CPU = "2"
+                    # }
 
                     $TempSitesInfo = [PSCustomObject]@{
                         Name = $Site.Name

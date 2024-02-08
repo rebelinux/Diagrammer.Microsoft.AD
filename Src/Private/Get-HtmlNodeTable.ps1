@@ -46,8 +46,8 @@ Function Get-HTMLNodeTable {
         [string] $iconType,
         [int] $columnSize = 2,
         [string] $Port = "EdgeDot",
-        [string[]] $Data,
         [Switch]$MultiIcon
+        # [string[]] $Data, For future uses
     )
 
     if ($inputObject.Count -le 1) {

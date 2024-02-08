@@ -349,11 +349,11 @@ function New-ADDiagram {
 
         if ($EnableSubGraphDebug) {
             $SubGraphDebug = @{style = 'dashed'; color = 'red' }
-            $NodeDebug = @{color = 'black'; style = 'red' }
+            $script:NodeDebug = @{color = 'black'; style = 'red' }
             $script:URLIcon = $true
         } else {
             $SubGraphDebug = @{style = 'invis'; color = 'gray' }
-            $NodeDebug = @{color = 'transparent'; style = 'transparent' }
+            $script:NodeDebug = @{color = 'transparent'; style = 'transparent' }
         }
 
         $Dir = switch ($Direction) {

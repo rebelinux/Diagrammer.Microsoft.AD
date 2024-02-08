@@ -1,4 +1,4 @@
-# culture="en-US"
+﻿# culture="en-US"
 ConvertFrom-StringData @'
     outputfolderpatherror = OutputFolderPath {0} is not a valid folder path.
     runasadmin = The requested operation requires elevation: Run PowerShell console as administrator
