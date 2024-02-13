@@ -380,8 +380,7 @@ function New-ADDiagram {
             imagepath = $IconPath
             nodesep = $NodeSeparation
             ranksep = $SectionSeparation
-            ratio = 'auto'
-            # newrank = 'true'
+            # ratio = 'auto'
         }
     }
 
@@ -440,12 +439,12 @@ function New-ADDiagram {
                         if ($DiagramType -eq 'Forest') {
                             $ForestInfo = Get-DiagForest
                             if ($ForestInfo) {
-                                $ForestInfo
+                                $ForestInfo | Select-String -Pattern '"([A-Z])\w+"\s\[label="";style="invis";shape="point";]' -NotMatch
                             } else { Write-Warning $translate.emptyForest }
                         } elseif ($DiagramType -eq 'Sites') {
                             $SitesInfo = Get-DiagSite
                             if ($SitesInfo) {
-                                $SitesInfo
+                                $SitesInfo | Select-String -Pattern '"([A-Z])\w+"\s\[label="";style="invis";shape="point";]' -NotMatch
                             } else { Write-Warning $translate.emptySites }
                         }
                     }
