@@ -5,7 +5,7 @@ function Get-DiagForest {
     .DESCRIPTION
         Build a diagram of the configuration of Microsoft Active Directory in PDF/PNG/SVG formats using Psgraph.
     .NOTES
-        Version:        0.1.6
+        Version:        0.1.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -46,9 +46,9 @@ function Get-DiagForest {
                         # Dummy Node used for subgraph centering
                         Node CHILDDOMAINSTEXT @{Label = $DiagramDummyLabel; fontcolor = '#71797E'; fontsize = 24; shape = 'plain'; fillColor = 'transparent' }
                         if ($Dir -eq 'TB') {
-                            Node CDLeft @{Label = 'CDLeft'; style = $EdgeDebug.style; color = $EdgeDebug.color; shape = 'plain'; fillColor = 'transparent' }
-                            Node CDLeftt @{Label = 'CDLeftt'; style = $EdgeDebug.style; color = $EdgeDebug.color; shape = 'plain'; fillColor = 'transparent' }
-                            Node CDRight @{Label = 'CDRight'; style = $EdgeDebug.style; color = $EdgeDebug.color; shape = 'plain'; fillColor = 'transparent' }
+                            Node CDLeft @{Label = 'CDLeft'; fontcolor = $NodeDebug.color; fillColor = $NodeDebug.style; shape = 'plain' }
+                            Node CDLeftt @{Label = 'CDLeftt'; fontcolor = $NodeDebug.color; fillColor = $NodeDebug.style; shape = 'plain' }
+                            Node CDRight @{Label = 'CDRight'; fontcolor = $NodeDebug.color; fillColor = $NodeDebug.style; shape = 'plain' }
                             Edge CDLeft, CDLeftt, CHILDDOMAINSTEXT, CDRight @{style = $EdgeDebug.style; color = $EdgeDebug.color }
                             Rank CDLeft, CDLeftt, CHILDDOMAINSTEXT, CDRight
                         }
