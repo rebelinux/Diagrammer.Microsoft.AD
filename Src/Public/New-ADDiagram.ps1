@@ -63,7 +63,7 @@ function New-ADDiagram {
         Allow the creation of footer signature.
         AuthorName and CompanyName must be set to use this property.
     .NOTES
-        Version:        0.1.6
+        Version:        0.1.7
         Author(s):      Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -380,6 +380,8 @@ function New-ADDiagram {
             imagepath = $IconPath
             nodesep = $NodeSeparation
             ranksep = $SectionSeparation
+            ratio = 'auto'
+            # newrank = 'true'
         }
     }
 
@@ -416,32 +418,37 @@ function New-ADDiagram {
                     arrowsize = 1
                 }
 
-                SubGraph MainGraph -Attributes @{Label = (Get-HTMLLabel -Label $MainGraphLabel -IconType $CustomLogo -URLIcon $URLIcon); fontsize = 22; penwidth = 0 } {
-                    $script:ForestRoot = $ADSystem.Name.ToString().ToUpper()
-
-                    # Call Forest Diagram
-                    if ($DiagramType -eq 'Forest') {
-                        $ForestInfo = Get-DiagForest
-                        if ($ForestInfo) {
-                            $ForestInfo
-                        } else { Write-Warning $translate.emptyForest }
-                    } elseif ($DiagramType -eq 'Sites') {
-                        $SitesInfo = Get-DiagSite
-                        if ($SitesInfo) {
-                            $SitesInfo
-                        } else { Write-Warning $translate.emptySites }
-                    }
-                }
                 if ($Signature) {
-                    SubGraph Legend @{Label = " "; style = 'dashed,rounded'; color = $SubGraphDebug.color; fontsize = 1 } {
-                        if ($CustomSignatureLogo) {
-                            Node LegendTable -Attributes @{Label = (Get-HtmlTable -Rows "Author: $($AuthorName)", "Company: $($CompanyName)" -TableBorder 0 -CellBorder 0 -align 'left' -Logo $CustomSignatureLogo); shape = 'plain'; fillColor = 'white' }
-                        } else {
-                            Node LegendTable -Attributes @{Label = (Get-HtmlTable -Rows "Author: $($AuthorName)", "Company: $($CompanyName)" -TableBorder 0 -CellBorder 0 -align 'left' -Logo "AD_LOGO_Footer"); shape = 'plain'; fillColor = 'white' }
+                    if ($CustomSignatureLogo) {
+                        $Signature = (Get-HtmlTable -Rows "Author: $($AuthorName)", "Company: $($CompanyName)" -TableBorder 2 -CellBorder 0 -align 'left' -Logo $CustomSignatureLogo)
+                    } else {
+                        $Signature = (Get-HtmlTable -Rows "Author: $($AuthorName)", "Company: $($CompanyName)" -TableBorder 2 -CellBorder 0 -align 'left' -Logo "AD_LOGO_Footer")
+                    }
+                } else {
+                    $Signature = " "
+                }
+
+                # Used for the Legend or SignatureLogo
+                SubGraph OUTERDRAWBOARD1 -Attributes @{Label = $Signature; fontsize = 24; penwidth = 1.5; labelloc = 'b'; labeljust = "r"; style = $SubGraphDebug.style; color = $SubGraphDebug.color } {
+
+                    # Main Graph SubGraph
+                    SubGraph MainGraph -Attributes @{Label = (Get-HTMLLabel -Label $MainGraphLabel -IconType $CustomLogo -URLIcon $URLIcon); fontsize = 22; penwidth = 0; labelloc = 't'; labeljust = "c" } {
+
+                        $script:ForestRoot = $ADSystem.Name.ToString().ToUpper()
+
+                        # Call Forest Diagram
+                        if ($DiagramType -eq 'Forest') {
+                            $ForestInfo = Get-DiagForest
+                            if ($ForestInfo) {
+                                $ForestInfo
+                            } else { Write-Warning $translate.emptyForest }
+                        } elseif ($DiagramType -eq 'Sites') {
+                            $SitesInfo = Get-DiagSite
+                            if ($SitesInfo) {
+                                $SitesInfo
+                            } else { Write-Warning $translate.emptySites }
                         }
                     }
-                    Inline { rank="sink"; "Legend"; "LegendTable"; }
-                    Edge -From MainSubGraph:s -To LegendTable @{minlen = 5; constrains = 'false'; style = $EdgeDebug.style; color = $EdgeDebug.color }
                 }
             }
         }
