@@ -380,7 +380,7 @@ function New-ADDiagram {
             imagepath = $IconPath
             nodesep = $NodeSeparation
             ranksep = $SectionSeparation
-            # ratio = 'auto'
+            ratio = 'auto'
         }
     }
 
@@ -437,14 +437,14 @@ function New-ADDiagram {
 
                         # Call Forest Diagram
                         if ($DiagramType -eq 'Forest') {
-                            $ForestInfo = Get-DiagForest
+                            $ForestInfo = Get-DiagForest | Select-String -Pattern '"([A-Z])\w+"\s\[label="";style="invis";shape="point";]' -NotMatch
                             if ($ForestInfo) {
-                                $ForestInfo | Select-String -Pattern '"([A-Z])\w+"\s\[label="";style="invis";shape="point";]' -NotMatch
+                                $ForestInfo
                             } else { Write-Warning $translate.emptyForest }
                         } elseif ($DiagramType -eq 'Sites') {
-                            $SitesInfo = Get-DiagSite
+                            $SitesInfo = Get-DiagSite | Select-String -Pattern '"([A-Z])\w+"\s\[label="";style="invis";shape="point";]' -NotMatch
                             if ($SitesInfo) {
-                                $SitesInfo | Select-String -Pattern '"([A-Z])\w+"\s\[label="";style="invis";shape="point";]' -NotMatch
+                                $SitesInfo
                             } else { Write-Warning $translate.emptySites }
                         }
                     }
@@ -461,6 +461,6 @@ function New-ADDiagram {
         Remove-CimSession -CimSession $TempCIMSession
 
         #Export Diagram
-        Out-ADDiagram -GraphObj $Graph -ErrorDebug $EnableErrorDebug -Rotate $Rotate
+        Out-ADDiagram -GraphObj ($Graph | Select-String -Pattern '"([A-Z])\w+"\s\[label="";style="invis";shape="point";]' -NotMatch) -ErrorDebug $EnableErrorDebug -Rotate $Rotate
     }
 }

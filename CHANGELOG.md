@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Improved diagram layout
 - Improved Get-HTMLTable cmdlet (Now allow MultiColumn table)
+- Updated Graphviz binaries to 10.0.1
 
 ### Fixed
 
