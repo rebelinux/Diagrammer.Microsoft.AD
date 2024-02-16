@@ -27,7 +27,7 @@ function Get-ADForestInfo {
 
             # Used for Debugging
             # $ChildDomains = @("a.uia.local", "b.uia.local", "c.uia.local", "d.uia.local", "e.uia.local", "f.uia.local", "g.uia.local", "h.uia.local","a.b12.local")
-            $ChildDomains = @("acad.a.pharmax.local", "b.pharmax.local", "c.pharmax.local", "ad.pharmax.local", "e.pharmax.local", "f.pharmax.local", "g.pharmax.local", "uia.local", "b12.local", "acad.uia.local", "admin.b12.local", "fin.b12.local", "it.b12.local", "hr.b12.local", "fin.uia.local", "hr.uia.local", "gov.uia.local", "hr.b13.local", "fin.uib.local", "hr.uib.local", "gov.uib.local")
+            # $ChildDomains = @("acad.a.pharmax.local", "b.pharmax.local", "c.pharmax.local", "ad.pharmax.local", "e.pharmax.local", "f.pharmax.local", "g.pharmax.local", "uia.local", "b12.local", "acad.uia.local", "admin.b12.local", "fin.b12.local", "it.b12.local", "hr.b12.local", "fin.uia.local", "hr.uia.local", "gov.uia.local", "hr.b13.local", "fin.uib.local", "hr.uib.local", "gov.uib.local")
 
 
             $ForestGroups = @()
