@@ -1,7 +1,7 @@
 Function Get-HTMLNodeTable {
     <#
     .SYNOPSIS
-        Function to convert a string array to a HTML Table with Graphviz Nodes split by Columns (Includes Icons)
+        Function to convert a array to a HTML Table. Graphviz Nodes split by Columns (Includes Icons)
     .DESCRIPTION
         Takes an array and converts it to a HTML table used for GraphViz Node label
     .Example
@@ -16,7 +16,7 @@ Function Get-HTMLNodeTable {
             ________________________________
 
     .NOTES
-        Version:        0.1.6
+        Version:        0.1.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -25,17 +25,17 @@ Function Get-HTMLNodeTable {
     .PARAMETER Align
         Align content inside table cell
     .PARAMETER TableBorder
-        The table line border
+        The table border line
     .PARAMETER CellBorder
         The table cell border
     .PARAMETER FontSize
-        The text fornt size used inside the cell
+        The cell text font size
     .PARAMETER IconType
-        Icon used to draw the node type
+        Node Icon type
     .PARAMETER ColumnSize
-        This number is used to specified how to split the object in side the HTML table
+        This value is used to specified how to split the object inside the HTML table
     .PARAMETER Port
-        Used inside Graphviz to point the edge between nodes
+        Used inside Graphviz to draw the edge between nodes
     #>
     param(
         [string[]] $inputObject,

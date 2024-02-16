@@ -299,8 +299,9 @@ function Test-Logo {
                 Copy-Item -Path $LogoPath -Destination $IconPath
                 $outputLogoFile = Split-Path $LogoPath -Leaf
                 if ($outputLogoFile) {
-                    $Images.Add("Custom", $outputLogoFile)
-                    return "Custom"
+                    $ImageName = "Custom-$(Get-Random)"
+                    $Images.Add($ImageName, $outputLogoFile)
+                    return $ImageName
                 }
             } else {
                 throw "New-ADDiagram : Logo isn't a supported image file. Please use the following format [.jpeg, .jpg, .png]"

@@ -22,7 +22,7 @@ Function Get-HTMLLabel {
                     | Diagram Title  |
                     __________________
     .NOTES
-        Version:        0.1.6
+        Version:        0.1.7
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -36,7 +36,9 @@ Function Get-HTMLLabel {
     param(
         [string] $Label,
         [string] $IconType,
-        [Switch] $SubgraphLabel
+        [Switch] $SubgraphLabel,
+        [string] $IconWidth = 40,
+        [string] $IconHeight = 40
     )
 
     if ($IconType -eq 'NoIcon') {
@@ -49,40 +51,16 @@ Function Get-HTMLLabel {
 
     if (-Not $SubgraphLabel) {
         if ($ICON -ne 'NoIcon') {
-            return "<TABLE border='0' cellborder='0' cellspacing='20' cellpadding='10'>
-            <TR>
-                <TD ALIGN='center' colspan='1'><img src='$($ICON)'/></TD>
-            </TR>
-            <TR>
-                <TD ALIGN='center'>$Label</TD>
-            </TR>
-            </TABLE>"
+            return "<TABLE border='0' cellborder='0' cellspacing='20' cellpadding='10'><TR><TD ALIGN='center' colspan='1'><img src='$($ICON)'/></TD></TR><TR><TD ALIGN='center'>$Label</TD></TR></TABLE>"
         } else {
-            return "<TABLE border='0' cellborder='0' cellspacing='20' cellpadding='10'>
-            <TR>
-                <TD bgcolor='#FFCCCC' ALIGN='center' colspan='1'>$($translate.MicrosoftLogo)</TD>
-            </TR>
-            <TR>
-                <TD bgcolor='#FFCCCC' ALIGN='center'>$Label</TD></TR><TR><TD ALIGN='center'><font color='red'>Debug ON</font></TD>
-            </TR>
-            </TABLE>"
+            return "<TABLE border='0' cellborder='0' cellspacing='20' cellpadding='10'><TR><TD bgcolor='#FFCCCC' ALIGN='center' colspan='1'>$($translate.MicrosoftLogo)</TD></TR><TR><TD bgcolor='#FFCCCC' ALIGN='center'>$Label</TD></TR><TR><TD ALIGN='center'><font color='red'>Debug ON</font></TD></TR></TABLE>"
         }
     }
     if ($SubgraphLabel) {
         if ($ICON -ne 'NoIcon') {
-            return "<TABLE border='0' cellborder='0' cellspacing='5' cellpadding='5'>
-            <TR>
-                <TD ALIGN='center' colspan='1' fixedsize='true' width='40' height='40'><img src='$($ICON)'/></TD>
-                <TD ALIGN='center'>$Label</TD>
-            </TR>
-            </TABLE>"
+            return "<TABLE border='0' cellborder='0' cellspacing='5' cellpadding='5'><TR><TD ALIGN='center' colspan='1' fixedsize='true' width='$($IconWidth)' height='$($IconHeight)'><img src='$($ICON)'/></TD><TD ALIGN='center'>$Label</TD></TR></TABLE>"
         } else {
-            return "<TABLE border='0' cellborder='0' cellspacing='20' cellpadding='10'>
-            <TR>
-                <TD bgcolor='#FFCCCC' ALIGN='center' colspan='1'>Subgraph Logo</TD>
-                <TD bgcolor='#FFCCCC' ALIGN='center'>$Label</TD>
-            </TR>
-            </TABLE>"
+            return "<TABLE border='0' cellborder='0' cellspacing='20' cellpadding='10'><TR><TD bgcolor='#FFCCCC' ALIGN='center' colspan='1'>Subgraph Logo</TD><TD bgcolor='#FFCCCC' ALIGN='center'>$Label</TD></TR></TABLE>"
         }
     }
 }
