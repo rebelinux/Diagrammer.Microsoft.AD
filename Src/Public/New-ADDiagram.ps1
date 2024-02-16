@@ -343,9 +343,9 @@ function New-ADDiagram {
         $script:URLIcon = $false
 
         if ($EnableEdgeDebug) {
-            $EdgeDebug = @{style = 'filled'; color = 'red' }
+            $script:EdgeDebug = @{style = 'filled'; color = 'red' }
             $script:URLIcon = $true
-        } else { $EdgeDebug = @{style = 'invis'; color = 'red' } }
+        } else { $script:EdgeDebug = @{style = 'invis'; color = 'red' } }
 
         if ($EnableSubGraphDebug) {
             $SubGraphDebug = @{style = 'dashed'; color = 'red' }
