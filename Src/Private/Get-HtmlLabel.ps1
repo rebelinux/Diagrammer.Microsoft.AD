@@ -22,7 +22,7 @@ Function Get-HTMLLabel {
                     | Diagram Title  |
                     __________________
     .NOTES
-        Version:        0.1.7
+        Version:        0.1.8
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -50,8 +50,15 @@ Function Get-HTMLLabel {
     } else { $ICON = "no_icon.png" }
 
     if (-Not $SubgraphLabel) {
+        # Todo add IconWidth and Icon Height
         if ($ICON -ne 'NoIcon') {
-            return "<TABLE border='0' cellborder='0' cellspacing='20' cellpadding='10'><TR><TD ALIGN='center' colspan='1'><img src='$($ICON)'/></TD></TR><TR><TD ALIGN='center'>$Label</TD></TR></TABLE>"
+            if ($IconWidth -and $IconHeight) {
+                return "<TABLE border='0' cellborder='0' cellspacing='20' cellpadding='10'><TR><TD ALIGN='center' colspan='1' fixedsize='true' width='$($IconWidth)' height='$($IconHeight)'><img src='$($ICON)'/></TD></TR><TR><TD ALIGN='center'>$Label</TD></TR></TABLE>"
+
+            } else {
+                return "<TABLE border='0' cellborder='0' cellspacing='20' cellpadding='10'><TR><TD ALIGN='center' colspan='1'><img src='$($ICON)'/></TD></TR><TR><TD ALIGN='center'>$Label</TD></TR></TABLE>"
+
+            }
         } else {
             return "<TABLE border='0' cellborder='0' cellspacing='20' cellpadding='10'><TR><TD bgcolor='#FFCCCC' ALIGN='center' colspan='1'>$($translate.MicrosoftLogo)</TD></TR><TR><TD bgcolor='#FFCCCC' ALIGN='center'>$Label</TD></TR><TR><TD ALIGN='center'><font color='red'>Debug ON</font></TD></TR></TABLE>"
         }
