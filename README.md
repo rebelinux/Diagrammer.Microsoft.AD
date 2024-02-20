@@ -64,9 +64,9 @@ Diagrammer.Microsoft.AD can be generated with Active Directory Enterprise Forest
 This project is compatible with the following PowerShell versions;
 
 <!-- ********** Update supported PowerShell versions ********** -->
-| Windows PowerShell 5.1 |     PowerShell 7    |
-|:----------------------:|:--------------------:|
-|   :white_check_mark:   | :x: |
+| Windows PowerShell 5.1 | PowerShell 7 |
+| :--------------------: | :----------: |
+|   :white_check_mark:   |     :x:      |
 
 ## :wrench: System Requirements
 
@@ -74,6 +74,8 @@ PowerShell 5.1, and the following PowerShell modules are required for generating
 
 - [ActiveDirectory Module](https://docs.microsoft.com/en-us/powershell/module/activedirectory/?view=windowsserver2019-ps)
 - [PSGraph Module](https://github.com/KevinMarquette/PSGraph)
+- [Diagrammer.Core Module](https://github.com/rebelinux/Diagrammer.Core)
+
 
 ## What is GraphViz?
 
