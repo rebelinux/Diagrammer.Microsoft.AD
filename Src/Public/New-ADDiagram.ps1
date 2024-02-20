@@ -63,7 +63,7 @@ function New-ADDiagram {
         Allow the creation of footer signature.
         AuthorName and CompanyName must be set to use this property.
     .NOTES
-        Version:        0.1.7
+        Version:        0.1.8
         Author(s):      Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -287,7 +287,6 @@ function New-ADDiagram {
         # Setup all paths required for script to run
         $script:RootPath = Split-Path (Split-Path $PSScriptRoot -Parent) -Parent
         $IconPath = Join-Path $RootPath 'icons'
-        $script:GraphvizPath = Join-Path $RootPath 'Graphviz\bin\dot.exe'
 
         if ($PSBoundParameters.ContainsKey('UICulture')) {
 
@@ -362,10 +361,15 @@ function New-ADDiagram {
         }
 
         # Validate Custom logo
-        $CustomLogo = Test-Logo -LogoPath $Logo
+        if ($Logo) {
+            $CustomLogo = Test-Logo -LogoPath (Get-ChildItem -Path $Logo).FullName -IconPath $IconPath -ImagesObj $Images
+        } else {
+            $CustomLogo = "Microsoft_Logo"
+        }
         # Validate Custom Signature Logo
-        $CustomSignatureLogo = Test-Logo -LogoPath $SignatureLogo -Signature
-
+        if ($SignatureLogo) {
+            $CustomSignatureLogo = Test-Logo -LogoPath (Get-ChildItem -Path $SignatureLogo).FullName -IconPath $IconPath -ImagesObj $Images
+        }
         $MainGraphAttributes = @{
             pad = 1.0
             rankdir = $Dir
@@ -418,20 +422,25 @@ function New-ADDiagram {
                 }
 
                 if ($Signature) {
+                    Write-Verbose "Generating diagram signature"
                     if ($CustomSignatureLogo) {
-                        $Signature = (Get-HtmlTable -Rows "Author: $($AuthorName)", "Company: $($CompanyName)" -TableBorder 2 -CellBorder 0 -align 'left' -Logo $CustomSignatureLogo)
+                        $Signature = (Get-HTMLTable -ImagesObj $Images -Rows "Author: $($AuthorName)", "Company: $($CompanyName)" -TableBorder 2 -CellBorder 0 -Align 'left' -Logo $CustomSignatureLogo -URLIcon $URLIcon)
                     } else {
-                        $Signature = (Get-HtmlTable -Rows "Author: $($AuthorName)", "Company: $($CompanyName)" -TableBorder 2 -CellBorder 0 -align 'left' -Logo "AD_LOGO_Footer")
+                        $Signature = (Get-HTMLTable -ImagesObj $Images -Rows "Author: $($AuthorName)", "Company: $($CompanyName)" -TableBorder 2 -CellBorder 0 -Align 'left' -Logo "AD_LOGO_Footer" -URLIcon $URLIcon)
                     }
                 } else {
+                    Write-Verbose "No diagram signature specified"
                     $Signature = " "
                 }
 
                 # Used for the Legend or SignatureLogo
                 SubGraph OUTERDRAWBOARD1 -Attributes @{Label = $Signature; fontsize = 24; penwidth = 1.5; labelloc = 'b'; labeljust = "r"; style = $SubGraphDebug.style; color = $SubGraphDebug.color } {
 
+                    Write-Verbose "Generating Signature SubGraph"
+
                     # Main Graph SubGraph
-                    SubGraph MainGraph -Attributes @{Label = (Get-HTMLLabel -Label $MainGraphLabel -IconType $CustomLogo -URLIcon $URLIcon); fontsize = 22; penwidth = 0; labelloc = 't'; labeljust = "c" } {
+                    SubGraph MainGraph -Attributes @{Label = (Get-HTMLLabel -ImagesObj $Images -Label $MainGraphLabel -IconType $CustomLogo -URLIcon $URLIcon -IconWidth 250 -IconHeight 80); fontsize = 22; penwidth = 0; labelloc = 't'; labeljust = "c" } {
+                        Write-Verbose "Generating Main SubGraph"
 
                         $script:ForestRoot = $ADSystem.Name.ToString().ToUpper()
 
@@ -461,6 +470,6 @@ function New-ADDiagram {
         Remove-CimSession -CimSession $TempCIMSession
 
         #Export Diagram
-        Out-ADDiagram -GraphObj ($Graph | Select-String -Pattern '"([A-Z])\w+"\s\[label="";style="invis";shape="point";]' -NotMatch) -ErrorDebug $EnableErrorDebug -Rotate $Rotate
+        Out-Diagram -GraphObj ($Graph | Select-String -Pattern '"([A-Z])\w+"\s\[label="";style="invis";shape="point";]' -NotMatch) -ErrorDebug $EnableErrorDebug -Rotate $Rotate -Format $Format -Filename $Filename -OutputFolderPath $OutputFolderPath
     }
 }

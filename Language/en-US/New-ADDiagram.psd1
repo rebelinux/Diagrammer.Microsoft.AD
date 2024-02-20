@@ -13,7 +13,7 @@ ConvertFrom-StringData @'
     connectingForest = Collecting Microsoft AD Forest information from {0}.
     DiagramLabel = Child Domains
     contiguous = Contiguous
-    noncontiguous = NonContiguous
+    noncontiguous = Non Contiguous
     osType = {0} is required to run the Diagrammer.Microsoft.AD. Run 'Install-WindowsFeature -Name '{0}'' to install the required modules. https://github.com/rebelinux/Diagrammer.Microsoft.AD
     osTypelast = Unable to validate if {0} is installed.
     DiagramDummyLabel = Child Domains

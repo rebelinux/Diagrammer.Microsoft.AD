@@ -5,7 +5,7 @@ function Get-DiagForest {
     .DESCRIPTION
         Build a diagram of the configuration of Microsoft Active Directory in PDF/PNG/SVG formats using Psgraph.
     .NOTES
-        Version:        0.1.7
+        Version:        0.1.8
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -21,6 +21,7 @@ function Get-DiagForest {
     )
 
     begin {
+        Write-Verbose "Generating Forest Diagram"
     }
 
     process {
@@ -31,27 +32,27 @@ function Get-DiagForest {
                 $ForestGroups = Get-ADForestInfo
 
                 if ($ForestGroups) {
-                    SubGraph ForestSubGraph -Attributes @{Label = (Get-HTMLLabel -Label $ForestRoot -IconType "ForestRoot" -URLIcon $URLIcon -SubgraphLabel -IconWidth 50 -IconHeight 50) ; fontsize = 24; penwidth = 1.5; labelloc = 't'; style = $SubGraphDebug.style ; color = $SubGraphDebug.color } {
+                    SubGraph ForestSubGraph -Attributes @{Label = (Get-HTMLLabel -ImagesObj $Images -Label $ForestRoot -IconType "ForestRoot" -URLIcon $URLIcon -SubgraphLabel -IconWidth 50 -IconHeight 50) ; fontsize = 24; penwidth = 1.5; labelloc = 't'; style = $SubGraphDebug.style ; color = $SubGraphDebug.color } {
                         SubGraph MainSubGraph -Attributes @{Label = $translate.DiagramLabel ; fontsize = 24; penwidth = 1.5; labelloc = 't'; style = 'dashed,rounded'; color = $SubGraphDebug.color } {
                             foreach ($ForestGroupOBJ in $ForestGroups) {
                                 if ($ForestGroupOBJ.Name -match $ForestRoot -and $ForestGroupOBJ.Childs.Group) {
                                     $SubGraphName = Remove-SpecialChar -String $ForestGroupOBJ.Name -SpecialChars '\-. '
                                     SubGraph ContiguousChilds -Attributes @{Label = $translate.contiguous; fontsize = 20; penwidth = 1.5; labelloc = 'b'; style = 'dashed,rounded' } {
-                                        SubGraph $SubGraphName -Attributes @{Label = (Get-HTMLLabel -Label $ForestGroupOBJ.Name -IconType "AD_Domain" -SubgraphLabel); fontsize = 20; penwidth = 1.5; labelloc = 't'; style = 'dashed,rounded'; fontcolor = "black" } {
-                                            Node -Name "$($SubGraphName)DomainTable" -Attributes @{Label = (Get-HtmlTable -Rows $ForestGroupOBJ.Childs.Group -MultiColunms -Columnsize 3 -Align 'Center' -fontSize 14); shape = "plain"; fillColor = 'transparent' }
+                                        SubGraph $SubGraphName -Attributes @{Label = (Get-HTMLLabel -ImagesObj $Images -Label $ForestGroupOBJ.Name -IconType "AD_Domain" -SubgraphLabel -URLIcon $URLIcon); fontsize = 20; penwidth = 1.5; labelloc = 't'; style = 'dashed,rounded'; fontcolor = "black" } {
+                                            Node -Name "$($SubGraphName)DomainTable" -Attributes @{Label = (Get-HTMLTable -ImagesObj $Images -Rows $ForestGroupOBJ.Childs.Group -MultiColunms -ColumnSize 3 -Align 'Center' -FontSize 14 -URLIcon $URLIcon); shape = "plain"; fillColor = 'transparent' }
                                         }
                                     }
                                 } elseif ($ForestGroupOBJ.Name -notmatch $ForestRoot -and $ForestGroupOBJ.Childs) {
                                     $SubGraphName = Remove-SpecialChar -String $ForestGroupOBJ.Name -SpecialChars '\-. '
                                     SubGraph NonContiguousChilds -Attributes @{Label = $translate.noncontiguous; fontsize = 20; penwidth = 1.5; labelloc = 'b'; style = 'dashed,rounded' } {
-                                        if ($ForestGroupOBJ.Childs.Group.Length -ge 1) {
-                                            SubGraph $SubGraphName -Attributes @{Label = (Get-HTMLLabel -Label $ForestGroupOBJ.Name -IconType "AD_Domain" -SubgraphLabel); fontsize = 20; penwidth = 1.5; labelloc = 't'; style = 'dashed,rounded' } {
-                                                Node -Name "$($SubGraphName)DomainTable" -Attributes @{Label = (Get-HtmlTable -Rows $ForestGroupOBJ.Childs.Group -MultiColunms -Columnsize 3 -Align 'Center' -fontSize 14); shape = "plain"; fillColor = 'transparent' }
+                                        if (($ForestGroupOBJ.Childs.Group | Measure-Object).Count -ge 1) {
+                                            SubGraph $SubGraphName -Attributes @{Label = (Get-HTMLLabel -ImagesObj $Images -Label $ForestGroupOBJ.Name -IconType "AD_Domain" -SubgraphLabel -URLIcon $URLIcon); fontsize = 20; penwidth = 1.5; labelloc = 't'; style = 'dashed,rounded' } {
+                                                Node -Name "$($SubGraphName)DomainTable" -Attributes @{Label = (Get-HTMLTable -ImagesObj $Images -Rows $ForestGroupOBJ.Childs.Group -MultiColunms -ColumnSize 3 -Align 'Center' -FontSize 14 -URLIcon $URLIcon); shape = "plain"; fillColor = 'transparent' }
                                             }
                                         } else {
                                             $SubGraphName = Remove-SpecialChar -String $ForestGroupOBJ.Name -SpecialChars '\-. '
-                                            SubGraph $SubGraphName -Attributes @{Label = (Get-HTMLLabel -Label $ForestGroupOBJ.Name -IconType "AD_Domain" -SubgraphLabel); fontsize = 20; penwidth = 1.5; labelloc = 't'; style = 'dashed,rounded' } {
-                                                Node -Name $ForestGroupOBJ.Name @{ Label = (Get-HtmlTable -Rows $ForestGroupOBJ.Name -MultiColunms -Columnsize 3 -Align 'Center' -fontSize 14); shape = 'plain'; fillColor = 'transparent' }
+                                            SubGraph $SubGraphName -Attributes @{Label = (Get-HTMLLabel -ImagesObj $Images -Label $ForestGroupOBJ.Name -IconType "AD_Domain" -SubgraphLabel -URLIcon $URLIcon); fontsize = 20; penwidth = 1.5; labelloc = 't'; style = 'dashed,rounded' } {
+                                                Node -Name $ForestGroupOBJ.Name @{ Label = (Get-HTMLTable -ImagesObj $Images -Rows $ForestGroupOBJ.Name -MultiColunms -ColumnSize 3 -Align 'Center' -FontSize 14 -URLIcon $URLIcon); shape = 'plain'; fillColor = 'transparent' }
                                             }
                                         }
                                     }
