@@ -5,7 +5,7 @@ function Get-DiagForestRoot {
     .DESCRIPTION
         Build a diagram of the configuration of Microsoft Active Directory in PDF/PNG/SVG formats using Psgraph.
     .NOTES
-        Version:        0.1.6
+        Version:        0.1.8
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -61,7 +61,7 @@ function Get-DiagForestRoot {
 
                         Convert-TableToHTML -Label $translate.fsmoRoles -Name FSMORoles -Row $FSMOObj -HeaderColor "#6d8faf" -HeaderFontColor "white" -BorderColor "black" -FontSize 14
 
-                        Node $ForestRoot @{Label = Get-NodeIcon -Name $ForestRoot -IconType "ForestRoot" -Align "Center"; shape = 'plain'; fillColor = 'transparent'; fontsize = 14 }
+                        Node $ForestRoot @{Label = Get-NodeIcon -ImagesObj $Images -Name $ForestRoot -IconType "ForestRoot" -Align "Center" -URLIcon $URLIcon; shape = 'plain'; fillColor = 'transparent'; fontsize = 14 }
 
                         # Edges between nodes to ensure that Forest name is in the center of the cluster
                         Edge ForestRootInformation, $ForestRoot, FSMORoles @{style = $EdgeDebug.style; color = $EdgeDebug.color }
@@ -72,7 +72,7 @@ function Get-DiagForestRoot {
                         Node Leftt @{Label = 'Leftt'; fontcolor = $NodeDebug.color; fillColor = $NodeDebug.style; shape = 'plain' }
                         Node Right @{Label = 'Right'; fontcolor = $NodeDebug.color; fillColor = $NodeDebug.style; shape = 'plain' }
 
-                        Node $ForestRoot @{Label = Get-NodeIcon -Name $ForestRoot -IconType "ForestRoot" -Align "Center"; shape = 'plain'; fillColor = 'transparent'; fontsize = 14 }
+                        Node $ForestRoot @{Label = Get-NodeIcon -ImagesObj $Images -Name $ForestRoot -IconType "ForestRoot" -Align "Center" -URLIcon $URLIcon; shape = 'plain'; fillColor = 'transparent'; fontsize = 14 }
 
                         # Edges between nodes to ensure that Forest name is in the center of the cluster
                         Edge Left, Leftt, $ForestRoot, Right @{style = $EdgeDebug.style; color = $EdgeDebug.color }

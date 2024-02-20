@@ -5,7 +5,7 @@ function Get-ADSitesInfo {
     .DESCRIPTION
         Build a diagram of the configuration of Microsoft Active Directory in PDF/PNG/SVG formats using Psgraph.
     .NOTES
-        Version:        0.1.6
+        Version:        0.1.8
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -51,7 +51,7 @@ function Get-ADSitesInfo {
 
                             $SubnetTable += [PSCustomObject]@{
                                 Name = Remove-SpecialChar -String "$($Site.Name)SubNets" -SpecialChars '\-. '
-                                Label = (Get-HtmlTable -Rows $SubnetArray -MultiColunms -Columnsize 3 -Align 'Center')
+                                Label = (Get-HtmlTable -ImagesObj $Images -Rows $SubnetArray -MultiColunms -Columnsize 3 -Align 'Center' -URLIcon $URLIcon)
                                 SubnetArray = $SubnetArray
                             }
 
@@ -70,7 +70,7 @@ function Get-ADSitesInfo {
 
                             $DCsTable += [PSCustomObject]@{
                                 Name = Remove-SpecialChar -String "$($Site.Name)DCs" -SpecialChars '\-. '
-                                Label = (Get-HTMLNodeTable -inputObject $DCsArray -Columnsize 3 -Align 'Center')
+                                Label = (Get-HTMLNodeTable -inputObject $DCsArray -Columnsize 3 -Align 'Center' -ImagesObj $Images -URLIcon $URLIcon)
                                 DCsArray = $DCsArray
                             }
 
@@ -97,7 +97,7 @@ function Get-ADSitesInfo {
                         #     while ($Number -ne $Group.Count) {
                         #         $DCLabel += @{
                         #             Group = $Number
-                        #             Label = (Get-HTMLNodeTable -inputObject $Group[$Number] -Columnsize 3 -Align 'Center' -IconType "DomainController" -MultiIcon)
+                        #             Label = (Get-HTMLNodeTable -inputObject $Group[$Number] -Columnsize 3 -Align 'Center' -IconType "DomainController" -MultiIcon -$ImagesObj $Images -URLIcon $URLIcon)
                         #         }
                         #         $Number++
                         #     }
