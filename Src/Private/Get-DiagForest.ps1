@@ -45,7 +45,7 @@ function Get-DiagForest {
                                 } elseif ($ForestGroupOBJ.Name -notmatch $ForestRoot -and $ForestGroupOBJ.Childs) {
                                     $SubGraphName = Remove-SpecialChar -String $ForestGroupOBJ.Name -SpecialChars '\-. '
                                     SubGraph NonContiguousChilds -Attributes @{Label = $translate.noncontiguous; fontsize = 20; penwidth = 1.5; labelloc = 'b'; style = 'dashed,rounded' } {
-                                        if ($ForestGroupOBJ.Childs.Group.Length -ge 1) {
+                                        if (($ForestGroupOBJ.Childs.Group | Measure-Object).Count -ge 1) {
                                             SubGraph $SubGraphName -Attributes @{Label = (Get-HTMLLabel -ImagesObj $Images -Label $ForestGroupOBJ.Name -IconType "AD_Domain" -SubgraphLabel -URLIcon $URLIcon); fontsize = 20; penwidth = 1.5; labelloc = 't'; style = 'dashed,rounded' } {
                                                 Node -Name "$($SubGraphName)DomainTable" -Attributes @{Label = (Get-HtmlTable -ImagesObj $Images -Rows $ForestGroupOBJ.Childs.Group -MultiColunms -Columnsize 3 -Align 'Center' -fontSize 14 -URLIcon $URLIcon); shape = "plain"; fillColor = 'transparent' }
                                             }

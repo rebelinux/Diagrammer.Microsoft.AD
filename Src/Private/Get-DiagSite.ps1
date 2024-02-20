@@ -35,7 +35,7 @@ function Get-DiagSite {
                     SubGraph ForestSubGraph -Attributes @{Label = (Get-HTMLLabel -ImagesObj $Images -Label $ForestRoot -IconType "ForestRoot" -URLIcon $URLIcon -SubgraphLabel -IconWidth 50 -IconHeight 50) ; fontsize = 24; penwidth = 1.5; labelloc = 't'; style = $SubGraphDebug.style ; color = $SubGraphDebug.color } {
                         SubGraph MainSubGraph -Attributes @{Label = ' ' ; fontsize = 24; penwidth = 1.5; labelloc = 't'; style = $SubGraphDebug.style; color = $SubGraphDebug.color } {
                             SubGraph SitesTopology -Attributes @{Label = 'Sites'; fontsize = 22; penwidth = 1.5; labelloc = 't'; style = 'dashed,rounded' } {
-                                if ($SitesGroups.Length -gt 1) {
+                                if (($SitesGroups | Measure-Object).Count -ge 1) {
                                     foreach ($SiteGroupOBJ in $SitesGroups) {
                                         $SubGraphName = Remove-SpecialChar -String $SiteGroupOBJ.Name -SpecialChars '\-. '
                                         SubGraph $SubGraphName -Attributes @{Label = (Get-HTMLLabel -ImagesObj $Images -Label $SiteGroupOBJ.Name -IconType "AD_Site" -SubgraphLabel -URLIcon $URLIcon); fontsize = 20; penwidth = 1.5; labelloc = 't'; style = 'dashed,rounded' } {
