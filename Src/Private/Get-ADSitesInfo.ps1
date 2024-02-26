@@ -5,7 +5,7 @@ function Get-ADSitesInfo {
     .DESCRIPTION
         Build a diagram of the configuration of Microsoft Active Directory in PDF/PNG/SVG formats using Psgraph.
     .NOTES
-        Version:        0.1.8
+        Version:        0.2.1
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -70,46 +70,13 @@ function Get-ADSitesInfo {
 
                             $DCsTable += [PSCustomObject]@{
                                 Name = Remove-SpecialChar -String "$($Site.Name)DCs" -SpecialChars '\-. '
-                                Label = (Get-DiaHTMLNodeTable -inputObject $DCsArray -Columnsize 3 -Align 'Center' -ImagesObj $Images -URLIcon $URLIcon)
+                                Label = (Get-DiaHtmlTable -Rows $DCsArray -MultiColunms -Columnsize 3 -Align 'Center' -ImagesObj $Images -URLIcon $URLIcon)
                                 DCsArray = $DCsArray
                             }
 
                             return $DCsTable
                         }
 
-                        #MultiIcon
-                        # DomainControllers = & {
-                        #     $DCsTable = @()
-                        #     $DCsArray = @()
-                        #     $DCs = try { Get-ADObjectSearch -DN "CN=Servers,$($Site.DistinguishedName)" -Filter { objectClass -eq "Server" } -Properties "DNSHostName" -SelectPrty 'DNSHostName', 'Name' -Session $TempPssSession } catch { Out-Null }
-                        #     foreach ($Object in $DCs) {
-                        #         $DCsArray += $Object.Name
-                        #     }
-
-                        #     # $DCsArray = @("Server-dc-01v","Server-dc-02v","Server-dc-03v","Server-dc-04v","Server-dc-05v","Server-dc-06v")
-
-                        #     $Group = Split-Array -inArray $DCsArray -size 3
-
-                        #     $DCLabel = @()
-
-                        #     $Number = 0
-
-                        #     while ($Number -ne $Group.Count) {
-                        #         $DCLabel += @{
-                        #             Group = $Number
-                        #             Label = (Get-HTMLNodeTable -inputObject $Group[$Number] -Columnsize 3 -Align 'Center' -IconType "DomainController" -MultiIcon -$ImagesObj $Images -URLIcon $URLIcon)
-                        #         }
-                        #         $Number++
-                        #     }
-
-                        #     $DCsTable += [PSCustomObject]@{
-                        #         Name = Remove-SpecialChar -String "$($Site.Name)DCs" -SpecialChars '\-. '
-                        #         Label = $DCLabel
-                        #         DCsArray = $DCsArray
-                        #     }
-
-                        #     return $DCsTable
-                        # }
                         SitesObj = $Site
                     }
                     $SitesInfo += $TempSitesInfo
