@@ -5,7 +5,7 @@ function Get-DiagSite {
     .DESCRIPTION
         Build a diagram of the configuration of Microsoft Active Directory in PDF/PNG/SVG formats using Psgraph.
     .NOTES
-        Version:        0.1.8
+        Version:        0.2.1
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -45,16 +45,6 @@ function Get-DiagSite {
                                                     Node -Name $SiteGroupOBJ.DomainControllers.Name -Attributes @{Label = $SiteGroupOBJ.DomainControllers.Label; shape = "plain"; fillColor = 'transparent' }
                                                 }
 
-                                                # MultiIcon
-                                                # $SubGraphNameSN = Remove-SpecialChar -String $SiteGroupOBJ.Name -SpecialChars '\-. '
-                                                # SubGraph "$($SubGraphNameSN)DC" -Attributes @{Label = "Domain Controllers"; fontsize = 18; penwidth = 1.5; labelloc = 't'; style = 'dashed,rounded' } {
-                                                #     $Group = @()
-                                                #     $SiteGroupOBJ.DomainControllers.Label | ForEach-Object {
-                                                #         Node -Name "$($SiteGroupOBJ.DomainControllers.Name)$($_.Group)" @{Label = $_.Label; shape = "plain"; fillColor = 'transparent' }
-                                                #         $Group += "$($SiteGroupOBJ.DomainControllers.Name)$($_.Group)"
-                                                #     }
-                                                #     Edge $Group @{minlen = 1; style = $EdgeDebug.style; color = $EdgeDebug.color }
-                                                # }
                                             } else {
                                                 $SubGraphNameSN = Remove-SpecialChar -String $SiteGroupOBJ.Name -SpecialChars '\-. '
                                                 SubGraph "$($SubGraphNameSN)DC" -Attributes @{Label = (Get-DiaHTMLLabel -ImagesObj $Images -Label "Domain Controllers" -IconType "AD_DC" -SubgraphLabel -URLIcon $URLIcon); fontsize = 18; penwidth = 1.5; labelloc = 't'; style = 'dashed,
