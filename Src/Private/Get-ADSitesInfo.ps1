@@ -21,7 +21,7 @@ function Get-ADSitesInfo {
     }
 
     process {
-        Write-Verbose -Message ($translate.connectingSites -f $($ForestRoot))
+        Write-Verbose -Message ($translate.buildingSites -f $($ForestRoot))
         try {
             $Sites = Invoke-Command -Session $TempPssSession { Get-ADReplicationSite -Filter * -Properties * }
 

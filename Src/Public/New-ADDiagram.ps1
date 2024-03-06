@@ -223,8 +223,8 @@ function New-ADDiagram {
             Mandatory = $false,
             HelpMessage = 'Allow to rotate the diagram output image. valid rotation degree (90, 180)'
         )]
-        [ValidateSet(90, 180)]
-        [string] $Rotate,
+        [ValidateSet(0, 90, 180, 270)]
+        [string] $Rotate = 0,
 
         [Parameter(
             Mandatory = $false,
@@ -273,9 +273,22 @@ function New-ADDiagram {
             HelpMessage = 'Allow the creation of footer signature'
         )]
         [Switch] $Signature = $false,
+
         [Parameter(
             Mandatory = $false,
-            HelpMessage = 'Allow the creation of footer signature'
+            HelpMessage = 'Allow to add a watermark to the output image (Not supported in svg format)'
+        )]
+        [string] $WaterMark,
+
+        [Parameter(
+            Mandatory = $false,
+            HelpMessage = 'Allow to specified the color used for the watermark text'
+        )]
+        [string] $WaterMarkColor = 'Blue',
+
+        [Parameter(
+            Mandatory = $false,
+            HelpMessage = 'Allow the specified the text language'
         )]
         [ValidateSet('en-US', 'es-ES')]
         [string] $UICulture
@@ -284,9 +297,20 @@ function New-ADDiagram {
 
     begin {
 
+        if ($Format -ne 'base64') {
+            Write-ColorOutput -Color 'Blue' -String 'Please wait while the Microsoft.AD diagram is being generated.'
+        }
+
+        $Verbose = if ($PSBoundParameters.ContainsKey('Verbose')) {
+            $PSCmdlet.MyInvocation.BoundParameters["Verbose"].IsPresent
+        }
+        else {
+            $false
+        }
+
         # Setup all paths required for script to run
         $script:RootPath = Split-Path (Split-Path $PSScriptRoot -Parent) -Parent
-        $IconPath = Join-Path $RootPath 'icons'
+        $script:IconPath = Join-Path $RootPath 'icons'
 
         if ($PSBoundParameters.ContainsKey('UICulture')) {
 
@@ -321,7 +345,6 @@ function New-ADDiagram {
         if ($Signature -and (([string]::IsNullOrEmpty($AuthorName)) -or ([string]::IsNullOrEmpty($CompanyName)))) {
             throw $translate.signaturerequirements
         }
-
 
         #Validate Required Modules and Features
         $OSType = (Get-ComputerInfo).OsProductType
@@ -406,8 +429,8 @@ function New-ADDiagram {
                     style = 'filled'
                     fillColor = '#99ceff'
                     fontsize = 14;
-                    imagescale = $true;
-                    color = "#003099";
+                    imagescale = $true
+                    color = "#003099"
                     penwidth = 3
                     fontname = "Segoe UI"
                 }
@@ -470,6 +493,20 @@ function New-ADDiagram {
         Remove-CimSession -CimSession $TempCIMSession
 
         #Export Diagram
-        Out-Diagram -GraphObj ($Graph | Select-String -Pattern '"([A-Z])\w+"\s\[label="";style="invis";shape="point";]' -NotMatch) -ErrorDebug $EnableErrorDebug -Rotate $Rotate -Format $Format -Filename $Filename -OutputFolderPath $OutputFolderPath
+        foreach ($OutputFormat in $Format) {
+
+            $OutputDiagram = Export-GraphvizDiagram -GraphObj ($Graph | Select-String -Pattern '"([A-Z])\w+"\s\[label="";style="invis";shape="point";]' -NotMatch) -ErrorDebug $EnableErrorDebug -Rotate $Rotate -Format $OutputFormat -Filename $Filename -OutputFolderPath $OutputFolderPath -WaterMark $WaterMark -WaterMarkColor $WaterMarkColor -IconPath $IconPath -Verbose:$Verbose
+
+            if ($OutputDiagram) {
+                if ($OutputFormat -ne 'Base64') {
+                    # If not Base64 format return image path
+                    Write-ColorOutput -Color 'White' -String ($translate.DiagramOutput -f $OutputDiagram.Name, $OutputDiagram.Directory)
+                } else {
+                    Write-Verbose $translate.Base64Output
+                    # Return Base64 string
+                    $OutputDiagram
+                }
+            }
+        }
     }
 }

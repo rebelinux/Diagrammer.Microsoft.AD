@@ -68,7 +68,7 @@ function Get-DiagSite {
                                         }
                                     }
                                 } else {
-                                    Node -Name NoSites -Attributes @{LAbel = $translate.NoSites; shape = "rectangle"; labelloc = 'c'; fixedsize = $true; width = "3"; height = "2"; fillColor = 'transparent'; penwidth = 0 }
+                                    Node -Name NoSites -Attributes @{Label = $translate.NoSites; shape = "rectangle"; labelloc = 'c'; fixedsize = $true; width = "3"; height = "2"; fillColor = 'transparent'; penwidth = 0 }
                                 }
                             }
                         }

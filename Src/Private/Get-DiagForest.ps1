@@ -57,7 +57,7 @@ function Get-DiagForest {
                                         }
                                     }
                                 } else {
-                                    Node -Name NoChildDomain @{LAbel = $translate.NoChildDomain; shape = "rectangle"; labelloc = 'c'; fixedsize = $true; width = "3"; height = "2"; fillColor = 'transparent'; penwidth = 0 }
+                                    Node -Name NoChildDomain @{Label = $translate.NoChildDomain; shape = "rectangle"; labelloc = 'c'; fixedsize = $true; width = "3"; height = "2"; fillColor = 'transparent'; penwidth = 0 }
                                 }
                             }
 

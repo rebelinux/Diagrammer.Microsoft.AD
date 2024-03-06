@@ -33,8 +33,10 @@ ConvertFrom-StringData @'
     sitesgraphlabel = Active Directory Site Inventory
     emptySites = No Site topology available to diagram
     connectingSites = Collecting Microsoft AD Sites information from {0}.
+    buildingSites = Building Microsoft AD Sites diagram from {0}.
     NoSites = No Site Topology
     NoSiteSubnet = No Site Subnets
     NoSiteDC = No Site Domain Controllers
-
+    Base64Output = Displaying Base64 string
+    DiagramOutput = Microsoft.AD diagram '{0}' has been saved to '{1}'
 '@
