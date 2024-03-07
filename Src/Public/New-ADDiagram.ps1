@@ -142,14 +142,13 @@ function New-ADDiagram {
             Mandatory = $false,
             HelpMessage = 'Please provide the path to the diagram output file'
         )]
-        [ValidateScript( {
-                if (Test-Path -Path $_) {
-                    $true
-                } else {
-                    throw "Path $_ not found!"
+        [ValidateScript({
+                if (-Not ($_ | Test-Path) ) {
+                    throw "Folder does not exist"
                 }
+                return $true
             })]
-        [string] $OutputFolderPath = [System.IO.Path]::GetTempPath(),
+        [System.IO.FileInfo] $OutputFolderPath = [System.IO.Path]::GetTempPath(),
 
         [Parameter(
             Mandatory = $false,
@@ -179,7 +178,7 @@ function New-ADDiagram {
 
         [Parameter(
             Mandatory = $false,
-            HelpMessage = 'Specify the Diagram filename'
+            HelpMessage = 'Specify the diagram output file name path'
         )]
         [ValidateNotNullOrEmpty()]
         [ValidateScript({
@@ -188,6 +187,10 @@ function New-ADDiagram {
                 } else {
                     throw "Format value must be unique if Filename is especified."
                 }
+                if (-Not $_.EndsWith($Format)) {
+                    throw "The file specified in the path argument must be of type $Format"
+                }
+                return $true
             })]
         [String] $Filename,
 
@@ -221,10 +224,10 @@ function New-ADDiagram {
 
         [Parameter(
             Mandatory = $false,
-            HelpMessage = 'Allow to rotate the diagram output image. valid rotation degree (90, 180)'
+            HelpMessage = 'Allow to rotate the diagram output image. valid rotation degree (90, 180, 270)'
         )]
-        [ValidateSet(0, 90, 180, 270)]
-        [string] $Rotate = 0,
+        [ValidateSet(90, 180, 270)]
+        [int] $Rotate,
 
         [Parameter(
             Mandatory = $false,
@@ -303,8 +306,7 @@ function New-ADDiagram {
 
         $Verbose = if ($PSBoundParameters.ContainsKey('Verbose')) {
             $PSCmdlet.MyInvocation.BoundParameters["Verbose"].IsPresent
-        }
-        else {
+        } else {
             $false
         }
 
