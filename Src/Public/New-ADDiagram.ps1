@@ -226,8 +226,8 @@ function New-ADDiagram {
             Mandatory = $false,
             HelpMessage = 'Allow to rotate the diagram output image. valid rotation degree (90, 180, 270)'
         )]
-        [ValidateSet(90, 180, 270)]
-        [int] $Rotate,
+        [ValidateSet(0, 90, 180, 270)]
+        [int] $Rotate = 0,
 
         [Parameter(
             Mandatory = $false,
