@@ -62,6 +62,10 @@ function New-ADDiagram {
     .PARAMETER Signature
         Allow the creation of footer signature.
         AuthorName and CompanyName must be set to use this property.
+    .PARAMETER WatermarkText
+        Allow to add a watermark to the output image (Not supported in svg format).
+    .PARAMETER WatermarkColor
+        Allow to specified the color used for the watermark text. Default: Blue.
     .NOTES
         Version:        0.1.8
         Author(s):      Jonathan Colon
@@ -224,9 +228,9 @@ function New-ADDiagram {
 
         [Parameter(
             Mandatory = $false,
-            HelpMessage = 'Allow to rotate the diagram output image. valid rotation degree (90, 180, 270)'
+            HelpMessage = 'Allow to rotate the diagram output image. valid rotation degree (0, 90)'
         )]
-        [ValidateSet(0, 90, 180, 270)]
+        [ValidateSet(0, 90)]
         [int] $Rotate = 0,
 
         [Parameter(
@@ -281,7 +285,7 @@ function New-ADDiagram {
             Mandatory = $false,
             HelpMessage = 'Allow to add a watermark to the output image (Not supported in svg format)'
         )]
-        [string] $WaterMark,
+        [string] $WaterMarkText,
 
         [Parameter(
             Mandatory = $false,
@@ -364,17 +368,17 @@ function New-ADDiagram {
             'SitesTopology' { $translate.sitesgraphlabel }
         }
 
-        $script:URLIcon = $false
+        $script:IconDebug = $false
 
         if ($EnableEdgeDebug) {
             $script:EdgeDebug = @{style = 'filled'; color = 'red' }
-            $script:URLIcon = $true
+            $script:IconDebug = $true
         } else { $script:EdgeDebug = @{style = 'invis'; color = 'red' } }
 
         if ($EnableSubGraphDebug) {
             $SubGraphDebug = @{style = 'dashed'; color = 'red' }
             $script:NodeDebug = @{color = 'black'; style = 'red' }
-            $script:URLIcon = $true
+            $script:IconDebug = $true
         } else {
             $SubGraphDebug = @{style = 'invis'; color = 'gray' }
             $script:NodeDebug = @{color = 'transparent'; style = 'transparent' }
@@ -395,6 +399,10 @@ function New-ADDiagram {
         if ($SignatureLogo) {
             $CustomSignatureLogo = Test-Logo -LogoPath (Get-ChildItem -Path $SignatureLogo).FullName -IconPath $IconPath -ImagesObj $Images
         }
+
+        # Change variable Scope
+
+        # Main Diagram Attributes
         $MainGraphAttributes = @{
             pad = 1.0
             rankdir = $Dir
@@ -410,6 +418,7 @@ function New-ADDiagram {
             nodesep = $NodeSeparation
             ranksep = $SectionSeparation
             ratio = 'auto'
+            rotate = $Rotate
         }
     }
 
@@ -449,9 +458,9 @@ function New-ADDiagram {
                 if ($Signature) {
                     Write-Verbose "Generating diagram signature"
                     if ($CustomSignatureLogo) {
-                        $Signature = (Get-DiaHTMLTable -ImagesObj $Images -Rows "Author: $($AuthorName)", "Company: $($CompanyName)" -TableBorder 2 -CellBorder 0 -Align 'left' -Logo $CustomSignatureLogo -URLIcon $URLIcon)
+                        $Signature = (Get-DiaHTMLTable -ImagesObj $Images -Rows "Author: $($AuthorName)", "Company: $($CompanyName)" -TableBorder 2 -CellBorder 0 -Align 'left' -Logo $CustomSignatureLogo -IconDebug $IconDebug)
                     } else {
-                        $Signature = (Get-DiaHTMLTable -ImagesObj $Images -Rows "Author: $($AuthorName)", "Company: $($CompanyName)" -TableBorder 2 -CellBorder 0 -Align 'left' -Logo "AD_LOGO_Footer" -URLIcon $URLIcon)
+                        $Signature = (Get-DiaHTMLTable -ImagesObj $Images -Rows "Author: $($AuthorName)", "Company: $($CompanyName)" -TableBorder 2 -CellBorder 0 -Align 'left' -Logo "AD_LOGO_Footer" -IconDebug $IconDebug)
                     }
                 } else {
                     Write-Verbose "No diagram signature specified"
@@ -464,7 +473,7 @@ function New-ADDiagram {
                     Write-Verbose "Generating Signature SubGraph"
 
                     # Main Graph SubGraph
-                    SubGraph MainGraph -Attributes @{Label = (Get-DiaHTMLLabel -ImagesObj $Images -Label $MainGraphLabel -IconType $CustomLogo -URLIcon $URLIcon -IconWidth 250 -IconHeight 80); fontsize = 22; penwidth = 0; labelloc = 't'; labeljust = "c" } {
+                    SubGraph MainGraph -Attributes @{Label = (Get-DiaHTMLLabel -ImagesObj $Images -Label $MainGraphLabel -IconType $CustomLogo -IconDebug $IconDebug -IconWidth 250 -IconHeight 80); fontsize = 22; penwidth = 0; labelloc = 't'; labeljust = "c" } {
                         Write-Verbose "Generating Main SubGraph"
 
                         $script:ForestRoot = $ADSystem.Name.ToString().ToUpper()
@@ -497,7 +506,7 @@ function New-ADDiagram {
         #Export Diagram
         foreach ($OutputFormat in $Format) {
 
-            $OutputDiagram = Export-GraphvizDiagram -GraphObj ($Graph | Select-String -Pattern '"([A-Z])\w+"\s\[label="";style="invis";shape="point";]' -NotMatch) -ErrorDebug $EnableErrorDebug -Rotate $Rotate -Format $OutputFormat -Filename $Filename -OutputFolderPath $OutputFolderPath -WaterMark $WaterMark -WaterMarkColor $WaterMarkColor -IconPath $IconPath -Verbose:$Verbose
+            $OutputDiagram = Export-Diagrammer -GraphObj ($Graph | Select-String -Pattern '"([A-Z])\w+"\s\[label="";style="invis";shape="point";]' -NotMatch) -ErrorDebug $EnableErrorDebug -Format $OutputFormat -Filename $Filename -OutputFolderPath $OutputFolderPath -WaterMarkText $WaterMarkText -WaterMarkColor $WaterMarkColor -IconPath $IconPath -Verbose:$Verbose -Rotate $Rotate
 
             if ($OutputDiagram) {
                 if ($OutputFormat -ne 'Base64') {
