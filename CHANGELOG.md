@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Improved Site diagram code
+- Fix [#18](https://github.com/rebelinux/Diagrammer.Microsoft.AD/issues/18)
 
 ## [0.2.0] - 2024-02-20
 
