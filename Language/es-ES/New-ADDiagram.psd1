@@ -28,4 +28,6 @@ ConvertFrom-StringData @'
     fsmoRoles = Roles FSMO
     forestRootInfo = Informacion de la Raiz del Arbol
     MicrosoftLogo = Logo de Microsoft
+    Base64Output = Desplegando cadena Base64
+    DiagramOutput = "El diagrama sobre Microsoft.AD '{0}' ha sido guardado en '{1}'"
 '@

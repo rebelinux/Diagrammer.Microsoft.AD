@@ -62,6 +62,10 @@ function New-ADDiagram {
     .PARAMETER Signature
         Allow the creation of footer signature.
         AuthorName and CompanyName must be set to use this property.
+    .PARAMETER WatermarkText
+        Allow to add a watermark to the output image (Not supported in svg format).
+    .PARAMETER WatermarkColor
+        Allow to specified the color used for the watermark text. Default: Blue.
     .NOTES
         Version:        0.1.8
         Author(s):      Jonathan Colon
@@ -142,14 +146,13 @@ function New-ADDiagram {
             Mandatory = $false,
             HelpMessage = 'Please provide the path to the diagram output file'
         )]
-        [ValidateScript( {
-                if (Test-Path -Path $_) {
-                    $true
-                } else {
-                    throw "Path $_ not found!"
+        [ValidateScript({
+                if (-Not ($_ | Test-Path) ) {
+                    throw "Folder does not exist"
                 }
+                return $true
             })]
-        [string] $OutputFolderPath = [System.IO.Path]::GetTempPath(),
+        [System.IO.FileInfo] $OutputFolderPath = [System.IO.Path]::GetTempPath(),
 
         [Parameter(
             Mandatory = $false,
@@ -179,7 +182,7 @@ function New-ADDiagram {
 
         [Parameter(
             Mandatory = $false,
-            HelpMessage = 'Specify the Diagram filename'
+            HelpMessage = 'Specify the diagram output file name path'
         )]
         [ValidateNotNullOrEmpty()]
         [ValidateScript({
@@ -188,6 +191,10 @@ function New-ADDiagram {
                 } else {
                     throw "Format value must be unique if Filename is especified."
                 }
+                if (-Not $_.EndsWith($Format)) {
+                    throw "The file specified in the path argument must be of type $Format"
+                }
+                return $true
             })]
         [String] $Filename,
 
@@ -221,10 +228,10 @@ function New-ADDiagram {
 
         [Parameter(
             Mandatory = $false,
-            HelpMessage = 'Allow to rotate the diagram output image. valid rotation degree (90, 180)'
+            HelpMessage = 'Allow to rotate the diagram output image. valid rotation degree (0, 90)'
         )]
-        [ValidateSet(90, 180)]
-        [string] $Rotate,
+        [ValidateSet(0, 90)]
+        [int] $Rotate = 0,
 
         [Parameter(
             Mandatory = $false,
@@ -273,9 +280,22 @@ function New-ADDiagram {
             HelpMessage = 'Allow the creation of footer signature'
         )]
         [Switch] $Signature = $false,
+
         [Parameter(
             Mandatory = $false,
-            HelpMessage = 'Allow the creation of footer signature'
+            HelpMessage = 'Allow to add a watermark to the output image (Not supported in svg format)'
+        )]
+        [string] $WaterMarkText,
+
+        [Parameter(
+            Mandatory = $false,
+            HelpMessage = 'Allow to specified the color used for the watermark text'
+        )]
+        [string] $WaterMarkColor = 'Blue',
+
+        [Parameter(
+            Mandatory = $false,
+            HelpMessage = 'Allow the specified the text language'
         )]
         [ValidateSet('en-US', 'es-ES')]
         [string] $UICulture
@@ -284,9 +304,19 @@ function New-ADDiagram {
 
     begin {
 
+        if ($Format -ne 'base64') {
+            Write-ColorOutput -Color 'Blue' -String 'Please wait while the Microsoft.AD diagram is being generated.'
+        }
+
+        $Verbose = if ($PSBoundParameters.ContainsKey('Verbose')) {
+            $PSCmdlet.MyInvocation.BoundParameters["Verbose"].IsPresent
+        } else {
+            $false
+        }
+
         # Setup all paths required for script to run
         $script:RootPath = Split-Path (Split-Path $PSScriptRoot -Parent) -Parent
-        $IconPath = Join-Path $RootPath 'icons'
+        $script:IconPath = Join-Path $RootPath 'icons'
 
         if ($PSBoundParameters.ContainsKey('UICulture')) {
 
@@ -322,7 +352,6 @@ function New-ADDiagram {
             throw $translate.signaturerequirements
         }
 
-
         #Validate Required Modules and Features
         $OSType = (Get-ComputerInfo).OsProductType
         if ($OSType -eq 'WorkStation') {
@@ -339,17 +368,17 @@ function New-ADDiagram {
             'SitesTopology' { $translate.sitesgraphlabel }
         }
 
-        $script:URLIcon = $false
+        $script:IconDebug = $false
 
         if ($EnableEdgeDebug) {
             $script:EdgeDebug = @{style = 'filled'; color = 'red' }
-            $script:URLIcon = $true
+            $script:IconDebug = $true
         } else { $script:EdgeDebug = @{style = 'invis'; color = 'red' } }
 
         if ($EnableSubGraphDebug) {
             $SubGraphDebug = @{style = 'dashed'; color = 'red' }
             $script:NodeDebug = @{color = 'black'; style = 'red' }
-            $script:URLIcon = $true
+            $script:IconDebug = $true
         } else {
             $SubGraphDebug = @{style = 'invis'; color = 'gray' }
             $script:NodeDebug = @{color = 'transparent'; style = 'transparent' }
@@ -370,6 +399,10 @@ function New-ADDiagram {
         if ($SignatureLogo) {
             $CustomSignatureLogo = Test-Logo -LogoPath (Get-ChildItem -Path $SignatureLogo).FullName -IconPath $IconPath -ImagesObj $Images
         }
+
+        # Change variable Scope
+
+        # Main Diagram Attributes
         $MainGraphAttributes = @{
             pad = 1.0
             rankdir = $Dir
@@ -385,6 +418,7 @@ function New-ADDiagram {
             nodesep = $NodeSeparation
             ranksep = $SectionSeparation
             ratio = 'auto'
+            rotate = $Rotate
         }
     }
 
@@ -406,8 +440,8 @@ function New-ADDiagram {
                     style = 'filled'
                     fillColor = '#99ceff'
                     fontsize = 14;
-                    imagescale = $true;
-                    color = "#003099";
+                    imagescale = $true
+                    color = "#003099"
                     penwidth = 3
                     fontname = "Segoe UI"
                 }
@@ -424,9 +458,9 @@ function New-ADDiagram {
                 if ($Signature) {
                     Write-Verbose "Generating diagram signature"
                     if ($CustomSignatureLogo) {
-                        $Signature = (Get-DiaHTMLTable -ImagesObj $Images -Rows "Author: $($AuthorName)", "Company: $($CompanyName)" -TableBorder 2 -CellBorder 0 -Align 'left' -Logo $CustomSignatureLogo -URLIcon $URLIcon)
+                        $Signature = (Get-DiaHTMLTable -ImagesObj $Images -Rows "Author: $($AuthorName)", "Company: $($CompanyName)" -TableBorder 2 -CellBorder 0 -Align 'left' -Logo $CustomSignatureLogo -IconDebug $IconDebug)
                     } else {
-                        $Signature = (Get-DiaHTMLTable -ImagesObj $Images -Rows "Author: $($AuthorName)", "Company: $($CompanyName)" -TableBorder 2 -CellBorder 0 -Align 'left' -Logo "AD_LOGO_Footer" -URLIcon $URLIcon)
+                        $Signature = (Get-DiaHTMLTable -ImagesObj $Images -Rows "Author: $($AuthorName)", "Company: $($CompanyName)" -TableBorder 2 -CellBorder 0 -Align 'left' -Logo "AD_LOGO_Footer" -IconDebug $IconDebug)
                     }
                 } else {
                     Write-Verbose "No diagram signature specified"
@@ -439,7 +473,7 @@ function New-ADDiagram {
                     Write-Verbose "Generating Signature SubGraph"
 
                     # Main Graph SubGraph
-                    SubGraph MainGraph -Attributes @{Label = (Get-DiaHTMLLabel -ImagesObj $Images -Label $MainGraphLabel -IconType $CustomLogo -URLIcon $URLIcon -IconWidth 250 -IconHeight 80); fontsize = 22; penwidth = 0; labelloc = 't'; labeljust = "c" } {
+                    SubGraph MainGraph -Attributes @{Label = (Get-DiaHTMLLabel -ImagesObj $Images -Label $MainGraphLabel -IconType $CustomLogo -IconDebug $IconDebug -IconWidth 250 -IconHeight 80); fontsize = 22; penwidth = 0; labelloc = 't'; labeljust = "c" } {
                         Write-Verbose "Generating Main SubGraph"
 
                         $script:ForestRoot = $ADSystem.Name.ToString().ToUpper()
@@ -470,6 +504,20 @@ function New-ADDiagram {
         Remove-CimSession -CimSession $TempCIMSession
 
         #Export Diagram
-        Out-Diagram -GraphObj ($Graph | Select-String -Pattern '"([A-Z])\w+"\s\[label="";style="invis";shape="point";]' -NotMatch) -ErrorDebug $EnableErrorDebug -Rotate $Rotate -Format $Format -Filename $Filename -OutputFolderPath $OutputFolderPath
+        foreach ($OutputFormat in $Format) {
+
+            $OutputDiagram = Export-Diagrammer -GraphObj ($Graph | Select-String -Pattern '"([A-Z])\w+"\s\[label="";style="invis";shape="point";]' -NotMatch) -ErrorDebug $EnableErrorDebug -Format $OutputFormat -Filename $Filename -OutputFolderPath $OutputFolderPath -WaterMarkText $WaterMarkText -WaterMarkColor $WaterMarkColor -IconPath $IconPath -Verbose:$Verbose -Rotate $Rotate
+
+            if ($OutputDiagram) {
+                if ($OutputFormat -ne 'Base64') {
+                    # If not Base64 format return image path
+                    Write-ColorOutput -Color 'White' -String ($translate.DiagramOutput -f $OutputDiagram.Name, $OutputDiagram.Directory)
+                } else {
+                    Write-Verbose $translate.Base64Output
+                    # Return Base64 string
+                    $OutputDiagram
+                }
+            }
+        }
     }
 }

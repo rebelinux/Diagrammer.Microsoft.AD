@@ -21,7 +21,7 @@ function Get-ADSitesInfo {
     }
 
     process {
-        Write-Verbose -Message ($translate.connectingSites -f $($ForestRoot))
+        Write-Verbose -Message ($translate.buildingSites -f $($ForestRoot))
         try {
             $Sites = Invoke-Command -Session $TempPssSession { Get-ADReplicationSite -Filter * -Properties * }
 
@@ -51,7 +51,7 @@ function Get-ADSitesInfo {
 
                             $SubnetTable += [PSCustomObject]@{
                                 Name = Remove-SpecialChar -String "$($Site.Name)SubNets" -SpecialChars '\-. '
-                                Label = (Get-DiaHtmlTable -ImagesObj $Images -Rows $SubnetArray -MultiColunms -Columnsize 3 -Align 'Center' -URLIcon $URLIcon)
+                                Label = (Get-DiaHtmlTable -ImagesObj $Images -Rows $SubnetArray -MultiColunms -Columnsize 3 -Align 'Center' -IconDebug $IconDebug)
                                 SubnetArray = $SubnetArray
                             }
 
@@ -70,7 +70,7 @@ function Get-ADSitesInfo {
 
                             $DCsTable += [PSCustomObject]@{
                                 Name = Remove-SpecialChar -String "$($Site.Name)DCs" -SpecialChars '\-. '
-                                Label = (Get-DiaHtmlTable -Rows $DCsArray -MultiColunms -Columnsize 3 -Align 'Center' -ImagesObj $Images -URLIcon $URLIcon)
+                                Label = (Get-DiaHtmlTable -Rows $DCsArray -MultiColunms -Columnsize 3 -Align 'Center' -ImagesObj $Images -IconDebug $IconDebug)
                                 DCsArray = $DCsArray
                             }
 
