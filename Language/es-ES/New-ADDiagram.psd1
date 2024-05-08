@@ -30,4 +30,14 @@ ConvertFrom-StringData @'
     MicrosoftLogo = Logo de Microsoft
     Base64Output = Desplegando cadena Base64
     DiagramOutput = "El diagrama sobre Microsoft.AD '{0}' ha sido guardado en '{1}'"
+    trustsDiagramLabel = Confianzas de Active Directory
+    emptySites = No existe una topology de sitios disponible para diagramar
+    emptyTrusts = No existe una topology de confianza disponible para diagramar
+    connectingSites = Reopilando la información de los sitios de Microsoft Active Directory para {0}.
+    connectingSTrusts = Reopilando la información de confianza de Microsoft Active Directory para {0}.
+    buildingTrusts = Creando diagrama de confianza de Microsoft AD desde {0}.
+    buildingSites = Creando diagrama de sitios de Microsoft AD desde {0}.
+    NoSites = Sin topologia de sitio
+    NoSiteSubnet = Sin sitios de subred
+    NoTrusts = Sin topologia de confianza
 '@
