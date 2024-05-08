@@ -131,62 +131,68 @@ The `New-ADDiagram` cmdlet is used to generate a Active Directory diagram. The t
 
 ```powershell
 .PARAMETER DiagramType
-  Specifies the type of active directory diagram that will be generated.
-  The supported output diagrams are:
-            'Forest'
+    Specifies the type of active directory diagram that will be generated.
+    The supported output diagrams are:
+                'Forest'
+                'Sites'
+                'Trusts'
 .PARAMETER Target
-  Specifies the IP/FQDN of the system to connect.
-  Multiple targets may be specified, separated by a comma.
+    Specifies the IP/FQDN of the system to connect.
+    Multiple targets may be specified, separated by a comma.
 .PARAMETER Credential
-  Specifies the stored credential of the target system.
+    Specifies the stored credential of the target system.
 .PARAMETER Username
-  Specifies the username for the target system.
+    Specifies the username for the target system.
 .PARAMETER Password
-  Specifies the password for the target system.
+    Specifies the password for the target system.
 .PARAMETER Format
-  Specifies the output format of the diagram.
-  The supported output formats are PDF, PNG, DOT & SVG.
-  Multiple output formats may be specified, separated by a comma.
+    Specifies the output format of the diagram.
+    The supported output formats are PDF, PNG, DOT & SVG.
+    Multiple output formats may be specified, separated by a comma.
 .PARAMETER Direction
-  Set the direction in which resource are plotted on the visualization
-  The supported directions are:
-      'top-to-bottom', 'left-to-right'
-  By default, direction will be set to top-to-bottom.
+    Set the direction in which resource are plotted on the visualization
+    The supported directions are:
+        'top-to-bottom', 'left-to-right'
+    By default, direction will be set to top-to-bottom.
 .PARAMETER NodeSeparation
-  Controls Node separation ratio in visualization
-  By default, NodeSeparation will be set to .60.
+    Controls Node separation ratio in visualization
+    By default, NodeSeparation will be set to .60.
 .PARAMETER SectionSeparation
-  Controls Section (Subgraph) separation ratio in visualization
-  By default, NodeSeparation will be set to .75.
+    Controls Section (Subgraph) separation ratio in visualization
+    By default, NodeSeparation will be set to .75.
 .PARAMETER EdgeType
-  Controls how edges lines appear in visualization
-  The supported edge type are:
-      'polyline', 'curved', 'ortho', 'line', 'spline'
-  By default, EdgeType will be set to spline.
-  References: https://graphviz.org/docs/attrs/splines/
+    Controls how edges lines appear in visualization
+    The supported edge type are:
+        'polyline', 'curved', 'ortho', 'line', 'spline'
+    By default, EdgeType will be set to spline.
+    References: https://graphviz.org/docs/attrs/splines/
 .PARAMETER OutputFolderPath
-  Specifies the folder path to save the diagram.
+    Specifies the folder path to save the diagram.
 .PARAMETER Filename
-  Specifies a filename for the diagram.
+    Specifies a filename for the diagram.
 .PARAMETER EnableEdgeDebug
-  Control to enable edge debugging ( Dummy Edge and Node lines ).
+    Control to enable edge debugging ( Dummy Edge and Node lines ).
 .PARAMETER EnableSubGraphDebug
-  Control to enable subgraph debugging ( Subgraph Lines ).
+    Control to enable subgraph debugging ( Subgraph Lines ).
 .PARAMETER EnableErrorDebug
-  Control to enable error debugging.
+    Control to enable error debugging.
 .PARAMETER AuthorName
-  Allow to set footer signature Author Name.
+    Allow to set footer signature Author Name.
 .PARAMETER CompanyName
-  Allow to set footer signature Company Name.
+    Allow to set footer signature Company Name.
 .PARAMETER Logo
-  Allow to change the Microsoft logo to a custom one.
-  Image should be 400px x 100px or less in size.
+    Allow to change the Microsoft logo to a custom one.
+    Image should be 400px x 100px or less in size.
 .PARAMETER SignatureLogo
-  Allow to change the Microsoft signature logo to a custom one.
-  Image should be 120px x 130px or less in size.
+    Allow to change the Microsoft signature logo to a custom one.
+    Image should be 120px x 130px or less in size.
 .PARAMETER Signature
-  Allow the creation of footer signature.
-  AuthorName and CompanyName must be set to use this property.
+    Allow the creation of footer signature.
+    AuthorName and CompanyName must be set to use this property.
+.PARAMETER WatermarkText
+    Allow to add a watermark to the output image (Not supported in svg format).
+.PARAMETER WatermarkColor
+    Allow to specified the color used for the watermark text. Default: Blue.
 ```
 
 For a full list of common parameters and examples you can view the `New-ADDiagram` cmdlet help with the following command;
