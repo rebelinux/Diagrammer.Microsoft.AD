@@ -28,15 +28,20 @@ ConvertFrom-StringData @'
     fsmoRoles = FSMO Roles
     forestRootInfo = Forest Root Information
     MicrosoftLogo = Microsoft Logo
-    SitesDiagramLabel = Sites
+    SitesDiagramLabel = Active Directory Sites
     SitesDiagramDummyLabel = Sites
     sitesgraphlabel = Active Directory Site Inventory
     emptySites = No Site topology available to diagram
+    emptyTrusts = No Trust topology available to diagram
     connectingSites = Collecting Microsoft AD Sites information from {0}.
+    connectingSTrusts = Collecting Microsoft AD Trusts information from {0}.
     buildingSites = Building Microsoft AD Sites diagram from {0}.
     NoSites = No Site Topology
     NoSiteSubnet = No Site Subnets
+    NoTrusts = No Trusts Topology
     NoSiteDC = No Site Domain Controllers
     Base64Output = Displaying Base64 string
     DiagramOutput = Microsoft.AD diagram '{0}' has been saved to '{1}'
+    trustsDiagramLabel = Active Directory Trusts
+    buildingTrusts = Building Microsoft AD Trust diagram from {0}.
 '@

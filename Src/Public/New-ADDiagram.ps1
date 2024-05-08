@@ -9,6 +9,7 @@ function New-ADDiagram {
         The supported output diagrams are:
                     'Forest'
                     'Sites'
+                    'Trusts'
     .PARAMETER Target
         Specifies the IP/FQDN of the system to connect.
         Multiple targets may be specified, separated by a comma.
@@ -67,7 +68,7 @@ function New-ADDiagram {
     .PARAMETER WatermarkColor
         Allow to specified the color used for the watermark text. Default: Blue.
     .NOTES
-        Version:        0.1.8
+        Version:        0.2.2
         Author(s):      Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -223,7 +224,7 @@ function New-ADDiagram {
             Mandatory = $true,
             HelpMessage = 'Controls type of Active Directory generated diagram'
         )]
-        [ValidateSet('Forest', 'Domain', 'Sites', 'SiteTopology', 'DomainController')]
+        [ValidateSet('Forest', 'Domain', 'Sites', 'SiteTopology', 'Trusts')]
         [string] $DiagramType,
 
         [Parameter(
@@ -366,6 +367,7 @@ function New-ADDiagram {
             'Domain' { $translate.domaingraphlabel }
             'Sites' { $translate.sitesgraphlabel }
             'SitesTopology' { $translate.sitesgraphlabel }
+            'Trusts' { $translate.trustsDiagramLabel }
         }
 
         $script:IconDebug = $false
@@ -480,15 +482,17 @@ function New-ADDiagram {
 
                         # Call Forest Diagram
                         if ($DiagramType -eq 'Forest') {
-                            $ForestInfo = Get-DiagForest | Select-String -Pattern '"([A-Z])\w+"\s\[label="";style="invis";shape="point";]' -NotMatch
-                            if ($ForestInfo) {
+                            if ($ForestInfo = Get-DiagForest | Select-String -Pattern '"([A-Z])\w+"\s\[label="";style="invis";shape="point";]' -NotMatch) {
                                 $ForestInfo
                             } else { Write-Warning $translate.emptyForest }
                         } elseif ($DiagramType -eq 'Sites') {
-                            $SitesInfo = Get-DiagSite | Select-String -Pattern '"([A-Z])\w+"\s\[label="";style="invis";shape="point";]' -NotMatch
-                            if ($SitesInfo) {
+                            if ($SitesInfo = Get-DiagSite | Select-String -Pattern '"([A-Z])\w+"\s\[label="";style="invis";shape="point";]' -NotMatch) {
                                 $SitesInfo
                             } else { Write-Warning $translate.emptySites }
+                        } elseif ($DiagramType -eq 'Trusts') {
+                            if ($TrustsInfo = Get-DiagTrust | Select-String -Pattern '"([A-Z])\w+"\s\[label="";style="invis";shape="point";]' -NotMatch) {
+                                $TrustsInfo
+                            } else { Write-Warning $translate.emptyTrusts }
                         }
                     }
                 }
