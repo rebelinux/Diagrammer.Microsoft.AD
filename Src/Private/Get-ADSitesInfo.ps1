@@ -23,61 +23,20 @@ function Get-ADSitesInfo {
     process {
         Write-Verbose -Message ($translate.buildingSites -f $($ForestRoot))
         try {
-            $Sites = Invoke-Command -Session $TempPssSession { Get-ADReplicationSite -Filter * -Properties * }
+            $SitesLinks = Invoke-Command -Session $TempPssSession { [System.DirectoryServices.ActiveDirectory.Forest]::GetCurrentForest().Sites | Select-Object Name,Subnets,Servers,Domains,@{l = 'Links'; e = { $x = $_.name; $_.sitelinks.Sites | Where-Object name -ne $x } } }
 
             $SitesInfo = @()
-            if ($Sites) {
-                foreach ($Site in $Sites) {
-                    # For future uses
-                    # $DCRows = @{
-                    #     Memory = "4GB"
-                    #     CPU = "2"
-                    # }
-
+            if ($SitesLinks) {
+                foreach ($SitesLink in $SitesLinks) {
                     $TempSitesInfo = [PSCustomObject]@{
-                        Name = $Site.Name
-                        Label = $Site.Name
-                        Subnets = & {
-                            $SubnetTable = @()
-                            $SubnetArray = @()
-                            $Subnets = $Site.Subnets
-                            foreach ($Object in $Subnets) {
-                                $SubnetName = Invoke-Command -Session $TempPssSession { Get-ADReplicationSubnet $using:Object }
-                                $SubnetArray += $SubnetName.Name
-                            }
-
-                            # Used for Debug
-                            # $SubnetArray = @("192.168.5.0/24","192.168.4.0/24","192.168.3.0/24","192.168.7.0/24","192.168.9.0/24","192.168.10.0/24","192.168.1.0/24","192.168.19.0/24")
-
-                            $SubnetTable += [PSCustomObject]@{
-                                Name = Remove-SpecialChar -String "$($Site.Name)SubNets" -SpecialChars '\-. '
-                                Label = (Get-DiaHtmlTable -ImagesObj $Images -Rows $SubnetArray -MultiColunms -Columnsize 3 -Align 'Center' -IconDebug $IconDebug)
-                                SubnetArray = $SubnetArray
-                            }
-
-                            return $SubnetTable
+                        Name = $SitesLink.Name
+                        Label = $SitesLink.Name
+                        Sites = $SitesLink.Links
+                        AditionalInfo = @{
+                            # 'Subnets' = $SitesLink.Subnets
+                            # 'Servers' = $SitesLink.Servers
+                            'Domain' = $SitesLink.Domains
                         }
-                        DomainControllers = & {
-                            $DCsTable = @()
-                            $DCsArray = @()
-                            $DCs = try { Get-ADObjectSearch -DN "CN=Servers,$($Site.DistinguishedName)" -Filter { objectClass -eq "Server" } -Properties "DNSHostName" -SelectPrty 'DNSHostName', 'Name' -Session $TempPssSession } catch { Out-Null }
-                            foreach ($Object in $DCs) {
-                                $DCsArray += $Object.Name
-                            }
-
-                            # Used for Debug
-                            # $DCsArray = @("Server-dc-01v","Server-dc-02v","Server-dc-03v","Server-dc-04v","Server-dc-05v","Server-dc-06v","Server-dc-07v","Server-dc-08v","Server-dc-09v","DC-Server-01v","DC-Server-02v","DC-Server-03v","DC-Server-04v")
-
-                            $DCsTable += [PSCustomObject]@{
-                                Name = Remove-SpecialChar -String "$($Site.Name)DCs" -SpecialChars '\-. '
-                                Label = (Get-DiaHtmlTable -Rows $DCsArray -MultiColunms -Columnsize 3 -Align 'Center' -ImagesObj $Images -IconDebug $IconDebug)
-                                DCsArray = $DCsArray
-                            }
-
-                            return $DCsTable
-                        }
-
-                        SitesObj = $Site
                     }
                     $SitesInfo += $TempSitesInfo
                 }

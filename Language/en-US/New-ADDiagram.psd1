@@ -28,9 +28,9 @@ ConvertFrom-StringData @'
     fsmoRoles = FSMO Roles
     forestRootInfo = Forest Root Information
     MicrosoftLogo = Microsoft Logo
-    SitesDiagramLabel = Active Directory Sites
     SitesDiagramDummyLabel = Sites
-    sitesgraphlabel = Active Directory Site Inventory
+    sitesgraphlabel = Active Directory Site Topology
+    sitesinventorygraphlabel = Active Directory Site Inventory
     emptySites = No Site topology available to diagram
     emptyTrusts = No Trust topology available to diagram
     connectingSites = Collecting Microsoft AD Sites information from {0}.
