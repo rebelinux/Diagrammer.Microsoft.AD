@@ -5,7 +5,7 @@ function Get-DiagForest {
     .DESCRIPTION
         Build a diagram of the configuration of Microsoft Active Directory in PDF/PNG/SVG formats using Psgraph.
     .NOTES
-        Version:        0.2.2
+        Version:        0.2.3
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -31,7 +31,7 @@ function Get-DiagForest {
 
                 $ForestInfo = Get-ADForestInfo
 
-                if ($ForestInfo) {
+                if ($ForestInfo | Where-Object { $_.ChildDomain -ne $_.RootDomain }) {
                     SubGraph ForestSubGraph -Attributes @{Label = (Get-DiaHTMLLabel -ImagesObj $Images -Label $ForestRoot -IconType "ForestRoot" -IconDebug $IconDebug -SubgraphLabel -IconWidth 50 -IconHeight 50) ; fontsize = 24; penwidth = 1.5; labelloc = 't'; style = $SubGraphDebug.style ; color = $SubGraphDebug.color } {
                         SubGraph MainSubGraph -Attributes @{Label = ' ' ; fontsize = 24; penwidth = 1.5; labelloc = 't'; style = $SubGraphDebug.style; color = $SubGraphDebug.color } {
                             if (($ForestInfo.ChildDomain | Measure-Object).count -gt 5) {
@@ -75,7 +75,11 @@ function Get-DiagForest {
                         }
                     }
                 } else {
-                    Node -Name NoChildDomain @{Label = $translate.NoChildDomain; shape = "rectangle"; labelloc = 'c'; fixedsize = $true; width = "3"; height = "2"; fillColor = 'transparent'; penwidth = 0 }
+                    $ForestRootDomain = Remove-SpecialChar -String "$($ForestInfo.RootDomain)ForestRoot" -SpecialChars '\-. '
+                    Node -Name $ForestRootDomain -Attributes @{Label = $ForestInfo.RootDomainLabel; shape = "plain"; fillColor = 'transparent' }
+                    Node -Name NoChildDomain @{Label = $translate.NoChildDomain; shape = "rectangle"; labelloc = 'c'; fixedsize = $true; width = "3"; height = "2"; fillColor = 'transparent'; penwidth = 1.5; style = 'dashed'; color = 'gray' }
+                    Edge -From $ForestRootDomain -To NoChildDomain @{minlen = 2 }
+
                 }
             }
         } catch {

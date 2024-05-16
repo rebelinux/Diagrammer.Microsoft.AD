@@ -6,4 +6,5 @@ $script:Images = @{
     "AD_Domain" = "ADDomain.png"
     "AD_Site" = "Site.png"
     "AD_Site_Subnet" = "SubNet.png"
+    "AD_Site_Node" = "SiteNode.png"
 }

@@ -5,7 +5,7 @@ function Get-DiagSite {
     .DESCRIPTION
         Build a diagram of the configuration of Microsoft Active Directory in PDF/PNG/SVG formats using Psgraph.
     .NOTES
-        Version:        0.2.1
+        Version:        0.2.3
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -29,50 +29,39 @@ function Get-DiagSite {
         try {
             if ($ForestRoot) {
 
-                $SitesGroups = Get-ADSitesInfo
+                $SitesInfo = Get-ADSitesInfo
 
-                if ($SitesGroups) {
+                if ($SitesInfo) {
                     SubGraph ForestSubGraph -Attributes @{Label = (Get-DiaHTMLLabel -ImagesObj $Images -Label $ForestRoot -IconType "ForestRoot" -IconDebug $IconDebug -SubgraphLabel -IconWidth 50 -IconHeight 50) ; fontsize = 24; penwidth = 1.5; labelloc = 't'; style = $SubGraphDebug.style ; color = $SubGraphDebug.color } {
                         SubGraph MainSubGraph -Attributes @{Label = ' ' ; fontsize = 24; penwidth = 1.5; labelloc = 't'; style = $SubGraphDebug.style; color = $SubGraphDebug.color } {
-                            SubGraph SitesTopology -Attributes @{Label = 'Sites'; fontsize = 22; penwidth = 1.5; labelloc = 't'; style = 'dashed,rounded' } {
-                                if (($SitesGroups | Measure-Object).Count -ge 1) {
-                                    foreach ($SiteGroupOBJ in $SitesGroups) {
-                                        $SubGraphName = Remove-SpecialChar -String $SiteGroupOBJ.Name -SpecialChars '\-. '
-                                        SubGraph $SubGraphName -Attributes @{Label = (Get-DiaHTMLLabel -ImagesObj $Images -Label $SiteGroupOBJ.Name -IconType "AD_Site" -SubgraphLabel -IconDebug $IconDebug); fontsize = 20; penwidth = 1.5; labelloc = 't'; style = 'dashed,rounded' } {
-                                            if ($SiteGroupOBJ.DomainControllers.DCsArray) {
-                                                $SubGraphNameSN = Remove-SpecialChar -String $SiteGroupOBJ.Name -SpecialChars '\-. '
-                                                SubGraph "$($SubGraphNameSN)DC" -Attributes @{Label = (Get-DiaHTMLLabel -ImagesObj $Images -Label "Domain Controllers" -IconType "AD_DC" -SubgraphLabel -IconDebug $IconDebug); fontsize = 18; penwidth = 1.5; labelloc = 't'; style = 'dashed,rounded' } {
-                                                    Node -Name $SiteGroupOBJ.DomainControllers.Name -Attributes @{Label = $SiteGroupOBJ.DomainControllers.Label; shape = "plain"; fillColor = 'transparent' }
-                                                }
+                            if ($SitesInfo.Site) {
+                                foreach ($SitesObj in $SitesInfo) {
+                                    $Site = Remove-SpecialChar -String "$($SitesObj.Name)" -SpecialChars '\-. '
+                                    Node -Name $Site -Attributes @{Label = $SitesObj.Name; penwidth = 1; width = 2; height = .5}
+                                    foreach ($Link in $SitesObj.SiteLink) {
+                                        $AditionalInfoObj = [ordered]@{
+                                            'Frequency' = $Link.AditionalInfo.Frequency
+                                            'Cost' = $Link.AditionalInfo.Cost
+                                        }
+                                        $SiteLink = Remove-SpecialChar -String $Link.Name -SpecialChars '\-. '
+                                        Node -Name $SiteLink -Attributes @{Label = (Get-DiaNodeIcon -Name "SiteLink: $($Link.Name)" -IconType "NoIcon" -Align "Center" -IconDebug $IconDebug -Rows $AditionalInfoObj -FontSize 10 -NoFontBold); shape = "plain"; fillColor = 'transparent'}
+                                        Edge -From $Site -To $SiteLink @{minlen = 2; arrowtail = 'none'; arrowhead = 'none'}
+                                        foreach ($SiteLinkSite in $Link.Sites) {
+                                            $SiteIncluded = Remove-SpecialChar -String $SiteLinkSite -SpecialChars '\-. '
+                                            Node -Name $SiteIncluded -Attributes @{Label = $SiteLinkSite; penwidth = 1; width = 2; height = .5}
+                                            Edge -From $SiteLink -To $SiteIncluded @{minlen = 2; arrowtail = 'none'; arrowhead = 'normal'}
 
-                                            } else {
-                                                $SubGraphNameSN = Remove-SpecialChar -String $SiteGroupOBJ.Name -SpecialChars '\-. '
-                                                SubGraph "$($SubGraphNameSN)DC" -Attributes @{Label = (Get-DiaHTMLLabel -ImagesObj $Images -Label "Domain Controllers" -IconType "AD_DC" -SubgraphLabel -IconDebug $IconDebug); fontsize = 18; penwidth = 1.5; labelloc = 't'; style = 'dashed,
-                                                rounded'
-                                                } {
-                                                    Node -Name "Dummy$($SubGraphName)NoSiteDC" -Attributes @{Label = $translate.NoSiteDC; shape = "rectangle"; labelloc = 'c'; fillColor = 'transparent'; penwidth = 0 }
-                                                }
-                                            }
-
-                                            if ($SiteGroupOBJ.Subnets.SubnetArray) {
-                                                $SubGraphNameSN = Remove-SpecialChar -String $SiteGroupOBJ.Name -SpecialChars '\-. '
-                                                SubGraph "$($SubGraphNameSN)SN" -Attributes @{Label = (Get-DiaHTMLLabel -ImagesObj $Images -Label "Subnets" -IconType "AD_Site_Subnet" -SubgraphLabel -IconDebug $IconDebug); fontsize = 18; penwidth = 1.5; labelloc = 't'; style = 'dashed,rounded' } {
-                                                    Node -Name $SiteGroupOBJ.Subnets.Name -Attributes @{Label = $SiteGroupOBJ.Subnets.Label; shape = "plain"; fillColor = 'transparent' }
-                                                }
-                                            } else {
-                                                $SubGraphNameSN = Remove-SpecialChar -String $SiteGroupOBJ.Name -SpecialChars '\-. '
-                                                SubGraph "$($SubGraphNameSN)SN" -Attributes @{Label = (Get-DiaHTMLLabel -ImagesObj $Images -Label "Subnets" -IconType "AD_Site_Subnet" -SubgraphLabel -IconDebug $IconDebug); fontsize = 18; penwidth = 1.5; labelloc = 't'; style = 'dashed,rounded' } {
-                                                    Node -Name "Dummy$($SubGraphName)NoSiteSN" -Attributes @{Label = $translate.NoSiteSubnet; shape = "rectangle"; labelloc = 'c'; fillColor = 'transparent'; penwidth = 0 }
-                                                }
-                                            }
                                         }
                                     }
-                                } else {
-                                    Node -Name NoSites -Attributes @{Label = $translate.NoSites; shape = "rectangle"; labelloc = 'c'; fixedsize = $true; width = "3"; height = "2"; fillColor = 'transparent'; penwidth = 0 }
                                 }
+                            } else {
+                                $Site = Remove-SpecialChar -String "$($SitesInfo.Name)" -SpecialChars '\-. '
+                                Node -Name $Site -Attributes @{Label = $SitesInfo.Name; penwidth = 1; width = 2; height = .5 }
                             }
                         }
                     }
+                } else {
+                    Node -Name NoSites -Attributes @{Label = $translate.NoSites; shape = "rectangle"; labelloc = 'c'; fixedsize = $true; width = "3"; height = "2"; fillColor = 'transparent'; penwidth = 0 }
                 }
             }
         } catch {

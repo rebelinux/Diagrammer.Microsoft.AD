@@ -136,6 +136,7 @@ The `New-ADDiagram` cmdlet is used to generate a Active Directory diagram. The t
                 'Forest'
                 'Sites'
                 'Trusts'
+                'SiteInventory'
 .PARAMETER Target
     Specifies the IP/FQDN of the system to connect.
     Multiple targets may be specified, separated by a comma.

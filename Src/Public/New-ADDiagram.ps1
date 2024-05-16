@@ -9,6 +9,7 @@ function New-ADDiagram {
         The supported output diagrams are:
                     'Forest'
                     'Sites'
+                    'SitesInventory'
                     'Trusts'
     .PARAMETER Target
         Specifies the IP/FQDN of the system to connect.
@@ -224,7 +225,7 @@ function New-ADDiagram {
             Mandatory = $true,
             HelpMessage = 'Controls type of Active Directory generated diagram'
         )]
-        [ValidateSet('Forest', 'Domain', 'Sites', 'SiteTopology', 'Trusts')]
+        [ValidateSet('Forest', 'Domain', 'Sites', 'SitesInventory', 'Trusts')]
         [string] $DiagramType,
 
         [Parameter(
@@ -366,7 +367,7 @@ function New-ADDiagram {
             'Forest' { $translate.forestgraphlabel }
             'Domain' { $translate.domaingraphlabel }
             'Sites' { $translate.sitesgraphlabel }
-            'SitesTopology' { $translate.sitesgraphlabel }
+            'SitesInventory' { $translate.sitesinventorygraphlabel }
             'Trusts' { $translate.trustsDiagramLabel }
         }
 
@@ -422,6 +423,9 @@ function New-ADDiagram {
             ratio = 'auto'
             rotate = $Rotate
         }
+        if ($DiagramType -eq 'Sites') {
+            $MainGraphAttributes.Add('concentrate', 'true')
+        }
     }
 
     process {
@@ -437,8 +441,8 @@ function New-ADDiagram {
             $Graph = Graph -Name MicrosoftAD -Attributes $MainGraphAttributes {
                 # Node default theme
                 Node @{
-                    shape = 'ellipse'
-                    labelloc = 't'
+                    shape = 'rectangle'
+                    labelloc = 'c'
                     style = 'filled'
                     fillColor = '#99ceff'
                     fontsize = 14;
@@ -487,6 +491,10 @@ function New-ADDiagram {
                             } else { Write-Warning $translate.emptyForest }
                         } elseif ($DiagramType -eq 'Sites') {
                             if ($SitesInfo = Get-DiagSite | Select-String -Pattern '"([A-Z])\w+"\s\[label="";style="invis";shape="point";]' -NotMatch) {
+                                $SitesInfo
+                            } else { Write-Warning $translate.emptySites }
+                        } elseif ($DiagramType -eq 'SitesInventory') {
+                            if ($SitesInfo = Get-DiagSiteInventory | Select-String -Pattern '"([A-Z])\w+"\s\[label="";style="invis";shape="point";]' -NotMatch) {
                                 $SitesInfo
                             } else { Write-Warning $translate.emptySites }
                         } elseif ($DiagramType -eq 'Trusts') {
