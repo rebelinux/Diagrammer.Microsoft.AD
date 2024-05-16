@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Increased Diagrammer.Core minimum version requirement v0.2.1
 
+### Fixed
+
+- Fix [#19](https://github.com/rebelinux/Diagrammer.Microsoft.AD/issues/19)
+
 ## [0.2.2] - 2024-05-08
 
 ### Added
