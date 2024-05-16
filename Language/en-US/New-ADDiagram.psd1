@@ -42,6 +42,6 @@ ConvertFrom-StringData @'
     NoSiteDC = No Site Domain Controllers
     Base64Output = Displaying Base64 string
     DiagramOutput = Microsoft.AD diagram '{0}' has been saved to '{1}'
-    trustsDiagramLabel = Active Directory Trusts
+    trustsDiagramLabel = Active Directory Domains and Trusts
     buildingTrusts = Building Microsoft AD Trust diagram from {0}.
 '@

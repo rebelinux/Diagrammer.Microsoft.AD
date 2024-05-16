@@ -5,7 +5,7 @@ function Get-ADSitesInfo {
     .DESCRIPTION
         Build a diagram of the configuration of Microsoft Active Directory in PDF/PNG/SVG formats using Psgraph.
     .NOTES
-        Version:        0.2.1
+        Version:        0.2.3
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -23,19 +23,25 @@ function Get-ADSitesInfo {
     process {
         Write-Verbose -Message ($translate.buildingSites -f $($ForestRoot))
         try {
-            $SitesLinks = Invoke-Command -Session $TempPssSession { [System.DirectoryServices.ActiveDirectory.Forest]::GetCurrentForest().Sites | Select-Object Name,Subnets,Servers,Domains,@{l = 'Links'; e = { $x = $_.name; $_.sitelinks.Sites | Where-Object name -ne $x } } }
+            $Sites = Invoke-Command -Session $TempPssSession { [System.DirectoryServices.ActiveDirectory.Forest]::GetCurrentForest().Sites | Select-Object Name, @{l = 'SitesLink'; e = { $_.sitelinks } } }
 
             $SitesInfo = @()
-            if ($SitesLinks) {
-                foreach ($SitesLink in $SitesLinks) {
+            if ($Sites) {
+                foreach ($SitesLink in $Sites) {
                     $TempSitesInfo = [PSCustomObject]@{
-                        Name = $SitesLink.Name
-                        Label = $SitesLink.Name
-                        Sites = $SitesLink.Links
-                        AditionalInfo = @{
-                            # 'Subnets' = $SitesLink.Subnets
-                            # 'Servers' = $SitesLink.Servers
-                            'Domain' = $SitesLink.Domains
+                        'Name' = $SitesLink.Name
+                        'SiteLink' = & {
+                            foreach ($Link in $SitesLink.SitesLink.Name) {
+                                $SitesLinkInfo = Invoke-Command -Session $TempPssSession { Get-ADReplicationSiteLink -Identity $using:Link }
+                                @{
+                                    'Name' = $Link
+                                    'Sites' = $SitesLinkInfo.SitesIncluded | ForEach-Object { ConvertTo-ADObjectName -Session $TempPssSession -DN $_ -DC $System }
+                                    'AditionalInfo' = @{
+                                        'Cost' = $SitesLinkInfo.Cost
+                                        'Frequency' = $SitesLinkInfo.ReplicationFrequencyInMinutes
+                                    }
+                                }
+                            }
                         }
                     }
                     $SitesInfo += $TempSitesInfo
