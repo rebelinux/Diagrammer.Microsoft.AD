@@ -36,34 +36,13 @@ function Get-DiagForest {
                         SubGraph MainSubGraph -Attributes @{Label = ' ' ; fontsize = 24; penwidth = 1.5; labelloc = 't'; style = $SubGraphDebug.style; color = $SubGraphDebug.color } {
                             if (($ForestInfo.ChildDomain | Measure-Object).count -gt 5) {
                                 SubGraph ChildDomains -Attributes @{Label = 'Child Domains'; fontsize = 18; penwidth = 1.5; labelloc = 't'; labeljust = 'l'; style = 'dashed,rounded' } {
-                                    # Node used for subgraph centering
-                                    Node ChildDomainsDummy @{Label = 'ChildDomainsDummy'; style = $SubGraphDebug.style; color = $SubGraphDebug.color; shape = 'plain' }
-                                    $Group = Split-array -inArray ($ForestInfo | Sort-Object -Property Name) -size 5
-                                    $Number = 0
-                                    while ($Number -ne $Group.Length) {
-                                        $Random = Get-Random
-                                        SubGraph "ChildDomainGroup$($Number)_$Random" -Attributes @{Label = ' '; style = $SubGraphDebug.style; color = $SubGraphDebug.color; fontsize = 18; penwidth = 1 } {
-                                            $Group[$Number] | ForEach-Object {
-                                                $REPOHASHTABLE = @{}
-                                                $_.psobject.properties | ForEach-Object { $REPOHASHTABLE[$_.Name] = $_.Value }
-                                                Node $_.Name @{Label = $REPOHASHTABLE.Label; shape = "plain"; fillColor = 'transparent' }
-                                            }
-                                        }
-                                        $Number++
-                                    }
 
-                                    Edge -From ChildDomainsDummy -To $Group[0].Name @{minlen = 1; style = $EdgeDebug.style; color = $EdgeDebug.color }
-                                    $Start = 0
-                                    $ChildDomainNum = 1
-                                    while ($ChildDomainNum -ne $Group.Length) {
-                                        Edge -From $Group[$Start].Name -To $Group[$ChildDomainNum].Name @{minlen = 1; style = $EdgeDebug.style; color = $EdgeDebug.color }
-                                        $Start++
-                                        $ChildDomainNum++
-                                    }
+                                    Node ChildDomain @{Label = (Get-DiaHTMLNodeTable -ImagesObj $Images -inputObject ($ForestInfo | ForEach-Object { $_.ChildDomainLabel }) -Align "Center" -iconType "AD_Domain" -columnSize 4 -IconDebug $IconDebug -MultiIcon -AditionalInfo ($ForestInfo.AditionalInfo )); shape = 'plain'; fillColor = 'transparent'; fontsize = 14; fontname = "Segoe Ui" }
+
                                 }
                                 $ForestRootDomain = Remove-SpecialChar -String "$($ForestInfo[0].RootDomain)ForestRoot" -SpecialChars '\-. '
                                 Node -Name $ForestRootDomain -Attributes @{Label = $ForestInfo[0].RootDomainLabel; shape = "plain"; fillColor = 'transparent' }
-                                Edge -From $ForestRootDomain -To ChildDomainsDummy @{minlen = 2 }
+                                Edge -From $ForestRootDomain -To ChildDomain @{minlen = 2 }
                             } else {
                                 foreach ($ForestObj in ($ForestInfo | Where-Object { $_.ChildDomain -ne $_.RootDomain })) {
                                     $ForestRootDomain = Remove-SpecialChar -String "$($ForestObj.RootDomain)ForestRoot" -SpecialChars '\-. '
