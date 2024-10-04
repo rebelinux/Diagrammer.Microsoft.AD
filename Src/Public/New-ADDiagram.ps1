@@ -464,9 +464,9 @@ function New-ADDiagram {
                 if ($Signature) {
                     Write-Verbose "Generating diagram signature"
                     if ($CustomSignatureLogo) {
-                        $Signature = (Get-DiaHTMLTable -ImagesObj $Images -Rows "Author: $($AuthorName)", "Company: $($CompanyName)" -TableBorder 2 -CellBorder 0 -Align 'left' -Logo $CustomSignatureLogo -IconDebug $IconDebug)
+                        $Signature = (Get-DiaHtmlSignatureTable -ImagesObj $Images -Rows "Author: $($AuthorName)", "Company: $($CompanyName)" -TableBorder 2 -CellBorder 0 -Align 'left' -Logo $CustomSignatureLogo -IconDebug $IconDebug)
                     } else {
-                        $Signature = (Get-DiaHTMLTable -ImagesObj $Images -Rows "Author: $($AuthorName)", "Company: $($CompanyName)" -TableBorder 2 -CellBorder 0 -Align 'left' -Logo "AD_LOGO_Footer" -IconDebug $IconDebug)
+                        $Signature = (Get-DiaHtmlSignatureTable -ImagesObj $Images -Rows "Author: $($AuthorName)", "Company: $($CompanyName)" -TableBorder 2 -CellBorder 0 -Align 'left' -Logo "AD_LOGO_Footer" -IconDebug $IconDebug)
                     }
                 } else {
                     Write-Verbose "No diagram signature specified"
