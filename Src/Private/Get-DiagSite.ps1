@@ -5,7 +5,7 @@ function Get-DiagSite {
     .DESCRIPTION
         Build a diagram of the configuration of Microsoft Active Directory in PDF/PNG/SVG formats using Psgraph.
     .NOTES
-        Version:        0.2.3
+        Version:        0.2.4
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -40,8 +40,7 @@ function Get-DiagSite {
                                     Node -Name $Site -Attributes @{Label = $SitesObj.Name; penwidth = 1; width = 2; height = .5}
                                     foreach ($Link in $SitesObj.SiteLink) {
                                         $AditionalInfoObj = [ordered]@{
-                                            'Frequency' = $Link.AditionalInfo.Frequency
-                                            'Cost' = $Link.AditionalInfo.Cost
+                                            1 = "Frequency = $($Link.AditionalInfo.Frequency) Cost = $($Link.AditionalInfo.Cost)"
                                         }
                                         $SiteLink = Remove-SpecialChar -String $Link.Name -SpecialChars '\-. '
                                         Node -Name $SiteLink -Attributes @{Label = (Get-DiaNodeIcon -Name "SiteLink: $($Link.Name)" -IconType "NoIcon" -Align "Center" -IconDebug $IconDebug -Rows $AditionalInfoObj -FontSize 10 -NoFontBold); shape = "plain"; fillColor = 'transparent'}

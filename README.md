@@ -45,6 +45,16 @@ Diagrammer.Microsoft.AD is a PowerShell module to automatically generate Actie D
 
 ![!\[Forest Diagram\](Forest_Diagram.webp)](Samples/Forest_Diagram.webp)
 
+### Site Diagram
+
+![!\[Forest Diagram\](Forest_Diagram.webp)](Samples/SiteInventory.webp)
+
+![!\[Forest Diagram\](Forest_Diagram.webp)](Samples/sitetopology.webp)
+
+### Domain & Trusts Diagram
+
+![!\[Forest Diagram\](Forest_Diagram.webp)](Samples/trust.webp)
+
 # :beginner: Getting Started
 
 Below are the instructions on how to install, configure and generate a Diagrammer.Microsoft.AD diagram.
