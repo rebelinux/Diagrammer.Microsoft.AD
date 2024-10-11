@@ -5,7 +5,7 @@ function Get-ADTrustsInfo {
     .DESCRIPTION
         Build a diagram of the configuration of Microsoft Active Directory in PDF/PNG/SVG formats using Psgraph.
     .NOTES
-        Version:        0.2.2
+        Version:        0.2.6
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -53,7 +53,7 @@ function Get-ADTrustsInfo {
             }
             return $TrustsInfo
         } catch {
-            $_
+            Write-Verbose $_.Exception.Message
         }
     }
     end {}

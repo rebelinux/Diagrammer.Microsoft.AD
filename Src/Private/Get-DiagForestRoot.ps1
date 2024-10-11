@@ -5,7 +5,7 @@ function Get-DiagForestRoot {
     .DESCRIPTION
         Build a diagram of the configuration of Microsoft Active Directory in PDF/PNG/SVG formats using Psgraph.
     .NOTES
-        Version:        0.1.8
+        Version:        0.2.6
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -81,7 +81,7 @@ function Get-DiagForestRoot {
                 }
             }
         } catch {
-            $_
+            Write-Verbose $_.Exception.Message
         }
     }
     end {}
