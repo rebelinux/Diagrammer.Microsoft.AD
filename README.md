@@ -28,9 +28,6 @@
 
 # Diagrammer Microsoft Active Directory
 
-<!-- ********** REMOVE THIS MESSAGE WHEN THE MODULE IS FUNCTIONAL ********** -->
-## :exclamation: THIS POWERSHELL MODULE IS CURRENTLY IN DEVELOPMENT AND MIGHT NOT YET BE FUNCTIONAL ❗
-
 Diagrammer.Microsoft.AD is a PowerShell module to automatically generate Actie Directory topology diagrams by just typing a PowerShell cmdlet and passing the name of the Forest/Domain.
 
 ## This project is extensively based on the [`AzViz`](https://github.com/PrateekKumarSingh/AzViz) module.
