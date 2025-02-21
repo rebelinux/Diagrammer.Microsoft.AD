@@ -140,6 +140,7 @@ The `New-ADDiagram` cmdlet is used to generate a Active Directory diagram. The t
 .PARAMETER DiagramType
     Specifies the type of active directory diagram that will be generated.
     The supported output diagrams are:
+                'CertificateAuthority'
                 'Forest'
                 'Sites'
                 'Trusts'
