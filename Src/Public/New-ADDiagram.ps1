@@ -225,7 +225,7 @@ function New-ADDiagram {
             Mandatory = $true,
             HelpMessage = 'Controls type of Active Directory generated diagram'
         )]
-        [ValidateSet('Forest', 'Domain', 'Sites', 'SitesInventory', 'Trusts')]
+        [ValidateSet('Forest', 'Domain', 'Sites', 'SitesInventory', 'Trusts', 'CertificateAuthority')]
         [string] $DiagramType,
 
         [Parameter(
@@ -369,6 +369,7 @@ function New-ADDiagram {
             'Sites' { $translate.sitesgraphlabel }
             'SitesInventory' { $translate.sitesinventorygraphlabel }
             'Trusts' { $translate.trustsDiagramLabel }
+            'CertificateAuthority' { $translate.caDiagramLabel }
         }
 
         $script:IconDebug = $false
@@ -469,14 +470,14 @@ function New-ADDiagram {
                         $Signature = (Get-DiaHtmlSignatureTable -ImagesObj $Images -Rows "Author: $($AuthorName)", "Company: $($CompanyName)" -TableBorder 2 -CellBorder 0 -Align 'left' -Logo "AD_LOGO_Footer" -IconDebug $IconDebug)
                     }
                 } else {
-                    Write-Verbose "No diagram signature specified"
+                    Write-Verbose $translate.diagramSignature
                     $Signature = " "
                 }
 
                 # Used for the Legend or SignatureLogo
                 SubGraph OUTERDRAWBOARD1 -Attributes @{Label = $Signature; fontsize = 24; penwidth = 1.5; labelloc = 'b'; labeljust = "r"; style = $SubGraphDebug.style; color = $SubGraphDebug.color } {
 
-                    Write-Verbose "Generating Signature SubGraph"
+                    Write-Verbose $translate.genDiagramSignature
 
                     # Main Graph SubGraph
                     SubGraph MainGraph -Attributes @{Label = (Get-DiaHTMLLabel -ImagesObj $Images -Label $MainGraphLabel -IconType $CustomLogo -IconDebug $IconDebug -IconWidth 250 -IconHeight 80); fontsize = 22; penwidth = 0; labelloc = 't'; labeljust = "c" } {
@@ -488,6 +489,11 @@ function New-ADDiagram {
                         if ($DiagramType -eq 'Forest') {
                             if ($ForestInfo = Get-DiagForest | Select-String -Pattern '"([A-Z])\w+"\s\[label="";style="invis";shape="point";]' -NotMatch) {
                                 $ForestInfo
+                            } else { Write-Warning $translate.emptyForest }
+                        } elseif ($DiagramType -eq 'CertificateAuthority') {
+                            $CAInfo = Get-DiagCertificateAuthority
+                            if ($CAInfo = Get-DiagCertificateAuthority | Select-String -Pattern '"([A-Z])\w+"\s\[label="";style="invis";shape="point";]' -NotMatch) {
+                                $CAInfo
                             } else { Write-Warning $translate.emptyForest }
                         } elseif ($DiagramType -eq 'Sites') {
                             if ($SitesInfo = Get-DiagSite | Select-String -Pattern '"([A-Z])\w+"\s\[label="";style="invis";shape="point";]' -NotMatch) {

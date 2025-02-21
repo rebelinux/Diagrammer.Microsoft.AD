@@ -5,7 +5,7 @@ function Get-ADTrustsInfo {
     .DESCRIPTION
         Build a diagram of the configuration of Microsoft Active Directory in PDF/PNG/SVG formats using Psgraph.
     .NOTES
-        Version:        0.2.6
+        Version:        0.2.8
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -35,13 +35,13 @@ function Get-ADTrustsInfo {
             $TrustsInfo = @()
             if ($Trusts) {
                 foreach ($Trust in $Trusts) {
-                    $AditionalInfo = @{
-                        'Type' = $Trust.TrustType
-                        'Direction' = $Trust.TrustDirection
+                    $AditionalInfo = [PSCustomObject][ordered]@{
+                        $translate.TrustDirection = $Trust.TrustDirection
+                        $translate.TrustType = $Trust.TrustType
                     }
                     $TempTrustsInfo = [PSCustomObject]@{
                         Name = Remove-SpecialChar -String "$($Trust.TargetName)Trusts" -SpecialChars '\-. '
-                        Label = Get-DiaNodeIcon -Name $Trust.TargetName -IconType "AD_Domain" -Align "Center" -ImagesObj $Images -IconDebug $IconDebug -Rows $AditionalInfo
+                        Label = Get-DiaNodeIcon -Name $Trust.TargetName -IconType "AD_Domain" -Align "Center" -ImagesObj $Images -IconDebug $IconDebug -RowsOrdered $AditionalInfo
                         Source = $Trust.SourceName
                         SourceLabel = Get-DiaNodeIcon -Name $Trust.SourceName -IconType "AD_Domain" -Align "Center" -ImagesObj $Images -IconDebug $IconDebug
                         Target = $Trust.TargetName

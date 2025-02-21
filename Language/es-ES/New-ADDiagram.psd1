@@ -1,43 +1,83 @@
 ﻿# culture="es-ES"
 ConvertFrom-StringData @'
-    outputfolderpatherror = El directorio OutputFolderPath {0} no es una ruta de carpeta válida.
-    runasadmin = La operación solicitada requiere elevación: Ejecutar la consola de PowerShell como administrador.
-    signaturerequirements = New-ADDiagram : Las opciones de AuthorName y CompanyName deben definirse si se especifica la opción de Signature.
-    forestgraphlabel = Arquitectura de Arbol de Active Directory.
-    domaingraphlabel = Arquitectura de Dominio de Active Directory.
-    emptyForest = No hay infraestructura forestal disponible para diagramar.
-    psSession = Borrado la sesión de PowerShell {0}.
-    cimSession = Borrado la sesión de Cim {0}.
-    unableToConnect = No se puedo conectar con el controllador de dominio {0}.
-    connectingDomain = Recopilando información de los dominios de Microsoft AD desde {0}.
-    connectingForest = Recopilando información del arbol de Microsoft AD desde {0}.
+    genMain = Por favor espere mientras se genera el diagrama de Microsoft.AD
+    gereratingDiag= Generando diagrama de {0}
+    diagramSignature = No se ha especificado la firma del diagrama
+    genDiagramSignature = Generando Subgráfica de la firma
+    genDiagramMAin = Generando Subgráfica Principal
+    osType = {0} es requerido para ejecutar Diagrammer.Microsoft.AD. Ejecute 'Install-WindowsFeature -Name '{0}'' para instalar los módulos requeridos. https://github.com/rebelinux/Diagrammer.Microsoft.AD
+    outputfolderpatherror = OutputFolderPath {0} no es una ruta de carpeta válida.
+    runasadmin = La operación solicitada requiere elevación: Ejecute la consola de PowerShell como administrador
+    signaturerequirements = New-ADDiagram : AuthorName y CompanyName deben estar definidos si se especifica la opción de firma
+    psSession = Limpiando sesión de PowerShell {0}
+    cimSession = Limpiando sesión de CIM {0}
+    unableToConnect = No se puede conectar al servidor de controlador de dominio {0}.
+
+    forestgraphlabel = Arquitectura del bosque de Active Directory
+    domaingraphlabel = Arquitectura del dominio de Active Directory
+    emptyForest = No hay infraestructura de bosque disponible para diagramar
+
+    connectingDomain = Recopilando información del dominio de Microsoft AD desde {0}.
+    connectingForest = Recopilando información del bosque de Microsoft AD desde {0}.
+    forestRootInfo = Información de la raíz del bosque
+
+    DiagramLabel = Dominios secundarios
     contiguous = Contiguo
-    noncontiguous = No Contiguo
-    DiagramLabel = Child Domains
-    DiagramDummyLabel = Child Domains
-    NoChildDomain = No Child Domains
-    funcLevel = <B>Nivel de Funcionamiento</B>: {0}
-    schemaVersion = <B>Version de Esquema</B>: {0}
+    noncontiguous = No contiguo
+    osTypelast = No se puede validar si {0} está instalado.
+    DiagramDummyLabel = Dominios secundarios
+    NoChildDomain = No hay dominios secundarios
+    funcLevel = <B>Nivel funcional</B>: {0}
+    schemaVersion = <B>Versión del esquema</B>: {0}
     infrastructure = <B>Infraestructura:</B> {0}
     rID = <B>RID:</B> {0}
     pdcEmulator= <B>Emulador PDC:</B> {0}
     schema = <B>Esquema:</B> {0}
-    domainNaming = <B>Nombramiento de dominios:</B> {0}
-    osType = El modulo {0} es necesario para ejecutar Diagrammer.Microsoft.AD. Ejecute 'Install-WindowsFeature -Name '{0}'' para instalar los módulos necesarios. https://github.com/rebelinux/Diagrammer.Microsoft.AD
-    osTypelast = No se ha podido validar si {0} está instalado.
+    domainNaming = <B>Nombres de dominio:</B> {0}
     fsmoRoles = Roles FSMO
-    forestRootInfo = Informacion de la Raiz del Arbol
     MicrosoftLogo = Logo de Microsoft
-    Base64Output = Desplegando cadena Base64
-    DiagramOutput = "El diagrama sobre Microsoft.AD '{0}' ha sido guardado en '{1}'"
-    trustsDiagramLabel = Dominios y Confianzas de Active Directory
-    emptySites = No existe una topology de sitios disponible para diagramar
-    emptyTrusts = No existe una topology de confianza disponible para diagramar
-    connectingSites = Reopilando la información de los sitios de Microsoft Active Directory para {0}.
-    connectingSTrusts = Reopilando la información de confianza de Microsoft Active Directory para {0}.
-    buildingTrusts = Creando diagrama de confianza de Microsoft AD desde {0}.
-    buildingSites = Creando diagrama de sitios de Microsoft AD desde {0}.
-    NoSites = Sin topologia de sitio
-    NoSiteSubnet = Sin sitios de subred
-    NoTrusts = Sin topologia de confianza
+
+    SitesDiagramDummyLabel = Sitios
+    sitesgraphlabel = Topología del sitio de Active Directory
+    sitesinventorygraphlabel = Inventario del sitio de Active Directory
+    NoSites = No hay topología de sitio
+    NoSiteSubnet = No hay subredes de sitio
+    siteLinkCost = Costo del enlace del sitio
+    siteLinkFrequency = Frecuencia del enlace del sitio
+    siteLinkFrequencyMinutes = minutos
+    siteLinkName = Enlace del sitio:
+    NoSiteDC = No hay controladores de dominio del sitio
+    emptySites = No hay topología de sitio disponible para diagramar
+    connectingSites = Recopilando información de sitios de Microsoft AD desde {0}.
+    buildingSites = Construyendo diagrama de sitios de Microsoft AD desde {0}.
+
+    NoTrusts = No hay topología de confianza
+    emptyTrusts = No hay topología de confianza disponible para diagramar
+    connectingSTrusts = Recopilando información de confianza de Microsoft AD desde {0}.
+    genDiagTrust = Generando diagrama de confianzas
+    trustsDiagramLabel = Dominios y confianzas de Active Directory
+    buildingTrusts = Construyendo diagrama de confianza de Microsoft AD desde {0}.
+    trustDirection = Direccion
+    trustType = Tipo
+
+    Base64Output = Mostrando cadena Base64
+    DiagramOutput = El diagrama de Microsoft.AD '{0}' se ha guardado en '{1}'
+
+    caDiagramLabel = Autoridad de Certificacion de Active Directory
+    caStdRootCA = Autoridad de Certificacion Raiz Independiente
+    caEntRootCA = Autoridad de Certificacion Raiz Empresarial
+    caEntSubCA = Autoridad de Certificacion Subordinada Empresarial
+    caEnterpriseCA = CA Empresarial
+    caStandaloneCA = CA Independiente
+    caSubordinateCA = CA Subordinada
+    NoCA = No hay infraestructura de Autoridad de Certificacion
+    caNotBefore = No antes de
+    caNotAfter = No despues de
+    caType = Tipo
+    caRootCaIssuer = Emisor de CA Raiz
+    caDnsName = Nombre de DNS
+
+    DomainControllers = Controlador de dominio
+    Sites = Sitios
+    Subnets = Subred
 '@

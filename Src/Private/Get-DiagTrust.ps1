@@ -21,7 +21,7 @@ function Get-DiagTrust {
     )
 
     begin {
-        Write-Verbose "Generating Trusts Diagram"
+        Write-Verbose $translate.genDiagTrust
     }
 
     process {

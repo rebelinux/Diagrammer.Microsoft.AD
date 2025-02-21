@@ -7,4 +7,6 @@ $script:Images = @{
     "AD_Site" = "Site.png"
     "AD_Site_Subnet" = "SubNet.png"
     "AD_Site_Node" = "SiteNode.png"
+    "AD_Certificate" = "certificate.png"
+    "AD_PKI_Logo" = "pkilogo.png"
 }
