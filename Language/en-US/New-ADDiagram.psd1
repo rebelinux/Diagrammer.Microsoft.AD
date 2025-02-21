@@ -4,7 +4,7 @@ ConvertFrom-StringData @'
     gereratingDiag = Generating {0} diagram
     diagramSignature = No diagram signature specified
     genDiagramSignature = Generating Signature SubGraph
-    genDiagramMAin =  Generating Main SubGraph
+    genDiagramMain =  Generating Main SubGraph
     osType = {0} is required to run the Diagrammer.Microsoft.AD. Run 'Install-WindowsFeature -Name '{0}'' to install the required modules. https://github.com/rebelinux/Diagrammer.Microsoft.AD
     outputfolderpatherror = OutputFolderPath {0} is not a valid folder path.
     runasadmin = The requested operation requires elevation: Run PowerShell console as administrator
@@ -16,6 +16,18 @@ ConvertFrom-StringData @'
     forestgraphlabel = Active Directory Forest Architecture
     domaingraphlabel = Active Directory Domain Architecture
     emptyForest = No Forest Infrastructure available to diagram
+    fDomainNaming = Domain Naming
+    fSchema = Schema
+    fFuncLevel = Functional Level
+    fInfrastructure = Infrastructure
+    fPDC = PDC Emulator
+    fRID = RID
+    fSchemaVersion = Schema Version
+    fForestRoot = Forest Root
+    fForestRootInfo = Forest Root Information
+    fForestRootLabel = Forest Root
+    fChildDomains = Child Domains
+    fNoChildDomains = No Child Domains
 
     connectingDomain = Collecting Microsoft AD Domain information from {0}.
     connectingForest = Collecting Microsoft AD Forest information from {0}.

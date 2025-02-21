@@ -4,7 +4,7 @@ ConvertFrom-StringData @'
     gereratingDiag= Generando diagrama de {0}
     diagramSignature = No se ha especificado la firma del diagrama
     genDiagramSignature = Generando Subgráfica de la firma
-    genDiagramMAin = Generando Subgráfica Principal
+    genDiagramMain = Generando Subgráfica Principal
     osType = {0} es requerido para ejecutar Diagrammer.Microsoft.AD. Ejecute 'Install-WindowsFeature -Name '{0}'' para instalar los módulos requeridos. https://github.com/rebelinux/Diagrammer.Microsoft.AD
     outputfolderpatherror = OutputFolderPath {0} no es una ruta de carpeta válida.
     runasadmin = La operación solicitada requiere elevación: Ejecute la consola de PowerShell como administrador
@@ -16,6 +16,18 @@ ConvertFrom-StringData @'
     forestgraphlabel = Arquitectura del bosque de Active Directory
     domaingraphlabel = Arquitectura del dominio de Active Directory
     emptyForest = No hay infraestructura de bosque disponible para diagramar
+    fDomainNaming = Nombres de dominio
+    fSchema = Esquema
+    fFuncLevel = Nivel funcional
+    fInfrastructure = Infraestructura
+    fPDC = Emulador PDC
+    fRID = RID
+    fSchemaVersion = Version del esquema
+    fForestRoot = Raíz del bosque
+    fForestRootInfo = Informació]on de la raí]iz del bosque
+    fForestRootLabel = Raiz del bosque
+    fChildDomains = Dominios secundarios
+    fNoChildDomains = No hay dominios secundarios
 
     connectingDomain = Recopilando información del dominio de Microsoft AD desde {0}.
     connectingForest = Recopilando información del bosque de Microsoft AD desde {0}.

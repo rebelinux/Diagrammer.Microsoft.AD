@@ -48,27 +48,27 @@ function Get-ADForestInfo {
                     }
 
                     $AditionalForestInfo = [PSCustomObject] [ordered] @{
-                        'Domain Naming' = $ForestObj.DomainNamingMaster.ToString().ToUpper().Split(".")[0]
-                        'Schema' = $ForestObj.SchemaMaster.ToString().ToUpper().Split(".")[0]
-                        'Functional Level' = $FuncionalLevel[$ForestObj.ForestMode]
+                        $translate.fDomainNaming = $ForestObj.DomainNamingMaster.ToString().ToUpper().Split(".")[0]
+                        $translate.fSchema = $ForestObj.SchemaMaster.ToString().ToUpper().Split(".")[0]
+                        $translate.fFuncLevel = $FuncionalLevel[$ForestObj.ForestMode]
                     }
                     $AditionalDomainInfo = [PSCustomObject] [ordered] @{
-                        'Infrastructure' = Switch ([string]::IsNullOrEmpty($ChildDomainsInfo.InfrastructureMaster)) {
+                        $translate.fInfrastructure = Switch ([string]::IsNullOrEmpty($ChildDomainsInfo.InfrastructureMaster)) {
                             $true { 'Unknown' }
                             $false { $ChildDomainsInfo.InfrastructureMaster.ToString().ToUpper().Split(".")[0] }
                             default { '--' }
                         }
-                        'PDC-Emulator' = Switch ([string]::IsNullOrEmpty($ChildDomainsInfo.PDCEmulator)) {
+                        $translate.fPDC = Switch ([string]::IsNullOrEmpty($ChildDomainsInfo.PDCEmulator)) {
                             $true { 'Unknown' }
                             $false { $ChildDomainsInfo.PDCEmulator.ToString().ToUpper().Split(".")[0] }
                             default { '--' }
                         }
-                        'RID' = Switch ([string]::IsNullOrEmpty($ChildDomainsInfo.RIDMaster)) {
+                        $translate.fRID = Switch ([string]::IsNullOrEmpty($ChildDomainsInfo.RIDMaster)) {
                             $true { 'Unknown' }
                             $false { $ChildDomainsInfo.RIDMaster.ToString().ToUpper().Split(".")[0] }
                             default { '--' }
                         }
-                        'Functional Level' = Switch ([string]::IsNullOrEmpty($ChildDomainsInfo.DomainMode)) {
+                        $translate.fFuncLevel = Switch ([string]::IsNullOrEmpty($ChildDomainsInfo.DomainMode)) {
                             $true { 'Unknown' }
                             $false { $FuncionalLevel[$ChildDomainsInfo.DomainMode] }
                             default { '--' }

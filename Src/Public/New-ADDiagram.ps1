@@ -69,7 +69,7 @@ function New-ADDiagram {
     .PARAMETER WatermarkColor
         Allow to specified the color used for the watermark text. Default: Blue.
     .NOTES
-        Version:        0.2.2
+        Version:        0.2.8
         Author(s):      Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -481,7 +481,7 @@ function New-ADDiagram {
 
                     # Main Graph SubGraph
                     SubGraph MainGraph -Attributes @{Label = (Get-DiaHTMLLabel -ImagesObj $Images -Label $MainGraphLabel -IconType $CustomLogo -IconDebug $IconDebug -IconWidth 250 -IconHeight 80); fontsize = 22; penwidth = 0; labelloc = 't'; labeljust = "c" } {
-                        Write-Verbose "Generating Main SubGraph"
+                        Write-Verbose $translate.genDiagramMain
 
                         $script:ForestRoot = $ADSystem.Name.ToString().ToUpper()
 
