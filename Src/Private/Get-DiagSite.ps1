@@ -5,7 +5,7 @@ function Get-DiagSite {
     .DESCRIPTION
         Build a diagram of the configuration of Microsoft Active Directory in PDF/PNG/SVG formats using Psgraph.
     .NOTES
-        Version:        0.2.6
+        Version:        0.2.8
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -21,7 +21,7 @@ function Get-DiagSite {
     )
 
     begin {
-        Write-Verbose "Generating Site Diagram"
+        Write-Verbose ($translate.gereratingDiag -f "Sites")
     }
 
     process {
@@ -39,11 +39,8 @@ function Get-DiagSite {
                                     $Site = Remove-SpecialChar -String "$($SitesObj.Name)" -SpecialChars '\-. '
                                     Node -Name $Site -Attributes @{Label = $SitesObj.Name; penwidth = 1; width = 2; height = .5}
                                     foreach ($Link in $SitesObj.SiteLink) {
-                                        $AditionalInfoObj = [ordered]@{
-                                            1 = "Frequency = $($Link.AditionalInfo.Frequency) Cost = $($Link.AditionalInfo.Cost)"
-                                        }
                                         $SiteLink = Remove-SpecialChar -String $Link.Name -SpecialChars '\-. '
-                                        Node -Name $SiteLink -Attributes @{Label = (Get-DiaNodeIcon -Name "SiteLink: $($Link.Name)" -IconType "NoIcon" -Align "Center" -IconDebug $IconDebug -Rows $AditionalInfoObj -FontSize 10 -NoFontBold); shape = "plain"; fillColor = 'transparent'}
+                                        Node -Name $SiteLink -Attributes @{Label = (Get-DiaNodeIcon -Name "$($translate.siteLinkName)  $($Link.Name)" -IconType "NoIcon" -Align "Center" -IconDebug $IconDebug -RowsOrdered $Link.AditionalInfo -FontSize 10 -NoFontBold); shape = "plain"; fillColor = 'transparent'}
                                         Edge -From $Site -To $SiteLink @{minlen = 2; arrowtail = 'none'; arrowhead = 'none'}
                                         foreach ($SiteLinkSite in $Link.Sites) {
                                             $SiteIncluded = Remove-SpecialChar -String $SiteLinkSite -SpecialChars '\-. '

@@ -5,7 +5,7 @@ function Get-DiagSiteInventory {
     .DESCRIPTION
         Build a diagram of the configuration of Microsoft Active Directory in PDF/PNG/SVG formats using Psgraph.
     .NOTES
-        Version:        0.2.6
+        Version:        0.2.8
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -21,7 +21,7 @@ function Get-DiagSiteInventory {
     )
 
     begin {
-        Write-Verbose "Generating Sites Inventory Diagram"
+        Write-Verbose ($translate.gereratingDiag -f "Sites Inventory")
     }
 
     process {
@@ -34,42 +34,47 @@ function Get-DiagSiteInventory {
                 if ($SitesGroups) {
                     SubGraph ForestSubGraph -Attributes @{Label = (Get-DiaHTMLLabel -ImagesObj $Images -Label $ForestRoot -IconType "ForestRoot" -IconDebug $IconDebug -SubgraphLabel -IconWidth 50 -IconHeight 50) ; fontsize = 24; penwidth = 1.5; labelloc = 't'; style = $SubGraphDebug.style ; color = $SubGraphDebug.color } {
                         SubGraph MainSubGraph -Attributes @{Label = ' ' ; fontsize = 24; penwidth = 1.5; labelloc = 't'; style = $SubGraphDebug.style; color = $SubGraphDebug.color } {
-                            SubGraph SitesTopology -Attributes @{Label = 'Sites'; fontsize = 22; penwidth = 1.5; labelloc = 't'; style = 'dashed,rounded' } {
-                                if (($SitesGroups | Measure-Object).Count -ge 1) {
-                                    foreach ($SiteGroupOBJ in $SitesGroups) {
-                                        $SubGraphName = Remove-SpecialChar -String $SiteGroupOBJ.Name -SpecialChars '\-. '
-                                        SubGraph $SubGraphName -Attributes @{Label = (Get-DiaHTMLLabel -ImagesObj $Images -Label $SiteGroupOBJ.Name -IconType "AD_Site" -SubgraphLabel -IconDebug $IconDebug); fontsize = 20; penwidth = 1.5; labelloc = 't'; style = 'dashed,rounded' } {
-                                            if ($SiteGroupOBJ.DomainControllers.DCsArray) {
-                                                $SubGraphNameSN = Remove-SpecialChar -String $SiteGroupOBJ.Name -SpecialChars '\-. '
-                                                SubGraph "$($SubGraphNameSN)DC" -Attributes @{Label = (Get-DiaHTMLLabel -ImagesObj $Images -Label "Domain Controllers" -IconType "AD_DC" -SubgraphLabel -IconDebug $IconDebug); fontsize = 18; penwidth = 1.5; labelloc = 't'; style = 'dashed,rounded' } {
-                                                    Node -Name $SiteGroupOBJ.DomainControllers.Name -Attributes @{Label = $SiteGroupOBJ.DomainControllers.Label; shape = "plain"; fillColor = 'transparent' }
-                                                }
+                            if (($SitesGroups | Measure-Object).Count -ge 1) {
+                                $ChildSiteSubgraphArray = @()
+                                foreach ($SiteGroupOBJ in $SitesGroups) {
+                                    $SubGraphName = Remove-SpecialChar -String $SiteGroupOBJ.Name -SpecialChars '\-. '
 
-                                            } else {
-                                                $SubGraphNameSN = Remove-SpecialChar -String $SiteGroupOBJ.Name -SpecialChars '\-. '
-                                                SubGraph "$($SubGraphNameSN)DC" -Attributes @{Label = (Get-DiaHTMLLabel -ImagesObj $Images -Label "Domain Controllers" -IconType "AD_DC" -SubgraphLabel -IconDebug $IconDebug); fontsize = 18; penwidth = 1.5; labelloc = 't'; style = 'dashed,
-                                                rounded'
-                                                } {
-                                                    Node -Name "Dummy$($SubGraphName)NoSiteDC" -Attributes @{Label = $translate.NoSiteDC; shape = "rectangle"; labelloc = 'c'; fillColor = 'transparent'; penwidth = 0 }
-                                                }
-                                            }
+                                    if ($SiteGroupOBJ.DomainControllers.DCsArray) {
+                                        $SubGraphNameSN = Remove-SpecialChar -String $SiteGroupOBJ.Name -SpecialChars '\-. '
 
-                                            if ($SiteGroupOBJ.Subnets.SubnetArray) {
-                                                $SubGraphNameSN = Remove-SpecialChar -String $SiteGroupOBJ.Name -SpecialChars '\-. '
-                                                SubGraph "$($SubGraphNameSN)SN" -Attributes @{Label = (Get-DiaHTMLLabel -ImagesObj $Images -Label "Subnets" -IconType "AD_Site_Subnet" -SubgraphLabel -IconDebug $IconDebug); fontsize = 18; penwidth = 1.5; labelloc = 't'; style = 'dashed,rounded' } {
-                                                    Node -Name $SiteGroupOBJ.Subnets.Name -Attributes @{Label = $SiteGroupOBJ.Subnets.Label; shape = "plain"; fillColor = 'transparent' }
-                                                }
-                                            } else {
-                                                $SubGraphNameSN = Remove-SpecialChar -String $SiteGroupOBJ.Name -SpecialChars '\-. '
-                                                SubGraph "$($SubGraphNameSN)SN" -Attributes @{Label = (Get-DiaHTMLLabel -ImagesObj $Images -Label "Subnets" -IconType "AD_Site_Subnet" -SubgraphLabel -IconDebug $IconDebug); fontsize = 18; penwidth = 1.5; labelloc = 't'; style = 'dashed,rounded' } {
-                                                    Node -Name "Dummy$($SubGraphName)NoSiteSN" -Attributes @{Label = $translate.NoSiteSubnet; shape = "rectangle"; labelloc = 'c'; fillColor = 'transparent'; penwidth = 0 }
-                                                }
-                                            }
-                                        }
+                                        $ChildDCsNodes = Get-DiaHTMLTable -ImagesObj $Images -Rows $SiteGroupOBJ.DomainControllers.DCsArray -Align 'Center' -ColumnSize 3 -IconDebug $IconDebug -TableStyle "dashed,rounded" -NoFontBold
+
+                                        $ChildDCsNodesSubgraph = Get-DiaHTMLSubGraph -ImagesObj $Images -TableArray $ChildDCsNodes -Align 'Center' -IconDebug $IconDebug -Label $translate.DomainControllers -LabelPos "top" -TableStyle "dashed,rounded" -TableBorder "1" -columnSize 3 -TableBorderColor "gray" -fontColor "#71797E" -IconType "AD_DC" -fontSize 8
+
+                                    } else {
+                                        $SubGraphNameSN = Remove-SpecialChar -String $SiteGroupOBJ.Name -SpecialChars '\-. '
+
+                                        $ChildDCsNodesSubgraph = Get-DiaHTMLSubGraph -ImagesObj $Images -TableArray $translate.NoSiteDC -Align 'Center' -IconDebug $IconDebug -Label $translate.DomainControllers -LabelPos "top" -TableStyle "dashed,rounded" -TableBorder "1" -columnSize 3 -TableBorderColor "gray" -fontColor "#71797E" -IconType "AD_DC"
                                     }
-                                } else {
-                                    Node -Name NoSites -Attributes @{Label = $translate.NoSites; shape = "rectangle"; labelloc = 'c'; fixedsize = $true; width = "3"; height = "2"; fillColor = 'transparent'; penwidth = 0 }
+
+                                    if ($SiteGroupOBJ.Subnets.SubnetArray) {
+                                        $SubGraphNameSN = Remove-SpecialChar -String $SiteGroupOBJ.Name -SpecialChars '\-. '
+
+                                        $ChildSubnetsNodes = Get-DiaHTMLTable -ImagesObj $Images -Rows $SiteGroupOBJ.Subnets.SubnetArray -Align 'Center' -ColumnSize 3 -IconDebug $IconDebug -TableStyle "dashed,rounded" -NoFontBold
+
+                                        $ChildSubnetsNodesSubgraph = Get-DiaHTMLSubGraph -ImagesObj $Images -TableArray $ChildSubnetsNodes -Align 'Center' -IconDebug $IconDebug -Label $translate.Subnets -LabelPos "top" -TableStyle "dashed,rounded" -TableBorder "1" -columnSize 3 -TableBorderColor "gray" -fontColor "#71797E" -IconType "AD_Site_Subnet"
+                                    } else {
+                                        $SubGraphNameSN = Remove-SpecialChar -String $SiteGroupOBJ.Name -SpecialChars '\-. '
+
+                                        $ChildSubnetsNodesSubgraph = Get-DiaHTMLSubGraph -ImagesObj $Images -TableArray $translate.NoSiteSubnet -Align 'Center' -IconDebug $IconDebug -Label $translate.Subnets -LabelPos "top" -TableStyle "dashed,rounded" -TableBorder "1" -columnSize 3 -TableBorderColor "gray" -fontColor "#71797E" -IconType "AD_Site_Subnet"
+                                    }
+
+                                    $ChildSiteSubgraph = @()
+
+                                    $ChildSiteSubgraph += $ChildDCsNodesSubgraph, $ChildSubnetsNodesSubgraph
+
+                                    $ChildSiteSubgraphArray += Get-DiaHTMLSubGraph -ImagesObj $Images -TableArray $ChildSiteSubgraph -Align 'Center' -IconType "AD_Site" -IconDebug $IconDebug -Label $SiteGroupOBJ.Name -LabelPos "top" -TableStyle "dashed,rounded" -TableBorder "1" -columnSize 3 -TableBorderColor "gray" -fontColor "#71797E"
                                 }
+
+                                Node -Name "SitesTopology" -Attributes @{Label = (Get-DiaHTMLSubGraph -ImagesObj $Images -TableArray $ChildSiteSubgraphArray -Align 'Center' -IconDebug $IconDebug -Label $translate.Sites -LabelPos "top" -TableStyle "dashed,rounded" -TableBorder "1" -columnSize 3 -TableBorderColor "gray" -fontColor "#71797E"); shape = 'plain'; fillColor = 'transparent'; fontsize = 14; fontname = "Segoe Ui" }
+
+                            } else {
+                                Node -Name NoSites -Attributes @{Label = $translate.NoSites; shape = "rectangle"; labelloc = 'c'; fixedsize = $true; width = "3"; height = "2"; fillColor = 'transparent'; penwidth = 0 }
                             }
                         }
                     }

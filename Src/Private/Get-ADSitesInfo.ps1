@@ -5,7 +5,7 @@ function Get-ADSitesInfo {
     .DESCRIPTION
         Build a diagram of the configuration of Microsoft Active Directory in PDF/PNG/SVG formats using Psgraph.
     .NOTES
-        Version:        0.2.6
+        Version:        0.2.8
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -36,9 +36,9 @@ function Get-ADSitesInfo {
                                 @{
                                     'Name' = $Link
                                     'Sites' = $SitesLinkInfo.SitesIncluded | ForEach-Object { ConvertTo-ADObjectName -Session $TempPssSession -DN $_ -DC $System }
-                                    'AditionalInfo' = @{
-                                        'Cost' = $SitesLinkInfo.Cost
-                                        'Frequency' = $SitesLinkInfo.ReplicationFrequencyInMinutes
+                                    'AditionalInfo' = [PSCustomObject][ordered]@{
+                                        $translate.siteLinkCost = $SitesLinkInfo.Cost
+                                        $translate.siteLinkFrequency = "$($SitesLinkInfo.ReplicationFrequencyInMinutes) $($translate.siteLinkFrequencyMinutes)"
                                     }
                                 }
                             }

@@ -5,7 +5,7 @@ function Get-ADSitesInventoryInfo {
     .DESCRIPTION
         Build a diagram of the configuration of Microsoft Active Directory in PDF/PNG/SVG formats using Psgraph.
     .NOTES
-        Version:        0.2.6
+        Version:        0.2.8
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -56,7 +56,7 @@ function Get-ADSitesInventoryInfo {
                             $DCsArray = @()
                             $DCs = try { Get-ADObjectSearch -DN "CN=Servers,$($Site.DistinguishedName)" -Filter { objectClass -eq "Server" } -Properties "DNSHostName" -SelectPrty 'DNSHostName', 'Name' -Session $TempPssSession } catch { Out-Null }
                             foreach ($Object in $DCs) {
-                                $DCsArray += $Object.Name
+                                $DCsArray += $Object.DNSHostName
                             }
 
                             # Used for Debug

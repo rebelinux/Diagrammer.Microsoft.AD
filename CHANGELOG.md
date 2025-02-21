@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.8] - 2025-02-21
+
+### Added
+
+- Add Certificate Diagram
+- Add spanish translation
+
+### Changed
+
+- Increase Diagrammer.Core minimum version requirement to v0.2.15
+- Add forest root as a child domain
+- Improved Forest diagram
+- Improved Site Inventory diagram
+
 ## [0.2.7] - 2024-11-15
 
 ### Changed

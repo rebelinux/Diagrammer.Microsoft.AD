@@ -5,7 +5,7 @@ function Get-ADForestInfo {
     .DESCRIPTION
         Build a diagram of the configuration of Microsoft Active Directory in PDF/PNG/SVG formats using Psgraph.
     .NOTES
-        Version:        0.2.6
+        Version:        0.2.8
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -26,7 +26,8 @@ function Get-ADForestInfo {
             $ForestObj = $ADSystem
             $ChildDomains = $ADSystem.Domains
 
-            # $ChildDomains = @("acad.pharmax.local", "it.pharmax.local", "hr.pharmax.local", "fin.pharmax.local", "dn.pharmax.local", "b12.local", "hr.b12.local")
+            # $ChildDomains = @("pharmax.local", "acad.pharmax.local", "hr.pharmax.local", "fin.pharmax.local", "it.pharmax.local", "admin.pharmax.local")
+            # $ChildDomains = @("pharmax.local")
 
             $ForestInfo = @()
             if ($ChildDomains) {
@@ -37,42 +38,59 @@ function Get-ADForestInfo {
                         Out-Null
                     }
 
-                    $AditionalForestInfo = [ordered] @{
-                        'Forest-Level' = $ForestObj.ForestMode
-                        'Domain-Naming' = $ForestObj.DomainNamingMaster.ToString().ToUpper().Split(".")[0]
-                        'Schema' = $ForestObj.SchemaMaster.ToString().ToUpper().Split(".")[0]
+                    $FuncionalLevel = @{
+                        Windows2012R2Domain = 'Windows Server 2012 R2 (Domain)'
+                        Windows2012R2Forest = 'Windows Server 2012 R2 (Forest)'
+                        Windows2016Domain = 'Windows Server 2016 (Domain)'
+                        Windows2016Forest = 'Windows Server 2016 (Forest)'
+                        Windows20225Domain = 'Windows Server 2025 (Domain)'
+                        Windows2025Forest = 'Windows Server 2025 (Forest)'
                     }
-                    $AditionalDomainInfo = [ordered] @{
-                        'Domain-Level' = Switch ([string]::IsNullOrEmpty($ChildDomainsInfo.DomainMode)) {
-                            $true {'Unknown'}
-                            $false {$ChildDomainsInfo.DomainMode}
-                            default {'Unknown'}
+
+                    $AditionalForestInfo = [PSCustomObject] [ordered] @{
+                        $translate.fDomainNaming = $ForestObj.DomainNamingMaster.ToString().ToUpper().Split(".")[0]
+                        $translate.fSchema = $ForestObj.SchemaMaster.ToString().ToUpper().Split(".")[0]
+                        $translate.fFuncLevel = $FuncionalLevel[$ForestObj.ForestMode]
+                    }
+                    $AditionalDomainInfo = [PSCustomObject] [ordered] @{
+                        $translate.fInfrastructure = Switch ([string]::IsNullOrEmpty($ChildDomainsInfo.InfrastructureMaster)) {
+                            $true { 'Unknown' }
+                            $false { $ChildDomainsInfo.InfrastructureMaster.ToString().ToUpper().Split(".")[0] }
+                            default { '--' }
                         }
-                        'Infrastructure' = Switch ([string]::IsNullOrEmpty($ChildDomainsInfo.InfrastructureMaster)) {
-                            $true {'Unknown'}
-                            $false {$ChildDomainsInfo.InfrastructureMaster.ToString().ToUpper().Split(".")[0]}
-                            default {'Unknown'}
+                        $translate.fPDC = Switch ([string]::IsNullOrEmpty($ChildDomainsInfo.PDCEmulator)) {
+                            $true { 'Unknown' }
+                            $false { $ChildDomainsInfo.PDCEmulator.ToString().ToUpper().Split(".")[0] }
+                            default { '--' }
                         }
-                        'PDC-Emulator' = Switch ([string]::IsNullOrEmpty($ChildDomainsInfo.PDCEmulator)) {
-                            $true {'Unknown'}
-                            $false {$ChildDomainsInfo.PDCEmulator.ToString().ToUpper().Split(".")[0]}
-                            default {'Unknown'}
+                        $translate.fRID = Switch ([string]::IsNullOrEmpty($ChildDomainsInfo.RIDMaster)) {
+                            $true { 'Unknown' }
+                            $false { $ChildDomainsInfo.RIDMaster.ToString().ToUpper().Split(".")[0] }
+                            default { '--' }
                         }
-                        'RID' = Switch ([string]::IsNullOrEmpty($ChildDomainsInfo.RIDMaster)) {
-                            $true {'Unknown'}
-                            $false {$ChildDomainsInfo.RIDMaster.ToString().ToUpper().Split(".")[0]}
-                            default {'Unknown'}
+                        $translate.fFuncLevel = Switch ([string]::IsNullOrEmpty($ChildDomainsInfo.DomainMode)) {
+                            $true { 'Unknown' }
+                            $false { $FuncionalLevel[$ChildDomainsInfo.DomainMode] }
+                            default { '--' }
                         }
+                    }
+
+                    if ($ChildDomain -eq $ForestObj.Name) {
+                        $IsForest = $true
+
+                    } else {
+                        $IsForest = $false
                     }
 
                     $TempForestInfo = [PSCustomObject]@{
                         Name = Remove-SpecialChar -String "$($ChildDomain)ChildDomain" -SpecialChars '\-. '
                         ChildDomainLabel = $ChildDomain
-                        Label = Get-DiaNodeIcon -Name $ChildDomain -IconType "AD_Domain" -Align "Center" -ImagesObj $Images -IconDebug $IconDebug -Rows $AditionalDomainInfo
+                        Label = Get-DiaNodeIcon -Name $ChildDomain -IconType "AD_Domain" -Align "Center" -ImagesObj $Images -IconDebug $IconDebug -RowsOrdered $AditionalDomainInfo
                         RootDomain = $ForestObj.RootDomain
-                        RootDomainLabel = Get-DiaNodeIcon -Name $ForestObj.RootDomain -IconType "AD_Domain" -Align "Center" -ImagesObj $Images -IconDebug $IconDebug -Rows $AditionalForestInfo
+                        RootDomainLabel = Get-DiaNodeIcon -Name $ForestObj.RootDomain -IconType "AD_Domain" -Align "Center" -ImagesObj $Images -IconDebug $IconDebug -RowsOrdered $AditionalForestInfo
                         ChildDomain = $ChildDomain
                         AditionalInfo = $AditionalDomainInfo
+                        IsForest = $IsForest
                     }
                     $ForestInfo += $TempForestInfo
                 }
