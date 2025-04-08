@@ -3,9 +3,9 @@ function Get-DiagTrust {
     .SYNOPSIS
         Function to diagram Microsoft Active Directory Trusts.
     .DESCRIPTION
-        Build a diagram of the configuration of Microsoft Active Directory in PDF/PNG/SVG formats using Psgraph.
+        Build a diagram of the configuration of Microsoft Active Directory to a supported formats using Psgraph.
     .NOTES
-        Version:        0.2.9
+        Version:        0.2.10
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -51,7 +51,7 @@ function Get-DiagTrust {
                         }
                     }
                 } else {
-                    Node -Name NoTrusts -Attributes @{Label = $translate.NoTrusts; shape = "rectangle"; labelloc = 'c'; fixedsize = $true; width = "3"; height = "2"; fillColor = 'transparent'; penwidth = 0 }
+                    Node -Name NoTrusts @{Label = $translate.NoTrusts; shape = "rectangle"; labelloc = 'c'; fixedsize = $true; width = "3"; height = "2"; fillColor = 'transparent'; penwidth = 1.5; style = 'dashed'; color = 'gray' }
                 }
             }
         } catch {

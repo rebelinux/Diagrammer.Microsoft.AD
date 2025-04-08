@@ -3,9 +3,9 @@ function Get-DiagSite {
     .SYNOPSIS
         Function to diagram Microsoft Active Directory Forest.
     .DESCRIPTION
-        Build a diagram of the configuration of Microsoft Active Directory in PDF/PNG/SVG formats using Psgraph.
+        Build a diagram of the configuration of Microsoft Active Directory to a supported formats using Psgraph.
     .NOTES
-        Version:        0.2.9
+        Version:        0.2.10
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -40,7 +40,7 @@ function Get-DiagSite {
                                     Node -Name $Site -Attributes @{Label = $SitesObj.Name; penwidth = 1; width = 2; height = .5}
                                     foreach ($Link in $SitesObj.SiteLink) {
                                         $SiteLink = Remove-SpecialChar -String $Link.Name -SpecialChars '\-. '
-                                        Node -Name $SiteLink -Attributes @{Label = (Get-DiaNodeIcon -Name "$($translate.siteLinkName)  $($Link.Name)" -IconType "NoIcon" -Align "Center" -IconDebug $IconDebug -RowsOrdered $Link.AditionalInfo -FontSize 10 -NoFontBold); shape = "plain"; fillColor = 'transparent'}
+                                        Node -Name $SiteLink -Attributes @{Label = (Get-DiaNodeIcon -Name ' ' -IconType "NoIcon" -Align "Center" -IconDebug $IconDebug -RowsOrdered $Link.AditionalInfo -FontSize 10 -NoFontBold); shape = "plain"; fillColor = 'transparent'}
                                         Edge -From $Site -To $SiteLink @{minlen = 2; arrowtail = 'none'; arrowhead = 'none'}
                                         foreach ($SiteLinkSite in $Link.Sites) {
                                             $SiteIncluded = Remove-SpecialChar -String $SiteLinkSite -SpecialChars '\-. '

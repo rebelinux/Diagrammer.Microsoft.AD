@@ -3,9 +3,9 @@ function Get-ADForestInfo {
     .SYNOPSIS
         Function to extract microsoft active directory forest information.
     .DESCRIPTION
-        Build a diagram of the configuration of Microsoft Active Directory in PDF/PNG/SVG formats using Psgraph.
+        Build a diagram of the configuration of Microsoft Active Directory to a supported formats using Psgraph.
     .NOTES
-        Version:        0.2.8
+        Version:        0.2.10
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -43,7 +43,7 @@ function Get-ADForestInfo {
                         Windows2012R2Forest = 'Windows Server 2012 R2 (Forest)'
                         Windows2016Domain = 'Windows Server 2016 (Domain)'
                         Windows2016Forest = 'Windows Server 2016 (Forest)'
-                        Windows20225Domain = 'Windows Server 2025 (Domain)'
+                        Windows2025Domain = 'Windows Server 2025 (Domain)'
                         Windows2025Forest = 'Windows Server 2025 (Forest)'
                     }
 

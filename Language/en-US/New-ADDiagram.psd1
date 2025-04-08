@@ -57,7 +57,7 @@ ConvertFrom-StringData @'
     siteLinkCost = Site Link Cost
     siteLinkFrequency = Site Link Frequency
     siteLinkFrequencyMinutes = minutes
-    siteLinkName = SiteLink:
+    siteLinkName = Site Link
     NoSiteDC = No Site Domain Controllers
     emptySites = No Site topology available to diagram
     connectingSites = Collecting Microsoft AD Sites information from {0}.

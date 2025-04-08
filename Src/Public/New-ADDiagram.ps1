@@ -1,9 +1,9 @@
 function New-ADDiagram {
     <#
     .SYNOPSIS
-        Diagram the configuration of Microsoft AD infrastructure in PDF/SVG/DOT/PNG formats using PSGraph and Graphviz.
+        Diagram the configuration of Microsoft AD infrastructure to a supported formats using PSGraph and Graphviz.
     .DESCRIPTION
-        Diagram the configuration of Microsoft AD  infrastructure in PDF/SVG/DOT/PNG formats using PSGraph and Graphviz.
+        Diagram the configuration of Microsoft AD  infrastructure to a supported formats using PSGraph and Graphviz.
     .PARAMETER DiagramType
         Specifies the type of active directory diagram that will be generated.
         The supported output diagrams are:
@@ -22,7 +22,7 @@ function New-ADDiagram {
         Specifies the password for the target system.
     .PARAMETER Format
         Specifies the output format of the diagram.
-        The supported output formats are PDF, PNG, DOT & SVG.
+        The supported output formats are JPG, PDF, PNG, DOT & SVG.
         Multiple output formats may be specified, separated by a comma.
     .PARAMETER Direction
         Set the direction in which resource are plotted on the visualization
@@ -431,6 +431,10 @@ function New-ADDiagram {
 
     process {
         foreach ($System in $Target) {
+
+            if (Select-String -InputObject $System -Pattern "^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$") {
+                throw "Please use the Fully Qualified Domain Name (FQDN) instead of an IP address when connecting to the Domain Controller: $System"
+            }
 
             try {
                 # Connection setup

@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.10] - 2025-03-08
+
+### Changed
+
+- Bump version to 0.2.10
+- Increase Diagrammer.Core minimum version requirement to v0.2.20
+- Enforce connections to the Domain Controller using its Fully Qualified Domain Name (FQDN) instead of its IP address
+- Enhance code to handle scenarios where no infrastructure is available for diagramming
+
+### Fixed
+
+- Fix issue where the Server 2025 domain mode was not being detected correctly
+
 ## [0.2.9] - 2025-03-04
 
 ### Changed

@@ -3,9 +3,9 @@ function Get-ADTrustsInfo {
     .SYNOPSIS
         Function to extract microsoft active directory trust information.
     .DESCRIPTION
-        Build a diagram of the configuration of Microsoft Active Directory in PDF/PNG/SVG formats using Psgraph.
+        Build a diagram of the configuration of Microsoft Active Directory to a supported formats using Psgraph.
     .NOTES
-        Version:        0.2.8
+        Version:        0.2.10
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -24,13 +24,9 @@ function Get-ADTrustsInfo {
         Write-Verbose -Message ($translate.buildingTrusts -f $($ForestRoot))
         try {
 
-            $TrustDomain = Invoke-Command -Session $TempPssSession { ([System.DirectoryServices.ActiveDirectory.Domain]::GetCurrentDomain()).GetAllTrustRelationships() }
-            $TrustForest = Invoke-Command -Session $TempPssSession { [System.DirectoryServices.ActiveDirectory.Forest]::GetCurrentForest().GetAllTrustRelationships() }
-
-
             $Trusts = @()
-            $Trusts += $TrustDomain
-            $Trusts += $TrustForest
+            $Trusts += Invoke-Command -Session $TempPssSession { ([System.DirectoryServices.ActiveDirectory.Domain]::GetCurrentDomain()).GetAllTrustRelationships() }
+            $Trusts += Invoke-Command -Session $TempPssSession { [System.DirectoryServices.ActiveDirectory.Forest]::GetCurrentForest().GetAllTrustRelationships() }
 
             $TrustsInfo = @()
             if ($Trusts) {
