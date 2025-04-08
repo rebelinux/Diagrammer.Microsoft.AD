@@ -3,9 +3,9 @@ function Get-DiagCertificateAuthority {
     .SYNOPSIS
         Function to diagram Microsoft Active Directory Certificate Authority.
     .DESCRIPTION
-        Build a diagram of the configuration of Microsoft Active Directory in PDF/PNG/SVG formats using Psgraph.
+        Build a diagram of the configuration of Microsoft Active Directory to a supported formats using Psgraph.
     .NOTES
-        Version:        0.2.9
+        Version:        0.2.10
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -61,7 +61,7 @@ function Get-DiagCertificateAuthority {
                         }
                     }
                 } else {
-                    Node -Name NoDomain @{Label = $translate.NoCA; shape = "rectangle"; labelloc = 'c'; fixedsize = $true; width = "3"; height = "2"; fillColor = 'transparent'; penwidth = 1.5; style = 'dashed'; color = 'gray' }
+                    Node -Name NoDomain @{Label = $translate.NoCA; shape = "rectangle"; labelloc = 'c'; fixedsize = $true; width = "5"; height = "3"; fillColor = 'transparent'; penwidth = 1.5; style = 'dashed'; color = 'gray' }
                 }
             }
         } catch {
