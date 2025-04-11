@@ -5,7 +5,7 @@ function Get-ADForestInfo {
     .DESCRIPTION
         Build a diagram of the configuration of Microsoft Active Directory to a supported formats using Psgraph.
     .NOTES
-        Version:        0.2.10
+        Version:        0.2.11
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -52,6 +52,7 @@ function Get-ADForestInfo {
                         $translate.fSchema = $ForestObj.SchemaMaster.ToString().ToUpper().Split(".")[0]
                         $translate.fFuncLevel = $FuncionalLevel[$ForestObj.ForestMode]
                     }
+
                     $AditionalDomainInfo = [PSCustomObject] [ordered] @{
                         $translate.fInfrastructure = Switch ([string]::IsNullOrEmpty($ChildDomainsInfo.InfrastructureMaster)) {
                             $true { 'Unknown' }
@@ -85,9 +86,9 @@ function Get-ADForestInfo {
                     $TempForestInfo = [PSCustomObject]@{
                         Name = Remove-SpecialChar -String "$($ChildDomain)ChildDomain" -SpecialChars '\-. '
                         ChildDomainLabel = $ChildDomain
-                        Label = Get-DiaNodeIcon -Name $ChildDomain -IconType "AD_Domain" -Align "Center" -ImagesObj $Images -IconDebug $IconDebug -RowsOrdered $AditionalDomainInfo
+                        Label = Get-DiaNodeIcon -Name $ChildDomain -IconType "AD_Domain" -Align "Center" -ImagesObj $Images -IconDebug $IconDebug -AditionalInfo $AditionalDomainInfo -FontSize 18
                         RootDomain = $ForestObj.RootDomain
-                        RootDomainLabel = Get-DiaNodeIcon -Name $ForestObj.RootDomain -IconType "AD_Domain" -Align "Center" -ImagesObj $Images -IconDebug $IconDebug -RowsOrdered $AditionalForestInfo
+                        RootDomainLabel = Get-DiaNodeIcon -Name $ForestObj.RootDomain -IconType "AD_Domain" -Align "Center" -ImagesObj $Images -IconDebug $IconDebug -AditionalInfo $AditionalForestInfo -FontSize 18
                         ChildDomain = $ChildDomain
                         AditionalInfo = $AditionalDomainInfo
                         IsForest = $IsForest

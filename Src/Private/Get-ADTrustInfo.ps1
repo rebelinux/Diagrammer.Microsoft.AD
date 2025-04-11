@@ -5,7 +5,7 @@ function Get-ADTrustsInfo {
     .DESCRIPTION
         Build a diagram of the configuration of Microsoft Active Directory to a supported formats using Psgraph.
     .NOTES
-        Version:        0.2.10
+        Version:        0.2.11
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -31,7 +31,7 @@ function Get-ADTrustsInfo {
             $TrustsInfo = @()
             if ($Trusts) {
                 foreach ($Trust in $Trusts) {
-                    $AditionalInfo = [PSCustomObject][ordered]@{
+                    $AditionalInfo = [PSCustomObject] [ordered]@{
                         $translate.TrustDirection = $Trust.TrustDirection
                         $translate.TrustType = $Trust.TrustType
                     }
