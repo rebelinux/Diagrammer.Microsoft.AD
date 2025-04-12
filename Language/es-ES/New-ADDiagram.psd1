@@ -70,7 +70,10 @@ ConvertFrom-StringData @'
     trustsDiagramLabel = Dominios y confianzas de Active Directory
     buildingTrusts = Construyendo diagrama de confianza de Microsoft AD desde {0}.
     trustDirection = Direccion
-    trustType = Tipo
+    trustType = Forma
+    TrustAttributes = Tipo
+    AuthenticationLevel = Nivel de autenticación
+
 
     Base64Output = Mostrando cadena Base64
     DiagramOutput = El diagrama de Microsoft.AD '{0}' se ha guardado en '{1}'

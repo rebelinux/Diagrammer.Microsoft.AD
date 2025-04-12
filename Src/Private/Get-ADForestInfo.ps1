@@ -31,7 +31,7 @@ function Get-ADForestInfo {
 
             $ForestInfo = @()
             if ($ChildDomains) {
-                foreach ($ChildDomain in $ChildDomains) {
+                foreach ($ChildDomain in $ChildDomains | sort-object) {
                     $ChildDomainsInfo = try {
                         Invoke-Command -Session $TempPssSession { Get-ADDomain -Identity $using:ChildDomain }
                     } catch {

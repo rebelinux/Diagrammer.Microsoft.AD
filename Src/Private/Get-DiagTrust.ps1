@@ -34,8 +34,25 @@ function Get-DiagTrust {
                 if ($TrustsInfo) {
                     SubGraph ForestSubGraph -Attributes @{Label = (Get-DiaHTMLLabel -ImagesObj $Images -Label $ForestRoot -IconType "ForestRoot" -IconDebug $IconDebug -SubgraphLabel -IconWidth 50 -IconHeight 50 -Fontsize 22 -fontName 'Segoe UI' -fontColor '#565656') ; fontsize = 24; penwidth = 1.5; labelloc = 't'; style = $SubGraphDebug.style ; color = $SubGraphDebug.color } {
                         SubGraph MainSubGraph -Attributes @{Label = ' ' ; fontsize = 24; penwidth = 1.5; labelloc = 't'; style = $SubGraphDebug.style; color = $SubGraphDebug.color } {
+                            if (($TrustsInfo.ChildDomain | Measure-Object).count -gt 5) {
+
+                                $ChildDomainsNodes = Get-DiaHTMLNodeTable -ImagesObj $Images -inputObject ($ForestInfo | ForEach-Object { $_.ChildDomainLabel }) -Align "Center" -iconType "AD_Domain" -columnSize 4 -IconDebug $IconDebug -MultiIcon -AditionalInfo $ForestInfo.AditionalInfo -fontSize 18
+
+                                Node -Name "ChildDomains" -Attributes @{Label = (Get-DiaHTMLSubGraph -ImagesObj $Images -TableArray $ChildDomainsNodes -Align 'Center' -IconDebug $IconDebug -Label $translate.fChildDomains -LabelPos "top" -TableStyle "dashed,rounded" -TableBorder "1" -columnSize 3 -fontSize 22); shape = 'plain'; fillColor = 'transparent'; fontsize = 18; fontname = "Segoe Ui" }
+
+                                $ForestRootDomain = Remove-SpecialChar -String "$($ForestInfo[0].RootDomain)ForestRoot" -SpecialChars '\-. '
+                                Node -Name $ForestRootDomain -Attributes @{Label = ($ForestInfo | Where-Object { $_.IsForest -eq $True }).RootDomainLabel; shape = "plain"; fillColor = 'transparent' }
+                                Edge -From $ForestRootDomain -To ChildDomains @{minlen = 2 }
+                            } else {
+                                $ForestRootDomain = Remove-SpecialChar -String "$($ForestObj.RootDomain)ForestRoot" -SpecialChars '\-. '
+                                Node -Name $ForestRootDomain -Attributes @{Label = ($ForestInfo | Where-Object { $_.IsForest -eq $True }).RootDomainLabel; shape = "plain"; fillColor = 'transparent' }
+                                foreach ($ForestObj in $ForestInfo) {
+                                    Node -Name $ForestObj.Name -Attributes @{Label = $ForestObj.Label; shape = "plain"; fillColor = 'transparent' }
+                                    Edge -From $ForestRootDomain -To $ForestObj.Name @{minlen = 2 }
+                                }
+                            }
                             foreach ($TrustsObj in $TrustsInfo) {
-                                $SourceDomain = Remove-SpecialChar -String "$($TrustsObj.SourceName)Trusts" -SpecialChars '\-. '
+                                $SourceDomain = Remove-SpecialChar -String "$($TrustsObj.Source)Trusts" -SpecialChars '\-. '
                                 Node -Name $TrustsObj.Name -Attributes @{Label = $TrustsObj.Label; shape = "plain"; fillColor = 'transparent' }
                                 Node -Name $SourceDomain -Attributes @{Label = $TrustsObj.SourceLabel; shape = "plain"; fillColor = 'transparent' }
                                 if ($TrustsObj.Direction -eq 'Bidirectional') {
