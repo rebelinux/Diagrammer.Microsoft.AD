@@ -5,7 +5,7 @@ function Get-ADForestInfo {
     .DESCRIPTION
         Build a diagram of the configuration of Microsoft Active Directory to a supported formats using Psgraph.
     .NOTES
-        Version:        0.2.10
+        Version:        0.2.11
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -31,7 +31,7 @@ function Get-ADForestInfo {
 
             $ForestInfo = @()
             if ($ChildDomains) {
-                foreach ($ChildDomain in $ChildDomains) {
+                foreach ($ChildDomain in $ChildDomains | sort-object) {
                     $ChildDomainsInfo = try {
                         Invoke-Command -Session $TempPssSession { Get-ADDomain -Identity $using:ChildDomain }
                     } catch {
@@ -39,12 +39,12 @@ function Get-ADForestInfo {
                     }
 
                     $FuncionalLevel = @{
-                        Windows2012R2Domain = 'Windows Server 2012 R2 (Domain)'
-                        Windows2012R2Forest = 'Windows Server 2012 R2 (Forest)'
-                        Windows2016Domain = 'Windows Server 2016 (Domain)'
-                        Windows2016Forest = 'Windows Server 2016 (Forest)'
-                        Windows2025Domain = 'Windows Server 2025 (Domain)'
-                        Windows2025Forest = 'Windows Server 2025 (Forest)'
+                        Windows2012R2Domain = '2012 R2 (Domain)'
+                        Windows2012R2Forest = '2012 R2 (Forest)'
+                        Windows2016Domain = '2016 (Domain)'
+                        Windows2016Forest = '2016 (Forest)'
+                        Windows2025Domain = '2025 (Domain)'
+                        Windows2025Forest = '2025 (Forest)'
                     }
 
                     $AditionalForestInfo = [PSCustomObject] [ordered] @{
@@ -52,6 +52,7 @@ function Get-ADForestInfo {
                         $translate.fSchema = $ForestObj.SchemaMaster.ToString().ToUpper().Split(".")[0]
                         $translate.fFuncLevel = $FuncionalLevel[$ForestObj.ForestMode]
                     }
+
                     $AditionalDomainInfo = [PSCustomObject] [ordered] @{
                         $translate.fInfrastructure = Switch ([string]::IsNullOrEmpty($ChildDomainsInfo.InfrastructureMaster)) {
                             $true { 'Unknown' }
@@ -85,9 +86,9 @@ function Get-ADForestInfo {
                     $TempForestInfo = [PSCustomObject]@{
                         Name = Remove-SpecialChar -String "$($ChildDomain)ChildDomain" -SpecialChars '\-. '
                         ChildDomainLabel = $ChildDomain
-                        Label = Get-DiaNodeIcon -Name $ChildDomain -IconType "AD_Domain" -Align "Center" -ImagesObj $Images -IconDebug $IconDebug -RowsOrdered $AditionalDomainInfo
+                        Label = Get-DiaNodeIcon -Name $ChildDomain -IconType "AD_Domain" -Align "Center" -ImagesObj $Images -IconDebug $IconDebug -AditionalInfo $AditionalDomainInfo -FontSize 18
                         RootDomain = $ForestObj.RootDomain
-                        RootDomainLabel = Get-DiaNodeIcon -Name $ForestObj.RootDomain -IconType "AD_Domain" -Align "Center" -ImagesObj $Images -IconDebug $IconDebug -RowsOrdered $AditionalForestInfo
+                        RootDomainLabel = Get-DiaNodeIcon -Name $ForestObj.RootDomain -IconType "AD_Domain" -Align "Center" -ImagesObj $Images -IconDebug $IconDebug -AditionalInfo $AditionalForestInfo -FontSize 18
                         ChildDomain = $ChildDomain
                         AditionalInfo = $AditionalDomainInfo
                         IsForest = $IsForest

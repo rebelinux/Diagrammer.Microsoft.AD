@@ -130,6 +130,15 @@ function New-ADDiagram {
 
         [Parameter(
             Position = 4,
+            Mandatory = $true,
+            HelpMessage = 'Please provide pssession to use for the connection',
+            ParameterSetName = 'PSSession'
+        )]
+        [ValidateNotNullOrEmpty()]
+        $PSSessionObject,
+
+        [Parameter(
+            Position = 5,
             Mandatory = $false,
             HelpMessage = 'Please provide the diagram output format'
         )]
@@ -438,9 +447,14 @@ function New-ADDiagram {
 
             try {
                 # Connection setup
-                $script:TempPssSession = New-PSSession $System -Credential $Credential -Authentication $PSDefaultAuthentication -ErrorAction Stop
-                $script:TempCIMSession = New-CimSession $System -Credential $Credential -Authentication $PSDefaultAuthentication -ErrorAction Stop
-                $script:ADSystem = Invoke-Command -Session $TempPssSession { Get-ADForest -ErrorAction Stop }
+                if ($PSSessionObject) {
+                    $TempPssSession = $PSSessionObject
+                    $script:ADSystem = Invoke-Command -Session $TempPssSession { Get-ADForest -ErrorAction Stop }
+                } else {
+                    Write-Verbose ($translate.psSessionSetup -f $($System))
+                    $script:TempPssSession = New-PSSession $System -Credential $Credential -Authentication $PSDefaultAuthentication -ErrorAction Stop
+                    $script:ADSystem = Invoke-Command -Session $TempPssSession { Get-ADForest -ErrorAction Stop }
+                }
             } Catch { throw ($translate.unableToConnect -f $System) }
 
             $Graph = Graph -Name MicrosoftAD -Attributes $MainGraphAttributes {
@@ -517,13 +531,11 @@ function New-ADDiagram {
             }
         }
     } end {
-        # Remove used PSSession
-        Write-Verbose ($translate.psSession -f $($TempPssSession.Id))
-        Remove-PSSession -Session $TempPssSession
-
-        # Remove used CIMSession
-        Write-Verbose ($translate.cimSession -f $($TempCIMSession.Id))
-        Remove-CimSession -CimSession $TempCIMSession
+        if (-Not $PSSessionObject) {
+            # Remove used PSSession
+            Write-Verbose ($translate.psSession -f $($TempPssSession.Id))
+            Remove-PSSession -Session $TempPssSession
+        }
 
         #Export Diagram
         foreach ($OutputFormat in $Format) {
