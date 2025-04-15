@@ -9,8 +9,8 @@ ConvertFrom-StringData @'
     outputfolderpatherror = OutputFolderPath {0} no es una ruta de carpeta válida.
     runasadmin = La operación solicitada requiere elevación: Ejecute la consola de PowerShell como administrador
     signaturerequirements = New-ADDiagram : AuthorName y CompanyName deben estar definidos si se especifica la opción de firma
-    psSession = Limpiando sesión de PowerShell {0}
-    cimSession = Limpiando sesión de CIM {0}
+    psSessionClear = Limpiando la sesión de PowerShell {0}
+    psSessionSetup = Configurando la sesión de PowerShell para {0}
     unableToConnect = No se puede conectar al servidor de controlador de dominio {0}.
 
     forestgraphlabel = Arquitectura del bosque de Active Directory
@@ -50,21 +50,21 @@ ConvertFrom-StringData @'
     MicrosoftLogo = Logo de Microsoft
 
     SitesDiagramDummyLabel = Sitios
-    sitesgraphlabel = Topología del sitio de Active Directory
+    sitesgraphlabel = Topologia del sitio de Active Directory
     sitesinventorygraphlabel = Inventario del sitio de Active Directory
-    NoSites = No hay topología de sitio
+    NoSites = No hay topologia de sitio
     NoSiteSubnet = No hay subredes de sitio
     siteLinkCost = Costo del enlace del sitio
     siteLinkFrequency = Frecuencia del enlace del sitio
     siteLinkFrequencyMinutes = minutos
     siteLinkName = Enlace del sitio
     NoSiteDC = No hay controladores de dominio del sitio
-    emptySites = No hay topología de sitio disponible para diagramar
+    emptySites = No hay topologia de sitio disponible para diagramar
     connectingSites = Recopilando información de sitios de Microsoft AD desde {0}.
     buildingSites = Construyendo diagrama de sitios de Microsoft AD desde {0}.
 
-    NoTrusts = No hay topología de confianza
-    emptyTrusts = No hay topología de confianza disponible para diagramar
+    NoTrusts = No hay topologia de confianza
+    emptyTrusts = No hay topologia de confianza disponible para diagramar
     connectingSTrusts = Recopilando información de confianza de Microsoft AD desde {0}.
     genDiagTrust = Generando diagrama de confianzas
     trustsDiagramLabel = Dominios y confianzas de Active Directory
@@ -72,7 +72,9 @@ ConvertFrom-StringData @'
     trustDirection = Direccion
     trustType = Forma
     TrustAttributes = Tipo
-    AuthenticationLevel = Nivel de autenticación
+    AuthenticationLevel = Autenticacion
+    TrustRelationships = Relaciones de confianza
+
 
 
     Base64Output = Mostrando cadena Base64

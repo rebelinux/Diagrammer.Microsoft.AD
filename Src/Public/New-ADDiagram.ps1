@@ -448,12 +448,12 @@ function New-ADDiagram {
             try {
                 # Connection setup
                 if ($PSSessionObject) {
-                    Write-Verbose ($translate.psSession -f $($PSSessionObject.Id))
                     $TempPssSession = $PSSessionObject
                     $script:ADSystem = Invoke-Command -Session $TempPssSession { Get-ADForest -ErrorAction Stop }
                 } else {
-                    Write-Verbose ($translate.psSession -f $($System))
+                    Write-Verbose ($translate.psSessionSetup -f $($System))
                     $script:TempPssSession = New-PSSession $System -Credential $Credential -Authentication $PSDefaultAuthentication -ErrorAction Stop
+                    $script:ADSystem = Invoke-Command -Session $TempPssSession { Get-ADForest -ErrorAction Stop }
                 }
             } Catch { throw ($translate.unableToConnect -f $System) }
 

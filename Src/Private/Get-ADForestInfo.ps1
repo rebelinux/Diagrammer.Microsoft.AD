@@ -39,12 +39,12 @@ function Get-ADForestInfo {
                     }
 
                     $FuncionalLevel = @{
-                        Windows2012R2Domain = 'Windows Server 2012 R2 (Domain)'
-                        Windows2012R2Forest = 'Windows Server 2012 R2 (Forest)'
-                        Windows2016Domain = 'Windows Server 2016 (Domain)'
-                        Windows2016Forest = 'Windows Server 2016 (Forest)'
-                        Windows2025Domain = 'Windows Server 2025 (Domain)'
-                        Windows2025Forest = 'Windows Server 2025 (Forest)'
+                        Windows2012R2Domain = '2012 R2 (Domain)'
+                        Windows2012R2Forest = '2012 R2 (Forest)'
+                        Windows2016Domain = '2016 (Domain)'
+                        Windows2016Forest = '2016 (Forest)'
+                        Windows2025Domain = '2025 (Domain)'
+                        Windows2025Forest = '2025 (Forest)'
                     }
 
                     $AditionalForestInfo = [PSCustomObject] [ordered] @{

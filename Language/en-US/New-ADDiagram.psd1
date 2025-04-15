@@ -9,8 +9,8 @@ ConvertFrom-StringData @'
     outputfolderpatherror = OutputFolderPath {0} is not a valid folder path.
     runasadmin = The requested operation requires elevation: Run PowerShell console as administrator
     signaturerequirements = New-ADDiagram : AuthorName and CompanyName must be defined if the Signature option is specified
-    psSession = Clearing PowerShell Session {0}
-    cimSession = Clearing CIM Session {0}
+    psSessionClear = Clearing PowerShell Session {0}
+    psSessionSetup = Setting PowerShell Session for {0}
     unableToConnect = Unable to connect to {0} Domain Controller Server.
 
     forestgraphlabel = Active Directory Forest Architecture
@@ -72,7 +72,8 @@ ConvertFrom-StringData @'
     trustDirection = Direction
     trustType = Flavor
     TrustAttributes = Type
-    AuthenticationLevel = Authentication Level
+    AuthenticationLevel = Authentication
+    TrustRelationships = Trust Relationships
 
     Base64Output = Displaying Base64 string
     DiagramOutput = Microsoft.AD diagram '{0}' has been saved to '{1}'
