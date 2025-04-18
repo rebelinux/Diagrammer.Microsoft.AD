@@ -37,15 +37,15 @@ function Get-DiagSite {
                             if ($SitesInfo.Site) {
                                 foreach ($SitesObj in $SitesInfo) {
                                     $Site = Remove-SpecialChar -String "$($SitesObj.Name)" -SpecialChars '\-. '
-                                    Node -Name $Site -Attributes @{Label = $SitesObj.Name; penwidth = 1; width = 2; height = .5}
+                                    Node -Name $Site -Attributes @{Label = $SitesObj.Name; penwidth = 1; width = 2; height = .5 }
                                     foreach ($Link in $SitesObj.SiteLink) {
                                         $SiteLink = Remove-SpecialChar -String $Link.Name -SpecialChars '\-. '
-                                        Node -Name $SiteLink -Attributes @{Label = (Get-DiaNodeIcon -Name ' ' -IconType "NoIcon" -Align "Center" -IconDebug $IconDebug -RowsOrdered $Link.AditionalInfo -FontSize 10 -NoFontBold); shape = "plain"; fillColor = 'transparent'}
-                                        Edge -From $Site -To $SiteLink @{minlen = 2; arrowtail = 'none'; arrowhead = 'none'}
+                                        Node -Name $SiteLink -Attributes @{Label = (Get-DiaNodeIcon -Name ' ' -IconType "NoIcon" -Align "Center" -IconDebug $IconDebug -RowsOrdered $Link.AditionalInfo -FontSize 10 -NoFontBold); shape = "plain"; fillColor = 'transparent' }
+                                        Edge -From $Site -To $SiteLink @{minlen = 2; arrowtail = 'none'; arrowhead = 'none' }
                                         foreach ($SiteLinkSite in $Link.Sites) {
                                             $SiteIncluded = Remove-SpecialChar -String $SiteLinkSite -SpecialChars '\-. '
-                                            Node -Name $SiteIncluded -Attributes @{Label = $SiteLinkSite; penwidth = 1; width = 2; height = .5}
-                                            Edge -From $SiteLink -To $SiteIncluded @{minlen = 2; arrowtail = 'none'; arrowhead = 'normal'}
+                                            Node -Name $SiteIncluded -Attributes @{Label = $SiteLinkSite; penwidth = 1; width = 2; height = .5 }
+                                            Edge -From $SiteLink -To $SiteIncluded @{minlen = 2; arrowtail = 'none'; arrowhead = 'normal' }
 
                                         }
                                     }

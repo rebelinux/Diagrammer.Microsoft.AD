@@ -37,7 +37,7 @@ function Get-ADSitesInfo {
                                     'Name' = $Link
                                     'Sites' = $SitesLinkInfo.SitesIncluded | ForEach-Object { ConvertTo-ADObjectName -Session $TempPssSession -DN $_ -DC $System }
                                     'AditionalInfo' = [PSCustomObject][ordered]@{
-                                        $translate.siteLinkName  = $Link
+                                        $translate.siteLinkName = $Link
                                         $translate.siteLinkCost = $SitesLinkInfo.Cost
                                         $translate.siteLinkFrequency = "$($SitesLinkInfo.ReplicationFrequencyInMinutes) $($translate.siteLinkFrequencyMinutes)"
                                     }

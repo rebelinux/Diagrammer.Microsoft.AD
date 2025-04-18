@@ -80,10 +80,10 @@ function New-ADDiagram {
         https://github.com/KevinMarquette/PSGraph
     #>
 
-    [Diagnostics.CodeAnalysis.SuppressMessage(
-        'PSUseShouldProcessForStateChangingFunctions',
-        ''
-    )]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingConvertToSecureStringWithPlainText", "", Scope = "Function")]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingUserNameAndPassWordParams", "", Scope = "Function")]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidUsingPlainTextForPassword", "", Scope = "Function")]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "", Scope = "Function")]
 
     [CmdletBinding(
         PositionalBinding = $false,
