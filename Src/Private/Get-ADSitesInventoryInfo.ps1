@@ -45,7 +45,7 @@ function Get-ADSitesInventoryInfo {
 
                             $SubnetTable += [PSCustomObject]@{
                                 Name = Remove-SpecialChar -String "$($Site.Name)SubNets" -SpecialChars '\-. '
-                                Label = (Get-DiaHtmlTable -ImagesObj $Images -Rows $SubnetArray -Columnsize 3 -Align 'Center' -IconDebug $IconDebug)
+                                Label = (Get-DiaHTMLTable -ImagesObj $Images -Rows $SubnetArray -ColumnSize 3 -Align 'Center' -IconDebug $IconDebug)
                                 SubnetArray = $SubnetArray
                             }
 
@@ -64,7 +64,7 @@ function Get-ADSitesInventoryInfo {
 
                             $DCsTable += [PSCustomObject]@{
                                 Name = Remove-SpecialChar -String "$($Site.Name)DCs" -SpecialChars '\-. '
-                                Label = (Get-DiaHtmlTable -Rows $DCsArray -Columnsize 3 -Align 'Center' -ImagesObj $Images -IconDebug $IconDebug)
+                                Label = (Get-DiaHTMLTable -Rows $DCsArray -ColumnSize 3 -Align 'Center' -ImagesObj $Images -IconDebug $IconDebug)
                                 DCsArray = $DCsArray
                             }
 
