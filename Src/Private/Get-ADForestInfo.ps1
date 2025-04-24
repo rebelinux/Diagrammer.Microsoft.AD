@@ -26,7 +26,7 @@ function Get-ADForestInfo {
             $ForestObj = $ADSystem
             $ChildDomains = $ADSystem.Domains
 
-            $ChildDomains = @("pharmax.local", "acad.pharmax.local", "hr.pharmax.local", "fin.pharmax.local", "it.pharmax.local", "admin.pharmax.local")
+            # $ChildDomains = @("pharmax.local", "acad.pharmax.local", "hr.pharmax.local", "fin.pharmax.local", "it.pharmax.local", "admin.pharmax.local")
             # $ChildDomains = @("pharmax.local")
 
             $ForestInfo = @()
