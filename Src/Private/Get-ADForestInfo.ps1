@@ -5,7 +5,7 @@ function Get-ADForestInfo {
     .DESCRIPTION
         Build a diagram of the configuration of Microsoft Active Directory to a supported formats using Psgraph.
     .NOTES
-        Version:        0.2.11
+        Version:        0.2.14
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
