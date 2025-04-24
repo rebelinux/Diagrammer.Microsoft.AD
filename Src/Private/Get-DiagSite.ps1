@@ -32,19 +32,19 @@ function Get-DiagSite {
                 $SitesInfo = Get-ADSitesInfo
 
                 if ($SitesInfo) {
-                    SubGraph ForestSubGraph -Attributes @{Label = (Get-DiaHTMLLabel -ImagesObj $Images -Label $ForestRoot -IconType "ForestRoot" -IconDebug $IconDebug -SubgraphLabel -IconWidth 50 -IconHeight 50 -Fontsize 22 -fontName 'Segoe UI' -fontColor '#565656' ) ; fontsize = 24; penwidth = 1.5; labelloc = 't'; style = $SubGraphDebug.style ; color = $SubGraphDebug.color } {
+                    SubGraph ForestSubGraph -Attributes @{Label = (Get-DiaHTMLLabel -ImagesObj $Images -Label $ForestRoot -IconType "ForestRoot" -IconDebug $IconDebug -SubgraphLabel -IconWidth 50 -IconHeight 50 -Fontsize 22 -fontName 'Segoe UI' -fontColor $Fontcolor ) ; fontsize = 24; penwidth = 1.5; labelloc = 't'; style = $SubGraphDebug.style ; color = $SubGraphDebug.color } {
                         SubGraph MainSubGraph -Attributes @{Label = ' ' ; fontsize = 24; penwidth = 1.5; labelloc = 't'; style = $SubGraphDebug.style; color = $SubGraphDebug.color } {
                             if ($SitesInfo.Site) {
                                 foreach ($SitesObj in $SitesInfo) {
                                     $Site = Remove-SpecialChar -String "$($SitesObj.Name)" -SpecialChars '\-. '
-                                    Node -Name $Site -Attributes @{Label = $SitesObj.Name; penwidth = 1; width = 2; height = .5 }
+                                    Node -Name $Site -Attributes @{Label = $SitesObj.Name; penwidth = 1; width = 2; height = .5; fillColor = '#003099'}
                                     foreach ($Link in $SitesObj.SiteLink) {
                                         $SiteLink = Remove-SpecialChar -String $Link.Name -SpecialChars '\-. '
                                         Node -Name $SiteLink -Attributes @{Label = (Get-DiaNodeIcon -Name ' ' -IconType "NoIcon" -Align "Center" -IconDebug $IconDebug -RowsOrdered $Link.AditionalInfo -FontSize 10 -NoFontBold); shape = "plain"; fillColor = 'transparent' }
                                         Edge -From $Site -To $SiteLink @{minlen = 2; arrowtail = 'none'; arrowhead = 'none' }
                                         foreach ($SiteLinkSite in $Link.Sites) {
                                             $SiteIncluded = Remove-SpecialChar -String $SiteLinkSite -SpecialChars '\-. '
-                                            Node -Name $SiteIncluded -Attributes @{Label = $SiteLinkSite; penwidth = 1; width = 2; height = .5 }
+                                            Node -Name $SiteIncluded -Attributes @{Label = $SiteLinkSite; penwidth = 1; width = 2; height = .5; fillColor = '#003099' }
                                             Edge -From $SiteLink -To $SiteIncluded @{minlen = 2; arrowtail = 'none'; arrowhead = 'normal' }
 
                                         }

@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bump version to 0.2.13
 - Increase Diagrammer.Core minimum version requirement to v0.2.24
 - Refine code formatting in various scripts for consistency
+- Add theme to diagrams
+  - Neon
+  - Black
+  - White
 
 ## [0.2.12] - 2025-04-15
 
