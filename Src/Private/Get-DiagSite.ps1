@@ -5,7 +5,7 @@ function Get-DiagSite {
     .DESCRIPTION
         Build a diagram of the configuration of Microsoft Active Directory to a supported formats using Psgraph.
     .NOTES
-        Version:        0.2.10
+        Version:        0.2.14
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -37,16 +37,15 @@ function Get-DiagSite {
                             if ($SitesInfo.Site) {
                                 foreach ($SitesObj in $SitesInfo) {
                                     $Site = Remove-SpecialChar -String "$($SitesObj.Name)" -SpecialChars '\-. '
-                                    Node -Name $Site -Attributes @{Label = $SitesObj.Name; penwidth = 1; width = 2; height = .5; fillColor = '#003099'}
+                                    Node -Name $Site -Attributes @{Label = $SitesObj.Name; penwidth = 1; width = 2; height = .5; fillColor = '#99ceff' }
                                     foreach ($Link in $SitesObj.SiteLink) {
                                         $SiteLink = Remove-SpecialChar -String $Link.Name -SpecialChars '\-. '
                                         Node -Name $SiteLink -Attributes @{Label = (Get-DiaNodeIcon -Name ' ' -IconType "NoIcon" -Align "Center" -IconDebug $IconDebug -RowsOrdered $Link.AditionalInfo -FontSize 10 -NoFontBold); shape = "plain"; fillColor = 'transparent' }
                                         Edge -From $Site -To $SiteLink @{minlen = 2; arrowtail = 'none'; arrowhead = 'none' }
                                         foreach ($SiteLinkSite in $Link.Sites) {
                                             $SiteIncluded = Remove-SpecialChar -String $SiteLinkSite -SpecialChars '\-. '
-                                            Node -Name $SiteIncluded -Attributes @{Label = $SiteLinkSite; penwidth = 1; width = 2; height = .5; fillColor = '#003099' }
+                                            Node -Name $SiteIncluded -Attributes @{Label = $SiteLinkSite; penwidth = 1; width = 2; height = .5; fillColor = '#99ceff' }
                                             Edge -From $SiteLink -To $SiteIncluded @{minlen = 2; arrowtail = 'none'; arrowhead = 'normal' }
-
                                         }
                                     }
                                 }

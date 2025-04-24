@@ -5,7 +5,7 @@ function Get-DiagSiteInventory {
     .DESCRIPTION
         Build a diagram of the configuration of Microsoft Active Directory to a supported formats using Psgraph.
     .NOTES
-        Version:        0.2.10
+        Version:        0.2.14
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -44,12 +44,12 @@ function Get-DiagSiteInventory {
 
                                         $ChildDCsNodes = Get-DiaHTMLTable -ImagesObj $Images -Rows $SiteGroupOBJ.DomainControllers.DCsArray -Align 'Center' -ColumnSize 3 -IconDebug $IconDebug -TableStyle "dashed,rounded" -NoFontBold -FontSize 18
 
-                                        $ChildDCsNodesSubgraph = Get-DiaHTMLSubGraph -ImagesObj $Images -TableArray $ChildDCsNodes -Align 'Center' -IconDebug $IconDebug -Label $translate.DomainControllers -LabelPos "top" -TableStyle "dashed,rounded" -TableBorder "1" -columnSize 3 -TableBorderColor "gray" -fontColor "#71797E" -IconType "AD_DC" -fontSize 18
+                                        $ChildDCsNodesSubgraph = Get-DiaHTMLSubGraph -ImagesObj $Images -TableArray $ChildDCsNodes -Align 'Center' -IconDebug $IconDebug -Label $translate.DomainControllers -LabelPos "top" -TableStyle "dashed,rounded" -TableBorder "1" -columnSize 3 -TableBorderColor "gray" -fontColor $Fontcolor -IconType "AD_DC" -fontSize 18
 
                                     } else {
                                         $SubGraphNameSN = Remove-SpecialChar -String $SiteGroupOBJ.Name -SpecialChars '\-. '
 
-                                        $ChildDCsNodesSubgraph = Get-DiaHTMLSubGraph -ImagesObj $Images -TableArray $translate.NoSiteDC -Align 'Center' -IconDebug $IconDebug -Label $translate.DomainControllers -LabelPos "top" -TableStyle "dashed,rounded" -TableBorder "1" -columnSize 3 -TableBorderColor "gray" -fontColor "#71797E" -IconType "AD_DC" -fontSize 22
+                                        $ChildDCsNodesSubgraph = Get-DiaHTMLSubGraph -ImagesObj $Images -TableArray $translate.NoSiteDC -Align 'Center' -IconDebug $IconDebug -Label $translate.DomainControllers -LabelPos "top" -TableStyle "dashed,rounded" -TableBorder "1" -columnSize 3 -TableBorderColor "gray" -fontColor $Fontcolor -IconType "AD_DC" -fontSize 22
                                     }
 
                                     if ($SiteGroupOBJ.Subnets.SubnetArray) {
@@ -57,21 +57,21 @@ function Get-DiagSiteInventory {
 
                                         $ChildSubnetsNodes = Get-DiaHTMLTable -ImagesObj $Images -Rows $SiteGroupOBJ.Subnets.SubnetArray -Align 'Center' -ColumnSize 3 -IconDebug $IconDebug -TableStyle "dashed,rounded" -NoFontBold -FontSize 18
 
-                                        $ChildSubnetsNodesSubgraph = Get-DiaHTMLSubGraph -ImagesObj $Images -TableArray $ChildSubnetsNodes -Align 'Center' -IconDebug $IconDebug -Label $translate.Subnets -LabelPos "top" -TableStyle "dashed,rounded" -TableBorder "1" -columnSize 3 -TableBorderColor "gray" -fontColor "#71797E" -IconType "AD_Site_Subnet" -fontSize 22
+                                        $ChildSubnetsNodesSubgraph = Get-DiaHTMLSubGraph -ImagesObj $Images -TableArray $ChildSubnetsNodes -Align 'Center' -IconDebug $IconDebug -Label $translate.Subnets -LabelPos "top" -TableStyle "dashed,rounded" -TableBorder "1" -columnSize 3 -TableBorderColor "gray" -fontColor $Fontcolor -IconType "AD_Site_Subnet" -fontSize 22
                                     } else {
                                         $SubGraphNameSN = Remove-SpecialChar -String $SiteGroupOBJ.Name -SpecialChars '\-. '
 
-                                        $ChildSubnetsNodesSubgraph = Get-DiaHTMLSubGraph -ImagesObj $Images -TableArray $translate.NoSiteSubnet -Align 'Center' -IconDebug $IconDebug -Label $translate.Subnets -LabelPos "top" -TableStyle "dashed,rounded" -TableBorder "1" -columnSize 3 -TableBorderColor "gray" -fontColor "#71797E" -IconType "AD_Site_Subnet" -fontSize 22
+                                        $ChildSubnetsNodesSubgraph = Get-DiaHTMLSubGraph -ImagesObj $Images -TableArray $translate.NoSiteSubnet -Align 'Center' -IconDebug $IconDebug -Label $translate.Subnets -LabelPos "top" -TableStyle "dashed,rounded" -TableBorder "1" -columnSize 3 -TableBorderColor "gray" -fontColor $Fontcolor -IconType "AD_Site_Subnet" -fontSize 22
                                     }
 
                                     $ChildSiteSubgraph = @()
 
                                     $ChildSiteSubgraph += $ChildDCsNodesSubgraph, $ChildSubnetsNodesSubgraph
 
-                                    $ChildSiteSubgraphArray += Get-DiaHTMLSubGraph -ImagesObj $Images -TableArray $ChildSiteSubgraph -Align 'Center' -IconType "AD_Site" -IconDebug $IconDebug -Label $SiteGroupOBJ.Name -LabelPos "top" -TableStyle "dashed,rounded" -TableBorder "1" -columnSize 3 -TableBorderColor "gray" -fontColor "#71797E" -fontSize 22
+                                    $ChildSiteSubgraphArray += Get-DiaHTMLSubGraph -ImagesObj $Images -TableArray $ChildSiteSubgraph -Align 'Center' -IconType "AD_Site" -IconDebug $IconDebug -Label $SiteGroupOBJ.Name -LabelPos "top" -TableStyle "dashed,rounded" -TableBorder "1" -columnSize 3 -TableBorderColor "gray" -fontColor $Fontcolor -fontSize 22
                                 }
 
-                                Node -Name "SitesTopology" -Attributes @{Label = (Get-DiaHTMLSubGraph -ImagesObj $Images -TableArray $ChildSiteSubgraphArray -Align 'Center' -IconDebug $IconDebug -Label $translate.Sites -LabelPos "top" -TableStyle "dashed,rounded" -TableBorder "1" -columnSize 3 -TableBorderColor "gray" -fontColor "#71797E" -fontSize 22); shape = 'plain'; fillColor = 'transparent'; fontsize = 14; fontname = "Segoe Ui" }
+                                Node -Name "SitesTopology" -Attributes @{Label = (Get-DiaHTMLSubGraph -ImagesObj $Images -TableArray $ChildSiteSubgraphArray -Align 'Center' -IconDebug $IconDebug -Label $translate.Sites -LabelPos "top" -TableStyle "dashed,rounded" -TableBorder "1" -columnSize 3 -TableBorderColor "gray" -fontColor $Fontcolor -fontSize 22); shape = 'plain'; fillColor = 'transparent'; fontsize = 14; fontname = "Segoe Ui" }
 
                             } else {
                                 Node -Name NoSites -Attributes @{Label = $translate.NoSites; shape = "rectangle"; labelloc = 'c'; fixedsize = $true; width = "3"; height = "2"; fillColor = 'transparent'; penwidth = 0 }

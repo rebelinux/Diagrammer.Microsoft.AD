@@ -5,7 +5,7 @@ function Get-DiagForest {
     .DESCRIPTION
         Build a diagram of the configuration of Microsoft Active Directory to a supported formats using Psgraph.
     .NOTES
-        Version:        0.2.11
+        Version:        0.2.14
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -38,7 +38,7 @@ function Get-DiagForest {
 
                                 $ChildDomainsNodes = Get-DiaHTMLNodeTable -ImagesObj $Images -inputObject ($ForestInfo | ForEach-Object { $_.ChildDomainLabel }) -Align "Center" -iconType "AD_Domain" -columnSize 4 -IconDebug $IconDebug -MultiIcon -AditionalInfo $ForestInfo.AditionalInfo -fontSize 18 -fontColor $Fontcolor -TableBorderColor $Edgecolor
 
-                                Node -Name "ChildDomains" -Attributes @{Label = (Get-DiaHTMLSubGraph -ImagesObj $Images -TableArray $ChildDomainsNodes -Align 'Center' -IconDebug $IconDebug -Label $translate.fChildDomains -LabelPos "top" -TableStyle "dashed,rounded" -TableBorder "1" -columnSize 3 -fontSize 22); shape = 'plain'; fillColor = 'transparent'; fontsize = 18; fontname = "Segoe Ui" }
+                                Node -Name "ChildDomains" -Attributes @{Label = (Get-DiaHTMLSubGraph -ImagesObj $Images -TableArray $ChildDomainsNodes -Align 'Center' -IconDebug $IconDebug -Label $translate.fChildDomains -LabelPos "top" -TableStyle "dashed,rounded" -TableBorder "1" -columnSize 3 -fontSize 22 -fontColor $Fontcolor -TableBorderColor $Edgecolor); shape = 'plain'; fillColor = 'transparent'; fontsize = 18; fontname = "Segoe Ui" }
 
                                 $ForestRootDomain = Remove-SpecialChar -String "$($ForestInfo[0].RootDomain)ForestRoot" -SpecialChars '\-. '
                                 Node -Name $ForestRootDomain -Attributes @{Label = ($ForestInfo | Where-Object { $_.IsForest -eq $True }).RootDomainLabel; shape = "plain"; fillColor = 'transparent' }
