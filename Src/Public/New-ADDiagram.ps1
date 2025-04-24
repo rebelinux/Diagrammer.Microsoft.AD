@@ -309,7 +309,13 @@ function New-ADDiagram {
             HelpMessage = 'Allow the specified the text language'
         )]
         [ValidateSet('en-US', 'es-ES')]
-        [string] $UICulture
+        [string] $UICulture,
+        [Parameter(
+            Mandatory = $false,
+            HelpMessage = 'Use it to set the diagram theme. (Black/White/Neon)'
+        )]
+        [ValidateSet('Black', 'White', 'Neon')]
+        [string] $DiagramTheme = 'White'
     )
 
 
@@ -397,6 +403,30 @@ function New-ADDiagram {
             $script:NodeDebug = @{color = 'transparent'; style = 'transparent' }
         }
 
+        # Used to set diagram theme
+        if ($DiagramTheme -eq 'Black') {
+            $MainGraphBGColor = 'Black'
+            $Edgecolor = 'White'
+            $Fontcolor = 'White'
+            $NodeFontcolor = 'White'
+            $EdgeArrowSize = 1
+            $EdgeLineWidth = 1
+        } elseif ($DiagramTheme -eq 'Neon') {
+            $MainGraphBGColor = 'grey14'
+            $Edgecolor = 'gold2'
+            $Fontcolor = 'gold2'
+            $NodeFontcolor = 'gold2'
+            $EdgeArrowSize = 1
+            $EdgeLineWidth = 1
+        } elseif ($DiagramTheme -eq 'White') {
+            $MainGraphBGColor = 'White'
+            $Edgecolor = '#71797E'
+            $Fontcolor = '#565656'
+            $NodeFontcolor = 'Black'
+            $EdgeArrowSize = 1
+            $EdgeLineWidth = 1
+        }
+
         $Dir = switch ($Direction) {
             'top-to-bottom' { 'TB' }
             'left-to-right' { 'LR' }
@@ -423,7 +453,7 @@ function New-ADDiagram {
             splines = $EdgeType
             penwidth = 1.5
             fontname = "Segoe UI"
-            fontcolor = '#71797E'
+            fontcolor = $Fontcolor
             fontsize = 32
             style = "dashed"
             labelloc = 't'
@@ -432,6 +462,7 @@ function New-ADDiagram {
             ranksep = $SectionSeparation
             ratio = 'auto'
             rotate = $Rotate
+            bgcolor = $MainGraphBGColor
         }
         if ($DiagramType -eq 'Sites') {
             $MainGraphAttributes.Add('concentrate', 'true')
@@ -463,21 +494,23 @@ function New-ADDiagram {
                     shape = 'rectangle'
                     labelloc = 'c'
                     style = 'filled'
-                    fillColor = '#99ceff'
-                    fontsize = 14;
+                    fillColor = 'transparent'
                     imagescale = $true
                     color = "#003099"
                     penwidth = 3
                     fontname = "Segoe UI"
+                    fontsize = $NodeFontSize
+                    fontcolor = $NodeFontcolor
                 }
                 # Edge default theme
                 Edge @{
                     style = 'dashed'
                     dir = 'both'
                     arrowtail = 'dot'
-                    color = '#71797E'
-                    penwidth = 1.5
-                    arrowsize = 1
+                    color = $Edgecolor
+                    penwidth = $EdgeLineWidth
+                    arrowsize = $EdgeArrowSize
+                    fontcolor = $Edgecolor
                 }
 
                 if ($Signature) {
@@ -498,7 +531,7 @@ function New-ADDiagram {
                     Write-Verbose $translate.genDiagramSignature
 
                     # Main Graph SubGraph
-                    SubGraph MainGraph -Attributes @{Label = (Get-DiaHTMLLabel -ImagesObj $Images -Label $MainGraphLabel -IconType $CustomLogo -IconDebug $IconDebug -IconWidth 250 -IconHeight 80 -Fontsize 24 -fontName 'Segoe UI Bold' -fontColor '#565656' ); fontsize = 22; penwidth = 0; labelloc = 't'; labeljust = "c" } {
+                    SubGraph MainGraph -Attributes @{Label = (Get-DiaHTMLLabel -ImagesObj $Images -Label $MainGraphLabel -IconType $CustomLogo -IconDebug $IconDebug -IconWidth 250 -IconHeight 80 -Fontsize 24 -fontName 'Segoe UI Bold' -fontColor $Fontcolor ); fontsize = 22; penwidth = 0; labelloc = 't'; labeljust = "c" } {
                         Write-Verbose $translate.genDiagramMain
 
                         $script:ForestRoot = $ADSystem.Name.ToString().ToUpper()
