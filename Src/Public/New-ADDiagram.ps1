@@ -69,7 +69,7 @@ function New-ADDiagram {
     .PARAMETER WatermarkColor
         Allow to specified the color used for the watermark text. Default: Blue.
     .NOTES
-        Version:        0.2.9
+        Version:        0.2.15
         Author(s):      Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -234,7 +234,7 @@ function New-ADDiagram {
             Mandatory = $true,
             HelpMessage = 'Controls type of Active Directory generated diagram'
         )]
-        [ValidateSet('Forest', 'Domain', 'Sites', 'SitesInventory', 'Trusts', 'CertificateAuthority')]
+        [ValidateSet('Forest', 'Sites', 'SitesInventory', 'Trusts', 'CertificateAuthority')]
         [string] $DiagramType,
 
         [Parameter(
@@ -321,16 +321,6 @@ function New-ADDiagram {
 
     begin {
 
-        if ($Format -ne 'base64') {
-            Write-ColorOutput -Color 'Blue' -String 'Please wait while the Microsoft.AD diagram is being generated.'
-        }
-
-        $Verbose = if ($PSBoundParameters.ContainsKey('Verbose')) {
-            $PSCmdlet.MyInvocation.BoundParameters["Verbose"].IsPresent
-        } else {
-            $false
-        }
-
         # Setup all paths required for script to run
         $script:RootPath = Split-Path (Split-Path $PSScriptRoot -Parent) -Parent
         $script:IconPath = Join-Path $RootPath 'icons'
@@ -344,6 +334,46 @@ function New-ADDiagram {
 
             # Default language en-US
             Import-LocalizedData -BaseDirectory ($RootPath + "\Language") -BindingVariable translate -ErrorAction SilentlyContinue
+        }
+
+        $MainGraphLabel = Switch ($DiagramType) {
+            'Forest' { $translate.forestgraphlabel }
+            'Domain' { $translate.domaingraphlabel }
+            'Sites' { $translate.sitesgraphlabel }
+            'SitesInventory' { $translate.sitesinventorygraphlabel }
+            'Trusts' { $translate.trustsDiagramLabel }
+            'CertificateAuthority' { $translate.caDiagramLabel }
+        }
+
+        if ($Format -ne 'base64') {
+            Write-ColorOutput -Color 'Blue' -String ($translate.genMain -f $MainGraphLabel)
+            Write-ColorOutput  -Color 'White' -String $translate.InfoProject
+            Write-ColorOutput  -Color 'White' -String $translate.InfoDocumentation
+            Write-ColorOutput  -Color 'White' -String $translate.InfoIssues
+            Write-ColorOutput  -Color 'White' -String $translate.InfoCommunity
+
+
+            # Check the current Diagrammer.Microsoft.AD module
+            Try {
+                $InstalledVersion = Get-Module -ListAvailable -Name Diagrammer.Microsoft.AD -ErrorAction SilentlyContinue | Sort-Object -Property Version -Descending | Select-Object -First 1 -ExpandProperty Version
+
+                if ($InstalledVersion) {
+                    Write-ColorOutput  -Color 'White' -String ($translate.InfoVersion -f $($InstalledVersion.ToString()))
+                    $LatestVersion = Find-Module -Name Diagrammer.Microsoft.AD -Repository PSGallery -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Version
+                    if ([version]$InstalledVersion -lt [version]$LatestVersion) {
+                        Write-ColorOutput  -Color 'Yellow' -String ($translate.WarningUpdate -f $($LatestVersion.ToString()))
+                        Write-ColorOutput  -Color 'Yellow' -String $translate.WarningUpdateCommand
+                    }
+                }
+            } Catch {
+                Write-Warning $_.Exception.Message
+            }
+        }
+
+        $Verbose = if ($PSBoundParameters.ContainsKey('Verbose')) {
+            $PSCmdlet.MyInvocation.BoundParameters["Verbose"].IsPresent
+        } else {
+            $false
         }
 
         # If Username and Password parameters used, convert specified Password to secure string and store in $Credential
@@ -376,15 +406,6 @@ function New-ADDiagram {
         }
         if ($OSType -eq 'Server' -or $OSType -eq 'DomainController') {
             Get-RequiredFeature -Name RSAT-AD-PowerShell -OSType $OSType
-        }
-
-        $MainGraphLabel = Switch ($DiagramType) {
-            'Forest' { $translate.forestgraphlabel }
-            'Domain' { $translate.domaingraphlabel }
-            'Sites' { $translate.sitesgraphlabel }
-            'SitesInventory' { $translate.sitesinventorygraphlabel }
-            'Trusts' { $translate.trustsDiagramLabel }
-            'CertificateAuthority' { $translate.caDiagramLabel }
         }
 
         $script:IconDebug = $false
@@ -578,7 +599,7 @@ function New-ADDiagram {
             if ($OutputDiagram) {
                 if ($OutputFormat -ne 'Base64') {
                     # If not Base64 format return image path
-                    Write-ColorOutput -Color 'White' -String ($translate.DiagramOutput -f $OutputDiagram.Name, $OutputDiagram.Directory)
+                    Write-ColorOutput -Color 'White' -String ($translate.DiagramOutput -f $MainGraphLabel, $OutputDiagram.Name, $OutputDiagram.Directory)
                 } else {
                     Write-Verbose $translate.Base64Output
                     # Return Base64 string

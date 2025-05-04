@@ -1,6 +1,6 @@
 ﻿# culture="es-ES"
 ConvertFrom-StringData @'
-    genMain = Por favor espere mientras se genera el diagrama de Microsoft.AD
+    genMain = Por favor espere mientras se genera el diagrama: {0}
     gereratingDiag= Generando diagrama de {0}
     diagramSignature = No se ha especificado la firma del diagrama
     genDiagramSignature = Generando Subgráfica de la firma
@@ -12,6 +12,13 @@ ConvertFrom-StringData @'
     psSessionClear = Limpiando la sesión de PowerShell {0}
     psSessionSetup = Configurando la sesión de PowerShell para {0}
     unableToConnect = No se puede conectar al servidor de controlador de dominio {0}.
+    InfoProject = Informacion: Consulte el sitio web de Diagrammer.Microsoft.AD en GitHub para obtener información más detallada sobre este proyecto.
+    InfoDocumentation = Información: Documentación: https://github.com/rebelinux/Diagrammer.Microsoft.AD
+    InfoIssues = Información: Reporte de problemas o errores: https://github.com/rebelinux/Diagrammer.Microsoft.AD/issues
+    InfoCommunity = Información: Este proyecto es mantenido por la comunidad y no cuenta con patrocinio de Microsoft, sus empleados o cualquiera de sus afiliados.
+    InfoVersion = Información: Diagrammer.Microsoft.AD {0} está actualmente instalado.
+    WarningUpdate = Advertencia: La actualización {0} de Diagrammer.Microsoft.AD está disponible.
+    WarningUpdateCommand = Advertencia: Ejecute 'Update-Module -Name Diagrammer.Microsoft.AD -Force' para instalar la última versión.
 
     forestgraphlabel = Arquitectura del bosque de Active Directory
     domaingraphlabel = Arquitectura del dominio de Active Directory
@@ -78,7 +85,7 @@ ConvertFrom-StringData @'
 
 
     Base64Output = Mostrando cadena Base64
-    DiagramOutput = El diagrama de Microsoft.AD '{0}' se ha guardado en '{1}'
+    DiagramOutput = El diagrama de {0} '{1}' se ha guardado en '{2}'
 
     caDiagramLabel = Autoridad de Certificacion de Active Directory
     caStdRootCA = Autoridad de Certificacion Raiz Independiente
