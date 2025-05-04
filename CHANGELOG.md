@@ -10,7 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Bump version to 0.2.15
-- Update localization strings for improved user guidance, and refine diagram output messages.
+- Update localization strings for improved user guidance, and refine diagram output messages
+- Refactor Get-DiagSiteInventory to eliminate redundant calls to Remove-SpecialChar for improved readability and performance
 
 ### Removed
 

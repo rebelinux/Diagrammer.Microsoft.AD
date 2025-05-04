@@ -37,29 +37,24 @@ function Get-DiagSiteInventory {
                             if (($SitesGroups | Measure-Object).Count -ge 1) {
                                 $ChildSiteSubgraphArray = @()
                                 foreach ($SiteGroupOBJ in $SitesGroups) {
-                                    $SubGraphName = Remove-SpecialChar -String $SiteGroupOBJ.Name -SpecialChars '\-. '
 
                                     if ($SiteGroupOBJ.DomainControllers.DCsArray) {
-                                        $SubGraphNameSN = Remove-SpecialChar -String $SiteGroupOBJ.Name -SpecialChars '\-. '
 
                                         $ChildDCsNodes = Get-DiaHTMLTable -ImagesObj $Images -Rows $SiteGroupOBJ.DomainControllers.DCsArray -Align 'Center' -ColumnSize 3 -IconDebug $IconDebug -TableStyle "dashed,rounded" -NoFontBold -FontSize 18
 
                                         $ChildDCsNodesSubgraph = Get-DiaHTMLSubGraph -ImagesObj $Images -TableArray $ChildDCsNodes -Align 'Center' -IconDebug $IconDebug -Label $translate.DomainControllers -LabelPos "top" -TableStyle "dashed,rounded" -TableBorder "1" -columnSize 3 -TableBorderColor "gray" -fontColor $Fontcolor -IconType "AD_DC" -fontSize 18
 
                                     } else {
-                                        $SubGraphNameSN = Remove-SpecialChar -String $SiteGroupOBJ.Name -SpecialChars '\-. '
 
                                         $ChildDCsNodesSubgraph = Get-DiaHTMLSubGraph -ImagesObj $Images -TableArray $translate.NoSiteDC -Align 'Center' -IconDebug $IconDebug -Label $translate.DomainControllers -LabelPos "top" -TableStyle "dashed,rounded" -TableBorder "1" -columnSize 3 -TableBorderColor "gray" -fontColor $Fontcolor -IconType "AD_DC" -fontSize 22
                                     }
 
                                     if ($SiteGroupOBJ.Subnets.SubnetArray) {
-                                        $SubGraphNameSN = Remove-SpecialChar -String $SiteGroupOBJ.Name -SpecialChars '\-. '
 
                                         $ChildSubnetsNodes = Get-DiaHTMLTable -ImagesObj $Images -Rows $SiteGroupOBJ.Subnets.SubnetArray -Align 'Center' -ColumnSize 3 -IconDebug $IconDebug -TableStyle "dashed,rounded" -NoFontBold -FontSize 18
 
                                         $ChildSubnetsNodesSubgraph = Get-DiaHTMLSubGraph -ImagesObj $Images -TableArray $ChildSubnetsNodes -Align 'Center' -IconDebug $IconDebug -Label $translate.Subnets -LabelPos "top" -TableStyle "dashed,rounded" -TableBorder "1" -columnSize 3 -TableBorderColor "gray" -fontColor $Fontcolor -IconType "AD_Site_Subnet" -fontSize 22
                                     } else {
-                                        $SubGraphNameSN = Remove-SpecialChar -String $SiteGroupOBJ.Name -SpecialChars '\-. '
 
                                         $ChildSubnetsNodesSubgraph = Get-DiaHTMLSubGraph -ImagesObj $Images -TableArray $translate.NoSiteSubnet -Align 'Center' -IconDebug $IconDebug -Label $translate.Subnets -LabelPos "top" -TableStyle "dashed,rounded" -TableBorder "1" -columnSize 3 -TableBorderColor "gray" -fontColor $Fontcolor -IconType "AD_Site_Subnet" -fontSize 22
                                     }
