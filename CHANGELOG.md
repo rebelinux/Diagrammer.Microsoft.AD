@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bump version to 0.2.15
 - Update localization strings for improved user guidance, and refine diagram output messages.
 
+### Removed
+
+- Remove unused rules from PSScriptAnalyzer settings for cleaner code analysis
+
 ## [0.2.14] - 2025-04-24
 
 ### Changed
