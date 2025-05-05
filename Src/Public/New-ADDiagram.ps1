@@ -67,7 +67,7 @@ function New-ADDiagram {
     .PARAMETER WatermarkText
         Allow to add a watermark to the output image (Not supported in svg format).
     .PARAMETER WatermarkColor
-        Allow to specified the color used for the watermark text. Default: Blue.
+        Allow to specified the color used for the watermark text. Default: #565656.
     .NOTES
         Version:        0.2.15
         Author(s):      Jonathan Colon
@@ -302,7 +302,7 @@ function New-ADDiagram {
             Mandatory = $false,
             HelpMessage = 'Allow to specified the color used for the watermark text'
         )]
-        [string] $WaterMarkColor = 'Blue',
+        [string] $WaterMarkColor = '#565656',
 
         [Parameter(
             Mandatory = $false,
