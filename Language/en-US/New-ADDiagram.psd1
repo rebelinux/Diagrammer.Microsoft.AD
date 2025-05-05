@@ -1,6 +1,6 @@
 ﻿# culture="en-US"
 ConvertFrom-StringData @'
-    genMain = Please wait while the Microsoft.AD diagram is being generated
+    genMain = Please wait while the {0} diagram is being generated
     gereratingDiag = Generating {0} diagram
     diagramSignature = No diagram signature specified
     genDiagramSignature = Generating Signature SubGraph
@@ -12,6 +12,13 @@ ConvertFrom-StringData @'
     psSessionClear = Clearing PowerShell Session {0}
     psSessionSetup = Setting PowerShell Session for {0}
     unableToConnect = Unable to connect to {0} Domain Controller Server.
+    InfoProject = Information: Please refer to the Diagrammer.Microsoft.AD github website for more detailed information about this project.
+    InfoDocumentation = Information: Documentation: https://github.com/rebelinux/Diagrammer.Microsoft.AD
+    InfoIssues = Information: Issues or bug reporting: https://github.com/rebelinux/Diagrammer.Microsoft.AD/issues
+    InfoCommunity = Information: This project is community maintained and has no sponsorship from Microsoft, its employees or any of its affiliates.
+    InfoVersion = Information: Diagrammer.Microsoft.AD {0} is currently installed.
+    WarningUpdate = Warning: Diagrammer.Microsoft.AD {0} update is available.
+    WarningUpdateCommand = Warning: Run 'Update-Module -Name Diagrammer.Microsoft.AD -Force' to install the latest version.
 
     forestgraphlabel = Active Directory Forest Architecture
     domaingraphlabel = Active Directory Domain Architecture
@@ -76,7 +83,7 @@ ConvertFrom-StringData @'
     TrustRelationships = Trust Relationships
 
     Base64Output = Displaying Base64 string
-    DiagramOutput = Microsoft.AD diagram '{0}' has been saved to '{1}'
+    DiagramOutput = '{0}' diagram file '{1}' has been saved to '{2}'
 
     caDiagramLabel = Active Directory Certificate Authority
     caStdRootCA = Standalone Root CA

@@ -5,7 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.14] - 2025-04-18
+## [0.2.15] - 2025-05-04
+
+### Changed
+
+- Update module to version 0.2.15
+- Enhance localization strings for better user guidance and refined diagram output messages
+- Refactore `Get-DiagSiteInventory` to remove redundant calls to `Remove-SpecialChar`, improving readability and performance
+- Enhance watermark color parameter in New-ADDiagram function
+  - Change default `WaterMarkColor` option from `Blue` to `#565656`
+- Update `Diagrammer.Core` module version to 0.2.25
+
+### Removed
+
+- Eliminate unused rules from PSScriptAnalyzer settings to streamline code analysis
+
+## [0.2.14] - 2025-04-24
 
 ### Changed
 
