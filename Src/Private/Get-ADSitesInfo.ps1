@@ -5,7 +5,7 @@ function Get-ADSitesInfo {
     .DESCRIPTION
         Build a diagram of the configuration of Microsoft Active Directory to a supported formats using Psgraph.
     .NOTES
-        Version:        0.2.10
+        Version:        0.2.16
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -36,7 +36,7 @@ function Get-ADSitesInfo {
                                 @{
                                     'Name' = $Link
                                     'Sites' = $SitesLinkInfo.SitesIncluded | ForEach-Object { ConvertTo-ADObjectName -Session $TempPssSession -DN $_ -DC $System }
-                                    'AditionalInfo' = [PSCustomObject][ordered]@{
+                                    'AditionalInfo' = [ordered]@{
                                         $translate.siteLinkName = $Link
                                         $translate.siteLinkCost = $SitesLinkInfo.Cost
                                         $translate.siteLinkFrequency = "$($SitesLinkInfo.ReplicationFrequencyInMinutes) $($translate.siteLinkFrequencyMinutes)"
