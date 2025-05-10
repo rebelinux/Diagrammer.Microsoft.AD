@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.15] - 2025-05-04
+## [0.2.15] - 2025-05-10
 
 ### Changed
 
@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enhance watermark color parameter in New-ADDiagram function
   - Change default `WaterMarkColor` option from `Blue` to `#565656`
 - Update `Diagrammer.Core` module version to 0.2.25
+- Improve the visual design and layout of the Site diagram for better clarity and aesthetics.
 
 ### Removed
 

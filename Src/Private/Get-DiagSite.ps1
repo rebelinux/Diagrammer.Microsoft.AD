@@ -5,7 +5,7 @@ function Get-DiagSite {
     .DESCRIPTION
         Build a diagram of the configuration of Microsoft Active Directory to a supported formats using Psgraph.
     .NOTES
-        Version:        0.2.14
+        Version:        0.2.15
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -39,12 +39,15 @@ function Get-DiagSite {
                                     $Site = Remove-SpecialChar -String "$($SitesObj.Name)" -SpecialChars '\-. '
                                     Node -Name $Site -Attributes @{Label = $SitesObj.Name; penwidth = 1; width = 2; height = .5; fillColor = '#99ceff' }
                                     foreach ($Link in $SitesObj.SiteLink) {
+                                        # Start - Information for each SiteLink. Example: "Name: (Pharmax-to-Acad) SiteLink (Cost: 10) (Frequency: 15 minutes)"
                                         $SiteLink = Remove-SpecialChar -String $Link.Name -SpecialChars '\-. '
-                                        Node -Name $SiteLink -Attributes @{Label = (Get-DiaNodeIcon -Name ' ' -IconType "NoIcon" -Align "Center" -IconDebug $IconDebug -RowsOrdered $Link.AditionalInfo -FontSize 10 -NoFontBold); shape = "plain"; fillColor = 'transparent' }
+                                        Node -Name $SiteLink -Attributes @{Label = (Get-DiaHTMLTable -Align "Center" -IconDebug $IconDebug -Rows ($Link.AditionalInfo.GetEnumerator() | ForEach-Object { "$($_.key): $($_.value)" }) -ColumnSize 1 -FontSize 12); shape = "plain"; fillColor = 'transparent' }
                                         Edge -From $Site -To $SiteLink @{minlen = 2; arrowtail = 'none'; arrowhead = 'none' }
+                                        # End - Information for each SiteLink
                                         foreach ($SiteLinkSite in $Link.Sites) {
+                                            # Start - Information for each connected Site. Example: "Name: (Pharmax)"
                                             $SiteIncluded = Remove-SpecialChar -String $SiteLinkSite -SpecialChars '\-. '
-                                            Node -Name $SiteIncluded -Attributes @{Label = $SiteLinkSite; penwidth = 1; width = 2; height = .5; fillColor = '#99ceff' }
+                                            Node -Name $SiteIncluded -Attributes @{Label = $SiteLinkSite; penwidth = 1; width = 2; height = .5; fillColor = '#b2b2b2'; color = '#3b3b3b'; fontsize = 18 }
                                             Edge -From $SiteLink -To $SiteIncluded @{minlen = 2; arrowtail = 'none'; arrowhead = 'normal' }
                                         }
                                     }
