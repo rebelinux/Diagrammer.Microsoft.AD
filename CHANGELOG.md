@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Update module to version 0.2.16
+- Update module to version 0.2.15
 - Enhance localization strings for better user guidance and refined diagram output messages
 - Refactore `Get-DiagSiteInventory` to remove redundant calls to `Remove-SpecialChar`, improving readability and performance
 - Enhance watermark color parameter in New-ADDiagram function
