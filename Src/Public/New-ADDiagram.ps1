@@ -69,7 +69,7 @@ function New-ADDiagram {
     .PARAMETER WatermarkColor
         Allow to specified the color used for the watermark text. Default: #565656.
     .NOTES
-        Version:        0.2.15
+        Version:        0.2.16
         Author(s):      Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -345,12 +345,12 @@ function New-ADDiagram {
             'CertificateAuthority' { $translate.caDiagramLabel }
         }
 
-        if ($Format -ne 'base64') {
-            Write-Host -ForegroundColor 'Blue' ($translate.genMain -f $MainGraphLabel)
-            Write-Host  -ForegroundColor 'White' $translate.InfoProject
-            Write-Host  -ForegroundColor 'White' $translate.InfoDocumentation
-            Write-Host  -ForegroundColor 'White' $translate.InfoIssues
-            Write-Host  -ForegroundColor 'White' $translate.InfoCommunity
+        if ($Format -ne 'Base64') {
+            Write-ColorOutput -Color 'Blue' -String ($translate.genMain -f $MainGraphLabel)
+            Write-ColorOutput -Color 'White' -String $translate.InfoProject
+            Write-ColorOutput -Color 'White' -String $translate.InfoDocumentation
+            Write-ColorOutput -Color 'White' -String $translate.InfoIssues
+            Write-ColorOutput -Color 'White' -String $translate.InfoCommunity
 
 
             # Check the current Diagrammer.Microsoft.AD module
@@ -361,11 +361,11 @@ function New-ADDiagram {
                     $InstalledVersion = Get-Module -ListAvailable -Name $Module -ErrorAction SilentlyContinue | Sort-Object -Property Version -Descending | Select-Object -First 1 -ExpandProperty Version
 
                     if ($InstalledVersion) {
-                        Write-Host  -ForegroundColor 'White' ($translate.InfoVersion -f $($Module), $($InstalledVersion.ToString()))
+                        Write-ColorOutput -Color 'White' -String ($translate.InfoVersion -f $($Module), $($InstalledVersion.ToString()))
                         $LatestVersion = Find-Module -Name $Module -Repository PSGallery -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Version
                         if ([version]$InstalledVersion -lt [version]$LatestVersion) {
-                            Write-Host  -ForegroundColor 'Yellow' ($translate.WarningUpdate -f $($Module), $($LatestVersion.ToString()))
-                            Write-Host  -ForegroundColor 'Yellow' ($translate.WarningUpdateCommand -f $($Module))
+                            Write-ColorOutput -Color 'Yellow' -String ($translate.WarningUpdate -f $($Module), $($LatestVersion.ToString()))
+                            Write-ColorOutput -Color 'Yellow' -String ($translate.WarningUpdateCommand -f $($Module))
                         }
                     }
                 } Catch {
@@ -603,7 +603,7 @@ function New-ADDiagram {
             if ($OutputDiagram) {
                 if ($OutputFormat -ne 'Base64') {
                     # If not Base64 format return image path
-                    Write-Host -ForegroundColor 'White' ($translate.DiagramOutput -f $MainGraphLabel, $OutputDiagram.Name, $OutputDiagram.Directory)
+                    Write-ColorOutput -Color 'White' -String ($translate.DiagramOutput -f $MainGraphLabel, $OutputDiagram.Name, $OutputDiagram.Directory)
                 } else {
                     Write-Verbose $translate.Base64Output
                     # Return Base64 string
