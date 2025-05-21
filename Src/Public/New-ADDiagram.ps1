@@ -346,27 +346,31 @@ function New-ADDiagram {
         }
 
         if ($Format -ne 'base64') {
-            Write-ColorOutput -Color 'Blue' -String ($translate.genMain -f $MainGraphLabel)
-            Write-ColorOutput  -Color 'White' -String $translate.InfoProject
-            Write-ColorOutput  -Color 'White' -String $translate.InfoDocumentation
-            Write-ColorOutput  -Color 'White' -String $translate.InfoIssues
-            Write-ColorOutput  -Color 'White' -String $translate.InfoCommunity
+            Write-Host -ForegroundColor 'Blue' ($translate.genMain -f $MainGraphLabel)
+            Write-Host  -ForegroundColor 'White' $translate.InfoProject
+            Write-Host  -ForegroundColor 'White' $translate.InfoDocumentation
+            Write-Host  -ForegroundColor 'White' $translate.InfoIssues
+            Write-Host  -ForegroundColor 'White' $translate.InfoCommunity
 
 
             # Check the current Diagrammer.Microsoft.AD module
-            Try {
-                $InstalledVersion = Get-Module -ListAvailable -Name Diagrammer.Microsoft.AD -ErrorAction SilentlyContinue | Sort-Object -Property Version -Descending | Select-Object -First 1 -ExpandProperty Version
+            $ModuleArray = @('Diagrammer.Microsoft.AD', 'Diagrammer.Core')
 
-                if ($InstalledVersion) {
-                    Write-ColorOutput  -Color 'White' -String ($translate.InfoVersion -f $($InstalledVersion.ToString()))
-                    $LatestVersion = Find-Module -Name Diagrammer.Microsoft.AD -Repository PSGallery -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Version
-                    if ([version]$InstalledVersion -lt [version]$LatestVersion) {
-                        Write-ColorOutput  -Color 'Yellow' -String ($translate.WarningUpdate -f $($LatestVersion.ToString()))
-                        Write-ColorOutput  -Color 'Yellow' -String $translate.WarningUpdateCommand
+            foreach ($Module in $ModuleArray) {
+                Try {
+                    $InstalledVersion = Get-Module -ListAvailable -Name $Module -ErrorAction SilentlyContinue | Sort-Object -Property Version -Descending | Select-Object -First 1 -ExpandProperty Version
+
+                    if ($InstalledVersion) {
+                        Write-Host  -ForegroundColor 'White' ($translate.InfoVersion -f $($Module), $($InstalledVersion.ToString()))
+                        $LatestVersion = Find-Module -Name $Module -Repository PSGallery -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Version
+                        if ([version]$InstalledVersion -lt [version]$LatestVersion) {
+                            Write-Host  -ForegroundColor 'Yellow' ($translate.WarningUpdate -f $($Module), $($LatestVersion.ToString()))
+                            Write-Host  -ForegroundColor 'Yellow' ($translate.WarningUpdateCommand -f $($Module))
+                        }
                     }
+                } Catch {
+                    Write-Warning $_.Exception.Message
                 }
-            } Catch {
-                Write-Warning $_.Exception.Message
             }
         }
 
@@ -599,7 +603,7 @@ function New-ADDiagram {
             if ($OutputDiagram) {
                 if ($OutputFormat -ne 'Base64') {
                     # If not Base64 format return image path
-                    Write-ColorOutput -Color 'White' -String ($translate.DiagramOutput -f $MainGraphLabel, $OutputDiagram.Name, $OutputDiagram.Directory)
+                    Write-Host -ForegroundColor 'White' ($translate.DiagramOutput -f $MainGraphLabel, $OutputDiagram.Name, $OutputDiagram.Directory)
                 } else {
                     Write-Verbose $translate.Base64Output
                     # Return Base64 string

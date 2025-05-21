@@ -12,13 +12,13 @@ ConvertFrom-StringData @'
     psSessionClear = Clearing PowerShell Session {0}
     psSessionSetup = Setting PowerShell Session for {0}
     unableToConnect = Unable to connect to {0} Domain Controller Server.
-    InfoProject = Information: Please refer to the Diagrammer.Microsoft.AD github website for more detailed information about this project.
-    InfoDocumentation = Information: Documentation: https://github.com/rebelinux/Diagrammer.Microsoft.AD
-    InfoIssues = Information: Issues or bug reporting: https://github.com/rebelinux/Diagrammer.Microsoft.AD/issues
-    InfoCommunity = Information: This project is community maintained and has no sponsorship from Microsoft, its employees or any of its affiliates.
-    InfoVersion = Information: Diagrammer.Microsoft.AD {0} is currently installed.
-    WarningUpdate = Warning: Diagrammer.Microsoft.AD {0} update is available.
-    WarningUpdateCommand = Warning: Run 'Update-Module -Name Diagrammer.Microsoft.AD -Force' to install the latest version.
+    InfoProject = - Please refer to the Diagrammer.Microsoft.AD github website for more detailed information about this project.
+    InfoDocumentation = - Documentation: https://github.com/rebelinux/Diagrammer.Microsoft.AD
+    InfoIssues = - Issues or bug reporting: https://github.com/rebelinux/Diagrammer.Microsoft.AD/issues
+    InfoCommunity = - This project is community maintained and has no sponsorship from Microsoft, its employees or any of its affiliates.
+    InfoVersion = - {0} v{1} is currently installed.
+    WarningUpdate =   - {0} v{1} update is available.
+    WarningUpdateCommand =   - Run 'Update-Module -Name {0} -Force' to install the latest version.
 
     forestgraphlabel = Active Directory Forest Architecture
     domaingraphlabel = Active Directory Domain Architecture
