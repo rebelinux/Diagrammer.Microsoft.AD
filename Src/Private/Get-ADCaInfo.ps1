@@ -5,7 +5,7 @@ function Get-ADCAInfo {
     .DESCRIPTION
         Build a diagram of the configuration of Microsoft Active Directory to a supported formats using Psgraph.
     .NOTES
-        Version:        0.2.11
+        Version:        0.2.17
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -43,7 +43,7 @@ function Get-ADCAInfo {
                     $TempCAInfo = [PSCustomObject]@{
                         Name = Remove-SpecialChar -String "$($rootCA.Name)RootCA" -SpecialChars '\-. '
                         CAName = $rootCA.Name
-                        Label = Get-DiaNodeIcon -Name $rootCA.Name -IconType "AD_Domain" -Align "Center" -ImagesObj $Images -IconDebug $IconDebug -Rows $AditionalInfo
+                        Label = Add-DiaNodeIcon -Name $rootCA.Name -IconType "AD_Domain" -Align "Center" -ImagesObj $Images -IconDebug $IconDebug -Rows $AditionalInfo
                         AditionalInfo = $AditionalInfo
                         IsRoot = $true
                     }
@@ -64,7 +64,7 @@ function Get-ADCAInfo {
                         $TempCAInfo = [PSCustomObject]@{
                             Name = Remove-SpecialChar -String $RootCAName -SpecialChars '\-. '
                             CAName = $RootCAName
-                            Label = Get-DiaNodeIcon -Name $RootCAName -IconType "AD_Domain" -Align "Center" -ImagesObj $Images -IconDebug $IconDebug -Rows $AditionalInfo
+                            Label = Add-DiaNodeIcon -Name $RootCAName -IconType "AD_Domain" -Align "Center" -ImagesObj $Images -IconDebug $IconDebug -Rows $AditionalInfo
                             AditionalInfo = $AditionalInfo
                             IsRoot = $true
                         }
@@ -86,7 +86,7 @@ function Get-ADCAInfo {
                     $TempCAInfo = [PSCustomObject]@{
                         Name = Remove-SpecialChar -String $subordinateCA.Name -SpecialChars '\-. '
                         CAName = $subordinateCA.Name
-                        Label = Get-DiaNodeIcon -Name $subordinateCA.dNSHostName -IconType "AD_Domain" -Align "Center" -ImagesObj $Images -IconDebug $IconDebug -Rows $AditionalInfo
+                        Label = Add-DiaNodeIcon -Name $subordinateCA.dNSHostName -IconType "AD_Domain" -Align "Center" -ImagesObj $Images -IconDebug $IconDebug -Rows $AditionalInfo
                         AditionalInfo = $AditionalInfo
                         IsRoot = $false
                     }

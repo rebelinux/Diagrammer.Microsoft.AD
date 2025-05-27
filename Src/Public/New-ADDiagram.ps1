@@ -69,7 +69,7 @@ function New-ADDiagram {
     .PARAMETER WatermarkColor
         Allow to specified the color used for the watermark text. Default: #565656.
     .NOTES
-        Version:        0.2.16
+        Version:        0.2.17
         Author(s):      Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -541,9 +541,9 @@ function New-ADDiagram {
                 if ($Signature) {
                     Write-Verbose "Generating diagram signature"
                     if ($CustomSignatureLogo) {
-                        $Signature = (Get-DiaHtmlSignatureTable -ImagesObj $Images -Rows "Author: $($AuthorName)", "Company: $($CompanyName)" -TableBorder 2 -CellBorder 0 -Align 'left' -Logo $CustomSignatureLogo -IconDebug $IconDebug)
+                        $Signature = (Add-DiaHtmlSignatureTable -ImagesObj $Images -Rows "Author: $($AuthorName)", "Company: $($CompanyName)" -TableBorder 2 -CellBorder 0 -Align 'left' -Logo $CustomSignatureLogo -IconDebug $IconDebug)
                     } else {
-                        $Signature = (Get-DiaHtmlSignatureTable -ImagesObj $Images -Rows "Author: $($AuthorName)", "Company: $($CompanyName)" -TableBorder 2 -CellBorder 0 -Align 'left' -Logo "AD_LOGO_Footer" -IconDebug $IconDebug)
+                        $Signature = (Add-DiaHtmlSignatureTable -ImagesObj $Images -Rows "Author: $($AuthorName)", "Company: $($CompanyName)" -TableBorder 2 -CellBorder 0 -Align 'left' -Logo "AD_LOGO_Footer" -IconDebug $IconDebug)
                     }
                 } else {
                     Write-Verbose $translate.diagramSignature
@@ -556,7 +556,7 @@ function New-ADDiagram {
                     Write-Verbose $translate.genDiagramSignature
 
                     # Main Graph SubGraph
-                    SubGraph MainGraph -Attributes @{Label = (Get-DiaHTMLLabel -ImagesObj $Images -Label $MainGraphLabel -IconType $CustomLogo -IconDebug $IconDebug -IconWidth 250 -IconHeight 80 -Fontsize 24 -fontName 'Segoe UI Bold' -fontColor $Fontcolor ); fontsize = 22; penwidth = 0; labelloc = 't'; labeljust = "c" } {
+                    SubGraph MainGraph -Attributes @{Label = (Add-DiaHTMLLabel -ImagesObj $Images -Label $MainGraphLabel -IconType $CustomLogo -IconDebug $IconDebug -IconWidth 250 -IconHeight 80 -Fontsize 24 -fontName 'Segoe UI Bold' -fontColor $Fontcolor ); fontsize = 22; penwidth = 0; labelloc = 't'; labeljust = "c" } {
                         Write-Verbose $translate.genDiagramMain
 
                         $script:ForestRoot = $ADSystem.Name.ToString().ToUpper()

@@ -5,7 +5,7 @@ function Get-ADSitesInventoryInfo {
     .DESCRIPTION
         Build a diagram of the configuration of Microsoft Active Directory to a supported formats using Psgraph.
     .NOTES
-        Version:        0.2.10
+        Version:        0.2.1
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -45,7 +45,7 @@ function Get-ADSitesInventoryInfo {
 
                             $SubnetTable += [PSCustomObject]@{
                                 Name = Remove-SpecialChar -String "$($Site.Name)SubNets" -SpecialChars '\-. '
-                                Label = (Get-DiaHTMLTable -ImagesObj $Images -Rows $SubnetArray -ColumnSize 3 -Align 'Center' -IconDebug $IconDebug)
+                                Label = (Add-DiaHTMLTable -ImagesObj $Images -Rows $SubnetArray -ColumnSize 3 -Align 'Center' -IconDebug $IconDebug)
                                 SubnetArray = $SubnetArray
                             }
 
@@ -64,7 +64,7 @@ function Get-ADSitesInventoryInfo {
 
                             $DCsTable += [PSCustomObject]@{
                                 Name = Remove-SpecialChar -String "$($Site.Name)DCs" -SpecialChars '\-. '
-                                Label = (Get-DiaHTMLTable -Rows $DCsArray -ColumnSize 3 -Align 'Center' -ImagesObj $Images -IconDebug $IconDebug)
+                                Label = (Add-DiaHTMLTable -Rows $DCsArray -ColumnSize 3 -Align 'Center' -ImagesObj $Images -IconDebug $IconDebug)
                                 DCsArray = $DCsArray
                             }
 

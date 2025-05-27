@@ -5,7 +5,7 @@ function Get-DiagTrust {
     .DESCRIPTION
         Build a diagram of the configuration of Microsoft Active Directory to a supported formats using Psgraph.
     .NOTES
-        Version:        0.2.14
+        Version:        0.2.17
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -32,13 +32,13 @@ function Get-DiagTrust {
                 $TrustsInfo = Get-ADTrustsInfo
 
                 if ($TrustsInfo) {
-                    SubGraph ForestSubGraph -Attributes @{Label = (Get-DiaHTMLLabel -ImagesObj $Images -Label $ForestRoot -IconType "ForestRoot" -IconDebug $IconDebug -SubgraphLabel -IconWidth 50 -IconHeight 50 -Fontsize 22 -fontName 'Segoe UI' -fontColor $Fontcolor) ; fontsize = 24; penwidth = 1.5; labelloc = 't'; style = $SubGraphDebug.style ; color = $SubGraphDebug.color } {
+                    SubGraph ForestSubGraph -Attributes @{Label = (Add-DiaHTMLLabel -ImagesObj $Images -Label $ForestRoot -IconType "ForestRoot" -IconDebug $IconDebug -SubgraphLabel -IconWidth 50 -IconHeight 50 -Fontsize 22 -fontName 'Segoe UI' -fontColor $Fontcolor) ; fontsize = 24; penwidth = 1.5; labelloc = 't'; style = $SubGraphDebug.style ; color = $SubGraphDebug.color } {
                         SubGraph MainSubGraph -Attributes @{Label = ' ' ; fontsize = 24; penwidth = 1.5; labelloc = 't'; style = $SubGraphDebug.style; color = $SubGraphDebug.color } {
                             if (($TrustsInfo.Name | Measure-Object).count -gt 3) {
 
                                 $ChildDomainsNodes = $TrustsInfo.Label
 
-                                Node -Name "TrustDestinations" -Attributes @{Label = (Get-DiaHTMLSubGraph -ImagesObj $Images -TableArray $ChildDomainsNodes -Align 'Center' -IconDebug $IconDebug -Label $translate.TrustRelationships -LabelPos "top" -TableStyle "dashed,rounded" -TableBorder "1" -columnSize 3 -fontSize 22 -fontName 'Segoe UI' -TableBorderColor $Edgecolor -fontColor $Fontcolor); shape = 'plain'; fillColor = 'transparent'; fontsize = 18; fontname = "Segoe Ui" }
+                                Node -Name "TrustDestinations" -Attributes @{Label = (Add-DiaHTMLSubGraph -ImagesObj $Images -TableArray $ChildDomainsNodes -Align 'Center' -IconDebug $IconDebug -Label $translate.TrustRelationships -LabelPos "top" -TableStyle "dashed,rounded" -TableBorder "1" -columnSize 3 -fontSize 22 -fontName 'Segoe UI' -TableBorderColor $Edgecolor -fontColor $Fontcolor); shape = 'plain'; fillColor = 'transparent'; fontsize = 18; fontname = "Segoe Ui" }
 
                                 $ForestRootDomain = Remove-SpecialChar -String "$($TrustsInfo.Source[0])ForestRoot" -SpecialChars '\-. '
                                 Node -Name $ForestRootDomain -Attributes @{Label = $TrustsInfo.SourceLabel[0]; shape = "plain"; fillColor = 'transparent' }

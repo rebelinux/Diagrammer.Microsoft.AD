@@ -71,9 +71,9 @@ function Get-ADTrustsInfo {
                     }
                     $TempTrustsInfo = [PSCustomObject]@{
                         Name = Remove-SpecialChar -String "$($Trust.Target)Trusts" -SpecialChars '\-. '
-                        Label = Get-DiaNodeIcon -Name $Trust.Target -IconType "AD_Domain" -Align "Center" -ImagesObj $Images -IconDebug $IconDebug -RowsOrdered $AditionalInfo
+                        Label = Add-DiaNodeIcon -Name $Trust.Target -IconType "AD_Domain" -Align "Center" -ImagesObj $Images -IconDebug $IconDebug -RowsOrdered $AditionalInfo
                         Source = $Trust.CanonicalName.split('/')[0]
-                        SourceLabel = Get-DiaNodeIcon -Name $Trust.CanonicalName.split('/')[0] -IconType "AD_Domain" -Align "Center" -ImagesObj $Images -IconDebug $IconDebug
+                        SourceLabel = Add-DiaNodeIcon -Name $Trust.CanonicalName.split('/')[0] -IconType "AD_Domain" -Align "Center" -ImagesObj $Images -IconDebug $IconDebug
                         Direction = $TrustDirectionID[[int]$Trust.TrustDirection]
                     }
                     $TrustsInfo += $TempTrustsInfo
