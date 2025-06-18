@@ -65,6 +65,7 @@ ConvertFrom-StringData @'
     siteLinkFrequency = Site Link Frequency
     siteLinkFrequencyMinutes = minutes
     siteLinkName = Site Link
+    siteLinkNameInterSiteTP = Site Link Protocol
     NoSiteDC = No Site Domain Controllers
     emptySites = No Site topology available to diagram
     connectingSites = Collecting Microsoft AD Sites information from {0}.

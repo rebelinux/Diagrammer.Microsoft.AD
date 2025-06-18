@@ -7,10 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.2.17] - 2025-05-XX
 
+### Added
+
+- Add site link protocol translation
+- Enhance Get-ADSitesInfo function for improved site link details
+
 ### Changed
 
 - Update module to version 0.2.17
 - Replace Get-Dia* functions with Add-Dia* equivalents for consistency and improved functionality
+- Update localization strings and version number
 
 ### Fixed
 
