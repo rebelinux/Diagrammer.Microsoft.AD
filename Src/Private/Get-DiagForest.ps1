@@ -34,27 +34,30 @@ function Get-DiagForest {
                 if ($ForestInfo) {
                     SubGraph ForestSubGraph -Attributes @{Label = (Add-DiaHTMLLabel -ImagesObj $Images -Label $ForestRoot -IconType "ForestRoot" -IconDebug $IconDebug -SubgraphLabel -IconWidth 50 -IconHeight 50 -Fontsize 22 -fontName 'Segoe UI' -fontColor $Fontcolor) ; fontsize = 24; penwidth = 1.5; labelloc = 't'; style = $SubGraphDebug.style ; color = $SubGraphDebug.color } {
                         SubGraph MainSubGraph -Attributes @{Label = ' ' ; fontsize = 24; penwidth = 1.5; labelloc = 't'; style = $SubGraphDebug.style; color = $SubGraphDebug.color } {
-                            if (($ForestInfo.ChildDomain | Measure-Object).count -gt 5) {
+                            if ($ForestInfo.ChildDomain ) {
 
-                                $ChildDomainsNodes = Add-DiaHTMLNodeTable -ImagesObj $Images -inputObject ($ForestInfo | ForEach-Object { $_.ChildDomainLabel }) -Align "Center" -iconType "AD_Domain" -columnSize 4 -IconDebug $IconDebug -MultiIcon -AditionalInfo $ForestInfo.AditionalInfo -fontSize 18 -fontColor $Fontcolor -TableBorderColor $Edgecolor
+                                $ForestRootDomain = Remove-SpecialChar -String "$($ForestInfo[0].RootDomain)ChildDomain" -SpecialChars '\-. '
+                                Node -Name $ForestRootDomain -Attributes @{Label = ($ForestInfo[0]).RootDomainLabel; shape = "plain"; fillColor = 'transparent' }
 
-                                Node -Name "ChildDomains" -Attributes @{Label = (Add-DiaHTMLSubGraph -ImagesObj $Images -TableArray $ChildDomainsNodes -Align 'Center' -IconDebug $IconDebug -Label $translate.fChildDomains -LabelPos "top" -TableStyle "dashed,rounded" -TableBorder "1" -columnSize 3 -fontSize 22 -fontColor $Fontcolor -TableBorderColor $Edgecolor); shape = 'plain'; fillColor = 'transparent'; fontsize = 18; fontname = "Segoe Ui" }
-
-                                $ForestRootDomain = Remove-SpecialChar -String "$($ForestInfo[0].RootDomain)ForestRoot" -SpecialChars '\-. '
-                                Node -Name $ForestRootDomain -Attributes @{Label = ($ForestInfo | Where-Object { $_.IsForest -eq $True }).RootDomainLabel; shape = "plain"; fillColor = 'transparent' }
-                                Edge -From $ForestRootDomain -To ChildDomains @{minlen = 2 }
-                            } else {
-                                $ForestRootDomain = Remove-SpecialChar -String "$($ForestObj.RootDomain)ForestRoot" -SpecialChars '\-. '
-                                Node -Name $ForestRootDomain -Attributes @{Label = ($ForestInfo | Where-Object { $_.IsForest -eq $True }).RootDomainLabel; shape = "plain"; fillColor = 'transparent' }
                                 foreach ($ForestObj in $ForestInfo) {
+                                    $ParentDomain = Remove-SpecialChar -String "$($ForestObj.ParentDomain)" -SpecialChars '\-. '
                                     Node -Name $ForestObj.Name -Attributes @{Label = $ForestObj.Label; shape = "plain"; fillColor = 'transparent' }
-                                    Edge -From $ForestRootDomain -To $ForestObj.Name @{minlen = 2 }
+                                    Edge -From $ParentDomain -To $ForestObj.Name @{minlen = 2 }
                                 }
+
+                            } else {
+
+                                Node -Name $ForestInfo.Name -Attributes @{Label = $ForestInfo.Label; shape = "plain"; fillColor = 'transparent' }
+
+                                Node -Name NoDomain @{Label = $translate.fNoChildDomains; shape = "rectangle"; labelloc = 'c'; fixedsize = $true; width = "3"; height = "2"; fillColor = 'transparent'; penwidth = 1.5; style = 'dashed'; color = 'gray' }
+
+                                Edge -From $ForestInfo.Name  -To NoDomain @{minlen = 2 }
+
                             }
                         }
                     }
                 } else {
-                    Node -Name NoDomain @{Label = $translate.fNoChildDomains; shape = "rectangle"; labelloc = 'c'; fixedsize = $true; width = "3"; height = "2"; fillColor = 'transparent'; penwidth = 1.5; style = 'dashed'; color = 'gray' }
+                    Node -Name NoDomain @{Label = $translate.fNoChildDomains; shape = "rectangle"; labelloc = 'c'; fixedsize = $true; width = "15"; height = "13"; fillColor = 'transparent'; penwidth = 1.5; style = 'dashed'; color = 'gray' }
                 }
             }
         } catch {

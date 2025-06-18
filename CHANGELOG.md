@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update module to version 0.2.17
 - Replace Get-Dia* functions with Add-Dia* equivalents for consistency and improved functionality
 
+### Fixed
+
+- Fix [#38](https://github.com/rebelinux/Diagrammer.Microsoft.AD/issues/38)
+
 ## [0.2.16] - 2025-05-21
 
 ### Changed
