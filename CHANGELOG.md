@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Update module to version 0.2.17
 - Replace Get-Dia* functions with Add-Dia* equivalents for consistency and improved functionality
 - Update localization strings and version number
+- Update workflow to use Windows 2022 for publishing PowerShell module
 
 ### Fixed
 
