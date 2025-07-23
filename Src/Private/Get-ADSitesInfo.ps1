@@ -5,7 +5,7 @@ function Get-ADSitesInfo {
     .DESCRIPTION
         Build a diagram of the configuration of Microsoft Active Directory to a supported formats using Psgraph.
     .NOTES
-        Version:        0.2.15
+        Version:        0.2.17
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -32,7 +32,7 @@ function Get-ADSitesInfo {
                         'Name' = $SitesLink.Name
                         'SiteLink' = & {
                             foreach ($Link in $SitesLink.SitesLink.Name) {
-                                $SitesLinkInfo = Invoke-Command -Session $TempPssSession { Get-ADReplicationSiteLink -Identity $using:Link }
+                                $SitesLinkInfo = Invoke-Command -Session $TempPssSession { Get-ADReplicationSiteLink -Identity $using:Link -Properties * }
                                 @{
                                     'Name' = $Link
                                     'Sites' = $SitesLinkInfo.SitesIncluded | ForEach-Object { ConvertTo-ADObjectName -Session $TempPssSession -DN $_ -DC $System }
@@ -40,6 +40,7 @@ function Get-ADSitesInfo {
                                         $translate.siteLinkName = $Link
                                         $translate.siteLinkCost = $SitesLinkInfo.Cost
                                         $translate.siteLinkFrequency = "$($SitesLinkInfo.ReplicationFrequencyInMinutes) $($translate.siteLinkFrequencyMinutes)"
+                                        $translate.siteLinkNameInterSiteTP = $SitesLinkInfo.InterSiteTransportProtocol
                                     }
                                 }
                             }

@@ -5,13 +5,39 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.17] - 2025-07-23
+
+### Added
+
+- Add site link protocol translation
+- Enhance Get-ADSitesInfo function for improved site link details
+
+### Changed
+
+- Update module to version 0.2.17
+- Replace Get-Dia* functions with Add-Dia* equivalents for consistency and improved functionality
+- Update localization strings and version number
+- Update workflow to use Windows 2022 for publishing PowerShell module
+
+### Fixed
+
+- Fix [#38](https://github.com/rebelinux/Diagrammer.Microsoft.AD/issues/38)
+
+## [0.2.16] - 2025-05-21
+
+### Changed
+
+- Update module to version 0.2.16
+- Enhance localization strings
+- Improve output messages in New-ADDiagram function
+
 ## [0.2.15] - 2025-05-10
 
 ### Changed
 
 - Update module to version 0.2.15
 - Enhance localization strings for better user guidance and refined diagram output messages
-- Refactore `Get-DiagSiteInventory` to remove redundant calls to `Remove-SpecialChar`, improving readability and performance
+- Refactor `Get-DiagSiteInventory` to remove redundant calls to `Remove-SpecialChar`, improving readability and performance
 - Enhance watermark color parameter in New-ADDiagram function
   - Change default `WaterMarkColor` option from `Blue` to `#565656`
 - Update `Diagrammer.Core` module version to 0.2.25
@@ -115,7 +141,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Migrate nodes to Get-DiaHTMLNodeTable on module Get-DiagForest
+- Migrate nodes to Add-DiaHTMLNodeTable on module Get-DiagForest
 
 ### Fixed
 

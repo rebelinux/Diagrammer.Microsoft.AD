@@ -5,6 +5,7 @@
         'PSAvoidGlobalVars',
         'PSAvoidUsingPlainTextForPassword',
         'PSAvoidUsingUsernameAndPasswordParams'
-        'PSAvoidUsingConvertToSecureStringWithPlainText'
+        'PSAvoidUsingConvertToSecureStringWithPlainText',
+        'PSAvoidUsingWriteHost'
     )
 }
