@@ -158,7 +158,7 @@ function New-ADDiagram {
             HelpMessage = 'Please provide the path to the diagram output file'
         )]
         [ValidateScript({
-                if (-Not ($_ | Test-Path) ) {
+                if (-not ($_ | Test-Path) ) {
                     throw "Folder does not exist"
                 }
                 return $true
@@ -202,7 +202,7 @@ function New-ADDiagram {
                 } else {
                     throw "Format value must be unique if Filename is especified."
                 }
-                if (-Not $_.EndsWith($Format)) {
+                if (-not $_.EndsWith($Format)) {
                     throw "The file specified in the path argument must be of type $Format"
                 }
                 return $true
@@ -336,7 +336,7 @@ function New-ADDiagram {
             Import-LocalizedData -BaseDirectory ($RootPath + "\Language") -BindingVariable translate -ErrorAction SilentlyContinue
         }
 
-        $MainGraphLabel = Switch ($DiagramType) {
+        $MainGraphLabel = switch ($DiagramType) {
             'Forest' { $translate.forestgraphlabel }
             'Domain' { $translate.domaingraphlabel }
             'Sites' { $translate.sitesgraphlabel }
@@ -357,7 +357,7 @@ function New-ADDiagram {
             $ModuleArray = @('Diagrammer.Microsoft.AD', 'Diagrammer.Core')
 
             foreach ($Module in $ModuleArray) {
-                Try {
+                try {
                     $InstalledVersion = Get-Module -ListAvailable -Name $Module -ErrorAction SilentlyContinue | Sort-Object -Property Version -Descending | Select-Object -First 1 -ExpandProperty Version
 
                     if ($InstalledVersion) {
@@ -368,7 +368,7 @@ function New-ADDiagram {
                             Write-ColorOutput -Color 'Yellow' -String ($translate.WarningUpdateCommand -f $($Module))
                         }
                     }
-                } Catch {
+                } catch {
                     Write-Warning $_.Exception.Message
                 }
             }
@@ -511,7 +511,7 @@ function New-ADDiagram {
                     $script:TempPssSession = New-PSSession $System -Credential $Credential -Authentication $PSDefaultAuthentication -ErrorAction Stop
                     $script:ADSystem = Invoke-Command -Session $TempPssSession { Get-ADForest -ErrorAction Stop }
                 }
-            } Catch { throw ($translate.unableToConnect -f $System) }
+            } catch { throw ($translate.unableToConnect -f $System) }
 
             $Graph = Graph -Name MicrosoftAD -Attributes $MainGraphAttributes {
                 # Node default theme
@@ -589,7 +589,7 @@ function New-ADDiagram {
             }
         }
     } end {
-        if (-Not $PSSessionObject) {
+        if (-not $PSSessionObject) {
             # Remove used PSSession
             Write-Verbose ($translate.psSession -f $($TempPssSession.Id))
             Remove-PSSession -Session $TempPssSession

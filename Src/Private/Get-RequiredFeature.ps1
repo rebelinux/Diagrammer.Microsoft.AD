@@ -15,7 +15,7 @@ function Get-RequiredFeature {
         The version of the required windows feature
     #>
 
-    Param
+    param
     (
         [CmdletBinding()]
         [Parameter(Mandatory = $true, ValueFromPipeline = $false)]

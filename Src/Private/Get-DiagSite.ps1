@@ -15,7 +15,7 @@ function Get-DiagSite {
     [CmdletBinding()]
     [OutputType([System.Object[]])]
 
-    Param
+    param
     (
 
     )

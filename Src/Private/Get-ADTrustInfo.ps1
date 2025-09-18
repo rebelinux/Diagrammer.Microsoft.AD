@@ -15,7 +15,7 @@ function Get-ADTrustsInfo {
     [CmdletBinding()]
     [OutputType([System.Object[]])]
 
-    Param()
+    param()
 
     begin {
     }
@@ -63,7 +63,7 @@ function Get-ADTrustsInfo {
                         $translate.TrustDirection = $TrustDirectionID[[int]$Trust.TrustDirection]
                         $translate.TrustType = $TrustTypeID[[string]$Trust.TrustType]
                         $translate.TrustAttributes = $TrustAttributesID[[int]$Trust.TrustAttributes]
-                        $translate.AuthenticationLevel = Switch ($Trust.SelectiveAuthentication) {
+                        $translate.AuthenticationLevel = switch ($Trust.SelectiveAuthentication) {
                             $true { 'Selective' }
                             $false { 'DomainWide' }
                             default { '--' }

@@ -15,7 +15,7 @@ function Get-ADForestInfo {
     [CmdletBinding()]
     [OutputType([System.Object[]])]
 
-    Param()
+    param()
 
     begin {
     }
@@ -79,17 +79,17 @@ function Get-ADForestInfo {
 
                         $AditionalForestInfo = [PSCustomObject] [ordered] @{
                             $translate.fDomainNaming = $ForestObj.DomainNamingMaster.ToString().ToUpper().Split(".")[0]
-                            $translate.fInfrastructure = Switch ([string]::IsNullOrEmpty($RootDomainsInfo.InfrastructureMaster)) {
+                            $translate.fInfrastructure = switch ([string]::IsNullOrEmpty($RootDomainsInfo.InfrastructureMaster)) {
                                 $true { 'Unknown' }
                                 $false { $RootDomainsInfo.InfrastructureMaster.ToString().ToUpper().Split(".")[0] }
                                 default { '--' }
                             }
-                            $translate.fPDC = Switch ([string]::IsNullOrEmpty($RootDomainsInfo.PDCEmulator)) {
+                            $translate.fPDC = switch ([string]::IsNullOrEmpty($RootDomainsInfo.PDCEmulator)) {
                                 $true { 'Unknown' }
                                 $false { $RootDomainsInfo.PDCEmulator.ToString().ToUpper().Split(".")[0] }
                                 default { '--' }
                             }
-                            $translate.fRID = Switch ([string]::IsNullOrEmpty($RootDomainsInfo.RIDMaster)) {
+                            $translate.fRID = switch ([string]::IsNullOrEmpty($RootDomainsInfo.RIDMaster)) {
                                 $true { 'Unknown' }
                                 $false { $RootDomainsInfo.RIDMaster.ToString().ToUpper().Split(".")[0] }
                                 default { '--' }
@@ -99,22 +99,22 @@ function Get-ADForestInfo {
                         }
 
                         $AditionalDomainInfo = [PSCustomObject] [ordered] @{
-                            $translate.fInfrastructure = Switch ([string]::IsNullOrEmpty($ChildDomainsInfo.InfrastructureMaster)) {
+                            $translate.fInfrastructure = switch ([string]::IsNullOrEmpty($ChildDomainsInfo.InfrastructureMaster)) {
                                 $true { 'Unknown' }
                                 $false { $ChildDomainsInfo.InfrastructureMaster.ToString().ToUpper().Split(".")[0] }
                                 default { '--' }
                             }
-                            $translate.fPDC = Switch ([string]::IsNullOrEmpty($ChildDomainsInfo.PDCEmulator)) {
+                            $translate.fPDC = switch ([string]::IsNullOrEmpty($ChildDomainsInfo.PDCEmulator)) {
                                 $true { 'Unknown' }
                                 $false { $ChildDomainsInfo.PDCEmulator.ToString().ToUpper().Split(".")[0] }
                                 default { '--' }
                             }
-                            $translate.fRID = Switch ([string]::IsNullOrEmpty($ChildDomainsInfo.RIDMaster)) {
+                            $translate.fRID = switch ([string]::IsNullOrEmpty($ChildDomainsInfo.RIDMaster)) {
                                 $true { 'Unknown' }
                                 $false { $ChildDomainsInfo.RIDMaster.ToString().ToUpper().Split(".")[0] }
                                 default { '--' }
                             }
-                            $translate.fFuncLevel = Switch ([string]::IsNullOrEmpty($ChildDomainsInfo.DomainMode)) {
+                            $translate.fFuncLevel = switch ([string]::IsNullOrEmpty($ChildDomainsInfo.DomainMode)) {
                                 $true { 'Unknown' }
                                 $false { $FuncionalLevel[$ChildDomainsInfo.DomainMode] }
                                 default { '--' }
@@ -160,17 +160,17 @@ function Get-ADForestInfo {
 
                 $AditionalForestInfo = [PSCustomObject] [ordered] @{
                     $translate.fDomainNaming = $ForestObj.DomainNamingMaster.ToString().ToUpper().Split(".")[0]
-                    $translate.fInfrastructure = Switch ([string]::IsNullOrEmpty($RootDomainsInfo.InfrastructureMaster)) {
+                    $translate.fInfrastructure = switch ([string]::IsNullOrEmpty($RootDomainsInfo.InfrastructureMaster)) {
                         $true { 'Unknown' }
                         $false { $RootDomainsInfo.InfrastructureMaster.ToString().ToUpper().Split(".")[0] }
                         default { '--' }
                     }
-                    $translate.fPDC = Switch ([string]::IsNullOrEmpty($RootDomainsInfo.PDCEmulator)) {
+                    $translate.fPDC = switch ([string]::IsNullOrEmpty($RootDomainsInfo.PDCEmulator)) {
                         $true { 'Unknown' }
                         $false { $RootDomainsInfo.PDCEmulator.ToString().ToUpper().Split(".")[0] }
                         default { '--' }
                     }
-                    $translate.fRID = Switch ([string]::IsNullOrEmpty($RootDomainsInfo.RIDMaster)) {
+                    $translate.fRID = switch ([string]::IsNullOrEmpty($RootDomainsInfo.RIDMaster)) {
                         $true { 'Unknown' }
                         $false { $RootDomainsInfo.RIDMaster.ToString().ToUpper().Split(".")[0] }
                         default { '--' }

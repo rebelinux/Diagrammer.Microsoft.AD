@@ -15,7 +15,7 @@ function Get-DiagCertificateAuthority {
     [CmdletBinding()]
     [OutputType([System.Object[]])]
 
-    Param
+    param
     (
 
     )

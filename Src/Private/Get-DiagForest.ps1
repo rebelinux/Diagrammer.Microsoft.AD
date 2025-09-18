@@ -15,7 +15,7 @@ function Get-DiagForest {
     [CmdletBinding()]
     [OutputType([System.Object[]])]
 
-    Param
+    param
     (
 
     )

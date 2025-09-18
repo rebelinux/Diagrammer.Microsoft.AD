@@ -15,7 +15,7 @@ function Get-ADSitesInfo {
     [CmdletBinding()]
     [OutputType([System.Object[]])]
 
-    Param()
+    param()
 
     begin {
     }

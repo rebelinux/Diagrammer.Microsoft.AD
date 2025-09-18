@@ -15,7 +15,7 @@ function Get-DiagSiteInventory {
     [CmdletBinding()]
     [OutputType([System.Object[]])]
 
-    Param
+    param
     (
 
     )

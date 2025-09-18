@@ -15,7 +15,7 @@ function Get-ADSitesInventoryInfo {
     [CmdletBinding()]
     [OutputType([System.Object[]])]
 
-    Param()
+    param()
 
     begin {
     }

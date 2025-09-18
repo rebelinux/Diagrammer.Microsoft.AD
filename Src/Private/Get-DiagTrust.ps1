@@ -15,7 +15,7 @@ function Get-DiagTrust {
     [CmdletBinding()]
     [OutputType([System.Object[]])]
 
-    Param
+    param
     (
 
     )
