@@ -556,7 +556,7 @@ function New-ADDiagram {
                     Write-Verbose $translate.genDiagramSignature
 
                     # Main Graph SubGraph
-                    SubGraph MainGraph -Attributes @{Label = (Add-DiaHTMLLabel -ImagesObj $Images -Label $MainGraphLabel -IconType $CustomLogo -IconDebug $IconDebug -IconWidth 250 -IconHeight 80 -Fontsize 24 -fontName 'Segoe UI Bold' -fontColor $Fontcolor ); fontsize = 22; penwidth = 0; labelloc = 't'; labeljust = "c" } {
+                    SubGraph MainGraph -Attributes @{Label = (Add-DiaHtmlLabel -ImagesObj $Images -Label $MainGraphLabel -IconType $CustomLogo -IconDebug $IconDebug -IconWidth 250 -IconHeight 80 -Fontsize 24 -fontName 'Segoe UI Bold' -fontColor $Fontcolor ); fontsize = 22; penwidth = 0; labelloc = 't'; labeljust = "c" } {
                         Write-Verbose $translate.genDiagramMain
 
                         $script:ForestRoot = $ADSystem.Name.ToString().ToUpper()

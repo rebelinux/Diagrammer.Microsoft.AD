@@ -32,7 +32,7 @@ function Get-DiagSite {
                 $SitesInfo = Get-ADSitesInfo
 
                 if ($SitesInfo) {
-                    SubGraph ForestSubGraph -Attributes @{Label = (Add-DiaHTMLLabel -ImagesObj $Images -Label $ForestRoot -IconType "ForestRoot" -IconDebug $IconDebug -SubgraphLabel -IconWidth 50 -IconHeight 50 -Fontsize 22 -fontName 'Segoe UI' -fontColor $Fontcolor ) ; fontsize = 24; penwidth = 1.5; labelloc = 't'; style = $SubGraphDebug.style ; color = $SubGraphDebug.color } {
+                    SubGraph ForestSubGraph -Attributes @{Label = (Add-DiaHtmlLabel -ImagesObj $Images -Label $ForestRoot -IconType "ForestRoot" -IconDebug $IconDebug -SubgraphLabel -IconWidth 50 -IconHeight 50 -Fontsize 22 -fontName 'Segoe UI' -fontColor $Fontcolor ) ; fontsize = 24; penwidth = 1.5; labelloc = 't'; style = $SubGraphDebug.style ; color = $SubGraphDebug.color } {
                         SubGraph MainSubGraph -Attributes @{Label = ' ' ; fontsize = 24; penwidth = 1.5; labelloc = 't'; style = $SubGraphDebug.style; color = $SubGraphDebug.color } {
                             if ($SitesInfo.Site) {
                                 foreach ($SitesObj in $SitesInfo) {
@@ -41,7 +41,7 @@ function Get-DiagSite {
                                     foreach ($Link in $SitesObj.SiteLink) {
                                         # Start - Information for each SiteLink. Example: "Name: (Pharmax-to-Acad) SiteLink (Cost: 10) (Frequency: 15 minutes)"
                                         $SiteLink = Remove-SpecialChar -String $Link.Name -SpecialChars '\-. '
-                                        Node -Name $SiteLink -Attributes @{Label = (Add-DiaHTMLTable -Align "Center" -IconDebug $IconDebug -Rows ($Link.AditionalInfo.GetEnumerator() | ForEach-Object { "$($_.key): $($_.value)" }) -ColumnSize 1 -FontSize 12); shape = "plain"; fillColor = 'transparent' }
+                                        Node -Name $SiteLink -Attributes @{Label = (Add-DiaHtmlTable -Align "Center" -IconDebug $IconDebug -Rows ($Link.AditionalInfo.GetEnumerator() | ForEach-Object { "$($_.key): $($_.value)" }) -ColumnSize 1 -FontSize 12); shape = "plain"; fillColor = 'transparent' }
                                         Edge -From $Site -To $SiteLink @{minlen = 2; arrowtail = 'none'; arrowhead = 'none' }
                                         # End - Information for each SiteLink
                                         foreach ($SiteLinkSite in $Link.Sites) {
