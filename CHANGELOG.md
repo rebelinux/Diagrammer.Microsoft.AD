@@ -10,8 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Update module to version 0.2.18
-- Update `Diagrammer.Core` module version to 0.2.30
-
+- Update `Diagrammer.Core` module version to 0.2.32
+- Refactor Get-DiagTrust to include Forest Root as a child domain in the Domain and Trust diagram
 
 ## [0.2.17] - 2025-07-23
 
