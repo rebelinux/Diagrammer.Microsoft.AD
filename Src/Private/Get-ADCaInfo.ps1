@@ -15,7 +15,7 @@ function Get-ADCAInfo {
     [CmdletBinding()]
     [OutputType([System.Object[]])]
 
-    Param()
+    param()
 
     begin {
         Write-Verbose -Message ($translate.connectingForest -f $($ForestRoot))

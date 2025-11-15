@@ -12,7 +12,7 @@
     RootModule = 'Diagrammer.Microsoft.AD.psm1'
 
     # Version number of this module.
-    ModuleVersion = '0.2.17'
+    ModuleVersion = '0.2.18'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -58,7 +58,7 @@
         },
         @{
             ModuleName = 'Diagrammer.Core';
-            ModuleVersion = '0.2.27';
+            ModuleVersion = '0.2.34';
         }
     )
 

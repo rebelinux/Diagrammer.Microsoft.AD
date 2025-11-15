@@ -12,7 +12,7 @@ ConvertFrom-StringData @'
     psSessionClear = Limpiando la sesión de PowerShell {0}
     psSessionSetup = Configurando la sesión de PowerShell para {0}
     unableToConnect = No se puede conectar al servidor de controlador de dominio {0}.
-    InfoProject = Informacion: Consulte el sitio web de Diagrammer.Microsoft.AD en GitHub para obtener información más detallada sobre este proyecto.
+    InfoProject = - Informacion: Consulte el sitio web de Diagrammer.Microsoft.AD en GitHub para obtener información más detallada sobre este proyecto.
     InfoDocumentation =  - Documentación: https://github.com/rebelinux/Diagrammer.Microsoft.AD
     InfoIssues =  - Reporte de problemas o errores: https://github.com/rebelinux/Diagrammer.Microsoft.AD/issues
     InfoCommunity =  - Este proyecto es mantenido por la comunidad y no cuenta con patrocinio de Microsoft, sus empleados o cualquiera de sus afiliados.

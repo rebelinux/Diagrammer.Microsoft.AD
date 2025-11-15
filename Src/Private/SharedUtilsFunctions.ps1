@@ -15,7 +15,7 @@ function Convert-IpAddressToMaskLength {
     #>
     [CmdletBinding()]
     [OutputType([String])]
-    Param
+    param
     (
         [Parameter (
             Position = 0,
