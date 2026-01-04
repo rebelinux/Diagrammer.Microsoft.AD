@@ -5,7 +5,7 @@ function Get-DiagCertificateAuthority {
     .DESCRIPTION
         Build a diagram of the configuration of Microsoft Active Directory to a supported formats using Psgraph.
     .NOTES
-        Version:        0.2.10
+        Version:        0.2.19
         Author:         Jonathan Colon
         Twitter:        @jcolonfzenpr
         Github:         rebelinux
@@ -32,7 +32,7 @@ function Get-DiagCertificateAuthority {
                 $CAInfo = Get-ADCAInfo
 
                 if ($CAInfo) {
-                    SubGraph ForestSubGraph -Attributes @{Label = (Add-DiaHtmlLabel -ImagesObj $Images -Label $ForestRoot -IconType "ForestRoot" -IconDebug $IconDebug -SubgraphLabel -IconWidth 50 -IconHeight 50 -Fontsize 22 -fontName 'Segoe UI' -fontColor $Fontcolor) ; fontsize = 24; penwidth = 1.5; labelloc = 't'; style = $SubGraphDebug.style ; color = $SubGraphDebug.color } {
+                    SubGraph ForestSubGraph -Attributes @{Label = (Add-DiaHtmlLabel -ImagesObj $Images -Label $ForestRoot -IconType "ForestRoot" -IconDebug $IconDebug -SubgraphLabel -IconWidth 50 -IconHeight 50 -Fontsize 22 -FontName 'Segoe UI' -FontColor $Fontcolor -FontBold) ; fontsize = 24; penwidth = 1.5; labelloc = 't'; style = $SubGraphDebug.style ; color = $SubGraphDebug.color } {
                         SubGraph MainSubGraph -Attributes @{Label = ' ' ; fontsize = 24; penwidth = 1.5; labelloc = 't'; style = $SubGraphDebug.style; color = $SubGraphDebug.color } {
                             if ($CAInfo | Where-Object { $_.IsRoot }) {
 
@@ -42,16 +42,16 @@ function Get-DiagCertificateAuthority {
                                     $CALabel = $translate.caEntRootCA
                                 }
 
-                                $CARootNodes = Add-DiaHtmlNodeTable -ImagesObj $Images -inputObject ($CAInfo | Where-Object { $_.IsRoot }).CAName -Align "Center" -iconType "AD_Certificate" -columnSize 4 -IconDebug $IconDebug -MultiIcon -AditionalInfo ($CAInfo | Where-Object { $_.IsRoot }).AditionalInfo -fontSize 18 -TableBorderColor $Edgecolor
+                                $CARootNodes = Add-DiaHtmlNodeTable -ImagesObj $Images -inputObject ($CAInfo | Where-Object { $_.IsRoot }).CAName -Align "Center" -iconType "AD_Certificate" -ColumnSize 4 -IconDebug $IconDebug -MultiIcon -AditionalInfo ($CAInfo | Where-Object { $_.IsRoot }).AditionalInfo -FontSize 18 -TableBorderColor $Edgecolor
 
-                                Node -Name "RootCA" -Attributes @{Label = (Add-DiaHtmlSubGraph -ImagesObj $Images -TableArray $CARootNodes -Align 'Center' -IconDebug $IconDebug -Label $CALabel -LabelPos "top" -TableStyle "dashed,rounded" -TableBorder "1" -columnSize 3 -IconType "AD_PKI_Logo" -fontSize 22 -TableBorderColor $Edgecolor); shape = 'plain'; fillColor = 'transparent'; fontsize = 18; fontname = "Segoe Ui" }
+                                Node -Name "RootCA" -Attributes @{Label = (Add-DiaHtmlSubGraph -ImagesObj $Images -TableArray $CARootNodes -Align 'Center' -IconDebug $IconDebug -Label $CALabel -LabelPos "top" -TableStyle "dashed,rounded" -TableBorder "1" -ColumnSize 3 -IconType "AD_PKI_Logo" -FontColor $Fontcolor -FontSize 24 -FontBold -TableBorderColor $Edgecolor); shape = 'plain'; fillColor = 'transparent'; fontsize = 18; fontname = "Segoe Ui" }
                             }
 
                             if ($CAInfo | Where-Object { $_.IsRoot -eq $false }) {
 
-                                $CASubordinateNodes = Add-DiaHtmlNodeTable -ImagesObj $Images -inputObject ($CAInfo | Where-Object { $_.IsRoot -eq $false }).CAName -Align "Center" -iconType "AD_Certificate" -columnSize 4 -IconDebug $IconDebug -MultiIcon -AditionalInfo ($CAInfo | Where-Object { $_.IsRoot -eq $false }).AditionalInfo -fontSize 18 -TableBorderColor $Edgecolor
+                                $CASubordinateNodes = Add-DiaHtmlNodeTable -ImagesObj $Images -inputObject ($CAInfo | Where-Object { $_.IsRoot -eq $false }).CAName -Align "Center" -iconType "AD_Certificate" -ColumnSize 4 -IconDebug $IconDebug -MultiIcon -AditionalInfo ($CAInfo | Where-Object { $_.IsRoot -eq $false }).AditionalInfo -FontSize 18 -TableBorderColor $Edgecolor
 
-                                Node -Name "SubordinateCA" -Attributes @{Label = (Add-DiaHtmlSubGraph -ImagesObj $Images -TableArray $CASubordinateNodes -Align 'Center' -IconDebug $IconDebug -Label $translate.caEntSubCA -LabelPos "top" -TableStyle "dashed,rounded" -TableBorder "1" -columnSize 3 -IconType "AD_PKI_Logo" -fontSize 22 -TableBorderColor $Edgecolor); shape = 'plain'; fillColor = 'transparent'; fontsize = 18; fontname = "Segoe Ui" }
+                                Node -Name "SubordinateCA" -Attributes @{Label = (Add-DiaHtmlSubGraph -ImagesObj $Images -TableArray $CASubordinateNodes -Align 'Center' -IconDebug $IconDebug -Label $translate.caEntSubCA -LabelPos "top" -TableStyle "dashed,rounded" -TableBorder "1" -ColumnSize 3 -IconType "AD_PKI_Logo" -FontColor $Fontcolor -FontSize 24 -FontBold -TableBorderColor $Edgecolor); shape = 'plain'; fillColor = 'transparent'; fontsize = 18; fontname = "Segoe Ui" }
 
                             }
 
